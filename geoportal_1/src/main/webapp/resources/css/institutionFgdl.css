@@ -7,8 +7,8 @@ body {
 
 /*main logo.  The width will probably have to be changed to accomodate your specific logo */
 #logo {
-	width: 358px;
-	background-image: url(../media/logo.png);
+	width: 200px;
+	background-image: url(../media/t200_88.gif);
 }
 
 /* css for the Contact dialog */
@@ -44,13 +44,15 @@ body {
 
 /*logos in the footer and in contact dialog */
 .itLogo {
-	width: 34px;
-	background: url(../media/uit_logo.png) no-repeat transparent;
+	margin-top: 0px;
+	width: 150px;
+	background: url(../media/geoplan_logo.png) no-repeat transparent;
 	}
 
 .gisLogo {
-	width: 111px;
-	background: url(../media/gis_logo.png) no-repeat transparent;
+	vertical-align: bottom;
+	width: 75px;
+	background: url(../media/fgdl_logo.png) no-repeat transparent;
 	}
 
 h1 {

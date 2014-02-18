@@ -3,11 +3,11 @@
  * This javascript module includes functions for dealing with the map Div
  * defined under the object MapController.  MapController inherits from
  * the OpenLayers.Map object
- * 
+ *
  * @author Chris Barnett
  */
 
-if (typeof org == 'undefined'){ 
+if (typeof org == 'undefined'){
 	org = {};
 } else if (typeof org != "object"){
 	throw new Error("org already exists and is not an object");
@@ -23,18 +23,18 @@ if (typeof org.OpenGeoPortal == 'undefined'){
 //some code to test presence of OpenLayers, check version?
 
 //MapDiv Constructor
-org.OpenGeoPortal.MapController = function(userDiv, userOptions) {	
+org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
 	//set default for the name of the map div
 	if ((typeof userDiv == 'undefined')||(userDiv.length == 0)){
 		userDiv = 'geoportalMap';
 	}
-	
+
 	this.userDiv = userDiv;
 	this.layerStateObject = org.OpenGeoPortal.layerState;
 	this.config = org.OpenGeoPortal.InstitutionInfo;
 	this.userMapAction = false;
 	var analytics = new org.OpenGeoPortal.Analytics();
-	
+
 	//set default OpenLayers map options
 	var nav = new OpenLayers.Control.NavigationHistory({nextOptions: {title: "Zoom to next geographic extent"}, previousOptions:{title: "Zoom to previous geographic extent"}});
     var zoomBox = new OpenLayers.Control.ZoomBox(
@@ -53,7 +53,7 @@ org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
         type: OpenLayers.Control.TYPE_BUTTON,
         title: "Clear the map", active: true
     });
-    
+
     panel.addControls([
                        globalExtent,
                        nav.previous,
@@ -65,6 +65,8 @@ org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
     //display mouse coords in lon-lat
     var displayCoords = new OpenLayers.Control.MousePosition({displayProjection: new OpenLayers.Projection("EPSG:4326")});
     var mapBounds = new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34);
+    mapBounds.extend(this.WGS84ToMercator(-88, 31));
+    mapBounds.extend(this.WGS84ToMercator(-80, 24));
 
 	var options = {
 	        allOverlays: true,
@@ -109,7 +111,7 @@ org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
 		console.log("click");
 		that.userMapAction = true;
 	});*/
-	
+
 	/*this.events.registerPriority('dblclick', this, function(){
 		console.log("dblclick");
 		that.userMapAction = true;
@@ -118,17 +120,17 @@ org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
 		console.log("drag");
 		that.userMapAction = true;
 	});
-	
+
 	this.events.registerPriority('dragstart', this, function(){
 		console.log("drag");
 		that.userMapAction = true;
 	});
-	
+
 	this.events.registerPriority('dragend', this, function(){
 		console.log("drag");
 		that.userMapAction = true;
 	});*/
-	
+
 	this.events.register('zoomend', this, function(){
 		var zoomLevel = that.getZoom();
 		//console.log(zoomLevel);
@@ -151,7 +153,7 @@ org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
 		}
 		if (zoomLevel == 0){
 			that.setCenter(that.WGS84ToMercator(that.getCenter().lon, 0));
-		} 
+		}
 		//console.log('zoomend');
 			jQuery(document).trigger('eventZoomEnd');
 		});
@@ -202,7 +204,7 @@ org.OpenGeoPortal.MapController.prototype.backgroundMaps = function(mapType){
 		var bgMaps = {
 			googleHybrid: {mapClass: "Google", zoomLevels: 22, name: "Google Hybrid", params: {type: google.maps.MapTypeId.HYBRID}},
 			googleSatellite: {mapClass: "Google", zoomLevels: 22, name: "Google Satellite", params: {type: google.maps.MapTypeId.SATELLITE}},
-			googleStreets: {mapClass: "Google", zoomLevels: 20, name: "Google Streets", params: {type: google.maps.MapTypeId.ROADMAP}}, 
+			googleStreets: {mapClass: "Google", zoomLevels: 20, name: "Google Streets", params: {type: google.maps.MapTypeId.ROADMAP}},
 			googlePhysical: {mapClass: "Google", zoomLevels: 15, name: "Google Physical", params: {type: google.maps.MapTypeId.TERRAIN}},
 			osm: {mapClass: "TMS", zoomLevels: 17, name: "OpenStreetMap", params: {type: 'png', getURL: this.getOsmTileUrl,
 				displayOutsideMaxExtent: true}, url: "http://tile.openstreetmap.org/"}
@@ -243,7 +245,7 @@ org.OpenGeoPortal.MapController.prototype.setCurrentBackgroundMap = function(bgT
 };
 
 org.OpenGeoPortal.MapController.prototype.setBackgroundMap = function(bgType) {
-	//default 
+	//default
 	bgType = bgType || this.getCurrentBackgroundMap();
 	this.setCurrentBackgroundMap(bgType);
 	var zoomLevel = this.getZoom();
@@ -284,7 +286,7 @@ org.OpenGeoPortal.MapController.prototype.changeBackgroundMap = function(bgType)
 					jQuery("#geoportalMap").fadeTo("slow", 1);
 
 				});
-			
+
 		}
 		if (this.getLayersByName('OpenStreetMap').length > 0){
 			this.getLayersByName('OpenStreetMap')[0].setVisibility(false);
@@ -374,13 +376,13 @@ org.OpenGeoPortal.MapController.prototype.returnExtent = function(){
 	var topRightLonLat = this.MercatorToWGS84(right, top);
 	var bbox = {};
 	bbox.left = parseFloat(bottomLeftLonLat.lon);
-	bbox.bottom = parseFloat(bottomLeftLonLat.lat); 
+	bbox.bottom = parseFloat(bottomLeftLonLat.lat);
 	bbox.right = parseFloat(topRightLonLat.lon);
 	bbox.top = parseFloat(topRightLonLat.lat);
 	//console.log(new OpenLayers.Bounds(bbox));why doesn't this return a nice openlayers bounds object?
 	return bbox;
 };
-	
+
 //method to clear the map while keeping the base layer
 org.OpenGeoPortal.MapController.prototype.clearMap = function (){
 	var mapLayers = this.layers;
@@ -466,7 +468,7 @@ org.OpenGeoPortal.MapController.prototype.wmsGetFeature = function(e){
 	//geoserver doesn't like fractional pixel values
 	searchString += "&x=" + Math.round(pixel.x) + "&y=" + Math.round(pixel.y);
 	searchString += "&height=" + this.map.size.h + "&width=" + this.map.size.w;
-    
+
     var ajaxParams = {
     		type: "GET",
     		context: this,
@@ -485,13 +487,13 @@ org.OpenGeoPortal.MapController.prototype.wmsGetFeature = function(e){
             	}
             	var rawFeatures = response;//.getElementsByTagName("wfs:FeatureCollection");
             	var innerText = '';
-            	
+
             	/*
             	//This doesn't work, since wms getFeatureInfo won't return gml in non-native projection
             	//we can use wfs instead, but it is problematic with complex geometries
             	//we can also use sld's but we don't really want to redraw the entire layer for each selection (very slow for large/complex layers)
             	//a possible solution:  add an additional wms layer with an SLD that draws only the feature selected; but we will have to keep track of it
-            	
+
             	var featureLayer;
             	//add or modify a layer with a vector representing the selected feature
             	if (this.map.getLayersByName("featureSelection").length > 0){
@@ -507,7 +509,7 @@ org.OpenGeoPortal.MapController.prototype.wmsGetFeature = function(e){
                     style_blue.strokeWidth = 2;
                     style_blue.strokeLinecap = "butt";
                     style_blue.zIndex = 999999;
-                    
+
                     var styleMap = new OpenLayers.StyleMap({
                         strokeColor: "blue",
                         strokeWidth: 2,
@@ -515,8 +517,8 @@ org.OpenGeoPortal.MapController.prototype.wmsGetFeature = function(e){
                         fillColor: "blue",
                         fillOpacity: 0.9
                     });
-                    
-            		featureLayer = new OpenLayers.Layer.Vector("featureSelection",         
+
+            		featureLayer = new OpenLayers.Layer.Vector("featureSelection",
             			{
             			style: style_blue,
                     	//styleMap: styleMap,
@@ -524,7 +526,7 @@ org.OpenGeoPortal.MapController.prototype.wmsGetFeature = function(e){
                     	reportError: true
             			}
             		);
-            	
+
             		this.map.addLayer(featureLayer);
             	}
             	var features = null;
@@ -532,7 +534,7 @@ org.OpenGeoPortal.MapController.prototype.wmsGetFeature = function(e){
                     var gmlOptions = {
                             'internalProjection': this.map.baseLayer.projection,
                             'externalProjection': this.map.baseLayer.projection
-                        }; 
+                        };
             		var format = new OpenLayers.Format.GML(gmlOptions);
             		features = format.read(data);
             	} catch (e){
@@ -553,9 +555,9 @@ org.OpenGeoPortal.MapController.prototype.wmsGetFeature = function(e){
                 	console.log(e);
                 }
 				*/
-            	
 
-				
+
+
             	var linecount = 0;
             	//supports only one feature as is
             	jQuery(attributes).children().first().children().each(function(){
@@ -593,7 +595,7 @@ org.OpenGeoPortal.MapController.prototype.wmsGetFeature = function(e){
   	  					width: 'auto',
   	  					height: dataHeight,
   	  					autoOpen: false
-  	  				});    	  
+  	  				});
   	  				jQuery("#featureInfo").dialog('open');
   	  			} else {
   	  				jQuery("#featureInfo").html(dialogTitle + tableText);
@@ -604,13 +606,13 @@ org.OpenGeoPortal.MapController.prototype.wmsGetFeature = function(e){
   			jQuery("td.attributeName").mouseenter(function(){that.map.getAttributeDescription(this, that.name);});
             },
             error: function(jqXHR, textStatus, errorThrown) {if ((jqXHR.status != 401)&&(textStatus != 'abort')){new org.OpenGeoPortal.ErrorObject(new Error(), "Error retrieving Feature Information.");}},
-            complete: function(){that.map.currentAttributeRequest = false;            	
+            complete: function(){that.map.currentAttributeRequest = false;
             	jQuery(document).trigger("hideLoadIndicator");}
     };
-    
+
     if (typeof this.map.currentAttributeRequest == 'object'){
     	this.map.currentAttributeRequest.abort();
-    } 
+    }
     this.map.currentAttributeRequest = jQuery.ajax(ajaxParams);
     jQuery(document).trigger("showLoadIndicator");
     var institution = (layerID.indexOf(".") > -1) ? layerID.split(".")[0] : "";
@@ -661,7 +663,7 @@ org.OpenGeoPortal.MapController.prototype.showLayerBBox = function (mapObj) {
 		var box1 = new OpenLayers.Feature.Vector(new OpenLayers.Bounds(bottomLeft.lon,bottomLeft.lat,dateline,topRight.lat).toGeometry());
 		var box2 = new OpenLayers.Feature.Vector(new OpenLayers.Bounds(topRight.lon,topRight.lat,-1*dateline, bottomLeft.lat).toGeometry());
 		featureLayer.addFeatures([box1, box2]);
-	} 
+	}
 	else {
 		 var box = new OpenLayers.Feature.Vector(new OpenLayers.Bounds(bottomLeft.lon,bottomLeft.lat,topRight.lon,topRight.lat).toGeometry());
 		 featureLayer.addFeatures([box]);
@@ -704,7 +706,7 @@ org.OpenGeoPortal.MapController.prototype.addMapBBox = function (mapObj) {
 };
 
 org.OpenGeoPortal.MapController.prototype.layerExists = function (mapObj) {
-	//if layer is a Harvard one, send an ajax request to 
+	//if layer is a Harvard one, send an ajax request to
 	//http://dixon.hul.harvard.edu:8080/HGL/RemoteServiceStarter?AddLayer=[layer name]&ValidationKey=OPENGEOPORTALROCKS
 	//otherwise, do a wms describe layer to make sure the layer is there before
 	//attempting to add it to the map (must be proxied).  handling wms errors is non-trivial, since,
@@ -753,7 +755,7 @@ org.OpenGeoPortal.MapController.prototype.getPreviewUrlArray = function (locatio
 		} else {
 			urlArray = addressArray;
 		}
-	
+
 	};
 
 	if ((typeof location.wmsProxy != "undefined")||(location.wmsProxy != null)){
@@ -763,8 +765,8 @@ org.OpenGeoPortal.MapController.prototype.getPreviewUrlArray = function (locatio
 	} else {
 		populateUrlArray(location.tilecache);
 	}
-	
-	
+
+
 	return urlArray;
 };
 
@@ -801,7 +803,7 @@ org.OpenGeoPortal.MapController.prototype.addWMSLayer = function (mapObj) {
 	var newLayer = new OpenLayers.Layer.WMS( mapObj.title,
             wmsArray,
             {layers: mapObj.layerName,
-             format: format, 
+             format: format,
              tiled: true,
              exceptions: "application/vnd.ogc.se_inxml",
              transparent: true//,
@@ -865,7 +867,7 @@ org.OpenGeoPortal.MapController.prototype.addOverview = function() {
 	var overviewSize = new OpenLayers.Size();
 	overviewSize.h = 100;
 	overviewSize.w = 150;
-	
+
 	var overviewBounds = new OpenLayers.Bounds();
 	overviewBounds.extend(new OpenLayers.LonLat(-2.003750834E7,-2.003750834E7));
 	overviewBounds.extend(new OpenLayers.LonLat(2.003750834E7,2.003750834E7));
@@ -873,11 +875,11 @@ org.OpenGeoPortal.MapController.prototype.addOverview = function() {
 			autoActivate: true,
 			title: 'Overview window',
 			//autoPan: true,
-    		mapOptions: { resolutions: [156543.03390625, 78271.516953125, 39135.7584765625, 19567.87923828125, 
-    		                             9783.939619140625, 4891.9698095703125, 2445.9849047851562, 1222.9924523925781, 
-    		                             611.4962261962891, 305.74811309814453, 152.87405654907226, 76.43702827453613, 
-    		                             38.218514137268066, 19.109257068634033, 9.554628534317017, 4.777314267158508, 
-    		                             2.388657133579254, 1.194328566789627, 0.5971642833948135, 0.29858214169740677, 
+    		mapOptions: { resolutions: [156543.03390625, 78271.516953125, 39135.7584765625, 19567.87923828125,
+    		                             9783.939619140625, 4891.9698095703125, 2445.9849047851562, 1222.9924523925781,
+    		                             611.4962261962891, 305.74811309814453, 152.87405654907226, 76.43702827453613,
+    		                             38.218514137268066, 19.109257068634033, 9.554628534317017, 4.777314267158508,
+    		                             2.388657133579254, 1.194328566789627, 0.5971642833948135, 0.29858214169740677,
     		                             0.14929107084870338, 0.07464553542435169],
     		             projection: new OpenLayers.Projection('EPSG:900913'),
     		             maxExtent: overviewBounds,
@@ -969,7 +971,7 @@ org.OpenGeoPortal.MapController.prototype.changeStyle = function(layerID, dataTy
 		userSLD.symbolizer.Point.strokeColor = userColor;
 	break;
 	case "Line":
-		//for lines	
+		//for lines
 		userSLD.symbolizer = {};
 		userSLD.symbolizer.Line = {};
 		userSLD.symbolizer.Line.stroke = true;
@@ -983,12 +985,12 @@ org.OpenGeoPortal.MapController.prototype.changeStyle = function(layerID, dataTy
 	var arrSLD = [{wmsName: wmsName, layerStyle: layerUniqueInfo}];
     var newSLD = { layers: wmsName, sld_body: this.createSLDFromParams(arrSLD)};
     layer.mergeNewParams(newSLD);
-    layerStateObject.setState(layerID, {"sld": layerUniqueInfo}); 
+    layerStateObject.setState(layerID, {"sld": layerUniqueInfo});
 };
 
 org.OpenGeoPortal.MapController.prototype.getBorderColor = function(fillColor){
 	//calculate an appropriate border color
-	var borderColor = {}; 
+	var borderColor = {};
 	borderColor.red = fillColor.slice(1,3);
 	borderColor.green = fillColor.slice(3,5);
 	borderColor.blue = fillColor.slice(5);
@@ -1056,7 +1058,7 @@ org.OpenGeoPortal.MapController.prototype.extentChanged = function(){
 	}
 	//console.log("currentExtent:" + currentExtent);
 	//console.log("previousExtent:" + previous);
-	
+
 	if ((previous.left != currentExtent.left)||
 			(previous.right != currentExtent.right)||
 			(previous.bottom != currentExtent.bottom)||
@@ -1091,11 +1093,11 @@ org.OpenGeoPortal.MapController.prototype.getCombinedBounds = function(arrBounds
 	function sortNumber(a, b){
 		return a - b;
 	}
-	
+
 	function inverseSortNumber(a, b){
 		return b - a;
 	}
-	
+
 	var arrLeft = [];
 	var arrRight = [];
 
@@ -1138,7 +1140,7 @@ org.OpenGeoPortal.MapController.prototype.boundsArrayToOLObject = function (arrB
 	newExtent.right = arrBbox[2];
 	newExtent.top = arrBbox[3];
 	newExtent.bottom = arrBbox[1];
-	
+
 	return newExtent;
 };
 
@@ -1157,9 +1159,9 @@ org.OpenGeoPortal.MapController.prototype.getSpecifiedExtent = function getSpeci
 			maxExtentForLayers = extentArr[0].toBBOX();
 		}
 	}
-	var extentMap = {"global": "-180,-85,180,85", "current": this.getGeodeticExtent().toBBOX(), 
+	var extentMap = {"global": "-180,-85,180,85", "current": this.getGeodeticExtent().toBBOX(),
 			"maxForLayers": maxExtentForLayers};
-	
+
 	if(extentMap[extentType] != "undefined"){
 		return extentMap[extentType];
 	} else {

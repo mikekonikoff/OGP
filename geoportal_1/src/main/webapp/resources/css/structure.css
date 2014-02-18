@@ -11,7 +11,7 @@ This file has been heavily modified from the original template
 
 body {
 	text-align: center;
-	margin: 0; 
+	margin: 0;
 	padding: 0;
 	background: #cccccc url(../media/bg_tile.gif)  repeat;
 	font-family: arial, sans-serif;
@@ -34,7 +34,7 @@ h2 {
 	margin-bottom: 3px;
 }
 
-h3 { 
+h3 {
 	font-size: 12px;
 	color:#003366;
 }
@@ -42,7 +42,7 @@ h3 {
  h4 {
   	text-decoration:underline;
  }
- 
+
 .button {
  	cursor: pointer;
 }
@@ -92,14 +92,14 @@ h3 {
 .styledButtonSmall:hover {
 	color: #417DC1;
 	}
-	
+
 .owsServicesButton {
 	width: 100%;
-	text-align: left;	
+	text-align: left;
 }
 
 .owsServicesButton > span.ui-button-text {
-	width: 100%;	
+	width: 100%;
 }
 
 .warning {
@@ -127,10 +127,10 @@ h3 {
  	text-align: left;
  	opacity: 0;
  }
- 
+
 /* Header */
 #header {
-	height: 92px;
+	height: 115px;
   	background-color: #edf4fa;
 	border-right: #333 solid 1px;
 	border-left: #333 solid 1px;
@@ -141,10 +141,10 @@ h3 {
 	float:left;
 	margin-left: 40px;
 	background: no-repeat transparent;
-	height: 75px;
+	height: 91px;
 	cursor: pointer;
 }
- 
+
 #top_menu {
  	float:right;
  	height: 26px;
@@ -155,7 +155,7 @@ h3 {
  }
 
 #top_menu a {
- 	color:#FFFFFF; 
+ 	color:#FFFFFF;
  	text-decoration: none;
 }
 
@@ -185,10 +185,11 @@ span.infoLinks:hover {
 /* Menu */
 #menu {
 	position: absolute;
-	top: 62px;
+	top: 85px;
 	height: 25px;
-	width: inherit; 
+	width: inherit;
 	min-width: 1000px;
+	background-color: transparent;
 }
 
 .styledDropdown {
@@ -220,7 +221,7 @@ span.infoLinks:hover {
 .styledSelectText {
     display: inline-block;
     overflow: hidden;
-    white-space: nowrap;	
+    white-space: nowrap;
 }
 
 .styledSelectArrow {
@@ -243,7 +244,7 @@ span.infoLinks:hover {
 }
 
 .styledSelectMenu label {
-	background-image: none !important;	
+	background-image: none !important;
 	border: none !important;
 	/*-moz-border-radius: 0px;
 	border-radius: 0px;*/
@@ -265,7 +266,7 @@ span.infoLinks:hover {
 
 .styledSelectMenu label > span > img {
 	padding-right: 10px;
-	float: left;	
+	float: left;
 }
 
 .styledSelectMenu input {
@@ -318,7 +319,7 @@ span.infoLinks:hover {
 }
 
 #basemapMenu label {
-	background-image: none;	
+	background-image: none;
 	display: block;
 	border: none;
 	-moz-border-radius: 0px;
@@ -366,7 +367,7 @@ span.infoLinks:hover {
 }
 
 #columnDropdownMenu {
-	width: 125px;	
+	width: 125px;
 	overflow: hidden;
 	margin-top: -3px;
 }
@@ -387,16 +388,16 @@ span.infoLinks:hover {
 #container {
 	background-color: #fff;
 	border-right: #333 solid 1px;
-	border-left: #333 solid 1px; 
-	border-bottom: #333 solid 1px; 
+	border-left: #333 solid 1px;
+	border-bottom: #333 solid 1px;
 	min-height:680px;
 	height: 100%;
 }
 
 /* left column panel */
 #left_col {
-	width: 450px;
-	border-right: #999 solid 1px; 	 
+	width: 1200px;
+	border-right: #999 solid 1px;
 	float:left;
 	cursor: default;
 }
@@ -407,7 +408,7 @@ span.infoLinks:hover {
  	/*min-height: 680px !important;*/
  	height: 100%;
 }
- 
+
 #tabs {
   	background: none !important;
   	background-color: transparent !important;
@@ -499,7 +500,7 @@ span.infoLinks:hover {
 #resultsSubHeader > div {
 	display: none;
 }
-	
+
 .sub_headerTitle {
 	margin-left: 20px;
 	color: #003366;
@@ -563,7 +564,7 @@ textarea:focus {
 #basicSearchMapFilterContainer {
 	margin-top: 5px;
 	display: inline-block;
-	visibility: hidden;	
+	visibility: hidden;
 }
 
 #advancedSearchBox {
@@ -592,8 +593,8 @@ textarea:focus {
 }
 
 .searchFormRowTwo {
-	margin-top: -4px;	
-}	
+	margin-top: -4px;
+}
 
 .searchFormInput {
 	width: 230px;
@@ -618,7 +619,7 @@ textarea:focus {
 
 .searchToggle span:hover {
 	color: yellow;
-	} 
+	}
 
 .searchFormLabel {
     display: inline-block;
@@ -628,11 +629,11 @@ textarea:focus {
 }
 
 .formCheckbox {
-	margin-left: -5px;	
+	margin-left: -5px;
 	display: inline-block;
 	width: 228px;
 }
-              
+
 /* results & cart table */
 
 #searchResultsMessage {
@@ -646,7 +647,7 @@ textarea:focus {
 	bottom: 0px;
 	text-align: center;
 	width: 100%;
-	padding-bottom: 5px;	
+	padding-bottom: 5px;
 	font-size: 10px;
 }
 
@@ -666,7 +667,7 @@ textarea:focus {
 	font-size:11px;
 }
 
-.ui-effects-transfer { 
+.ui-effects-transfer {
 	/*border: 2px dotted gray;*/
 	background-color: #edf4fa;
 	opacity: .5;
@@ -676,7 +677,7 @@ textarea:focus {
 #savedLayersOptions {
 	padding-top:15px;
 	padding-bottom: 10px;
-	padding-left:20px; 
+	padding-left:20px;
 	padding-right: 20px;
 }
 
@@ -707,7 +708,7 @@ textarea:focus {
 	font-size: 12px;
 }
 
-/* footer */      
+/* footer */
 #footer {
  	/*text-align: center;
  	vertical-align:middle;*/
@@ -717,8 +718,8 @@ textarea:focus {
 	border-left: #333 solid 1px;
 	border-bottom: #333 solid 1px;
 	font-size: 13px;
-}	
- 
+}
+
 #footerLogos {
 	float: right;
 	margin-right: 80px;
@@ -731,7 +732,7 @@ textarea:focus {
 	padding-right: 10px;
 	cursor: pointer;
 }
-	
+
 #footerInfo {
 	line-height: 30px;
 	margin-left: 8px;
@@ -762,7 +763,7 @@ td.colorCellParent{
 	height: 18px;
 	padding: 0px;
 }
-	
+
 div.colorCell {
 	cursor: pointer;
 	width:14px;
@@ -777,7 +778,7 @@ div.colorCell:hover {
 }
 
 .colorCellSelected {
-	border: 1px solid black !important;	
+	border: 1px solid black !important;
     width:16px !important;
 	height:16px !important;
 }
@@ -865,7 +866,7 @@ span.columnNote {
 }
 
 .downloadSettingsDialog select {
-	width: 100px;	
+	width: 100px;
 	position: absolute;
 	left: 126px;
 }
@@ -934,14 +935,14 @@ td.attributeName {
 }
 
 td.attributeName:hover {
-   	color:#417dc1; 
+   	color:#417dc1;
 }
 
 .getFeatureTitle {
-	 color: #003366; 
-	 font-family: Trebuchet MS; 
-	 font-weight: lighter; 
-	 font-size: 13px; 
+	 color: #003366;
+	 font-family: Trebuchet MS;
+	 font-weight: lighter;
+	 font-size: 13px;
 	 padding: 10px;
 }
 
@@ -1035,7 +1036,7 @@ iframe.download {
 #geoCommonsExportForm > fieldset {
 	background-color: #F2F2F2;
     border: 1px solid #CCCCCC;
-	padding: 15px;	
+	padding: 15px;
 }
 
 #geoCommonsExportForm > fieldset > input {

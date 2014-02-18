@@ -1,14 +1,14 @@
-/** 
+/**
  * This javascript module includes functions for dealing with the user interface.
- * 
+ *
  * @author Chris Barnett
- * 
+ *
  */
 
 /**
  * create the namespace objects if they don't already exist
  */
-if (typeof org == 'undefined'){ 
+if (typeof org == 'undefined'){
 	org = {};
 } else if (typeof org != "object"){
 	throw new Error("org already exists and is not an object");
@@ -26,7 +26,7 @@ org.OpenGeoPortal.UserInterface = function(){
 	this.geocodeText = "Find Place (Example: Boston, MA)";
 	//default text for the search input box
 	this.searchText = "Search for data layers...";
-	
+
 	this.mapObject = org.OpenGeoPortal.map;
 	this.resultsTableObject = org.OpenGeoPortal.resultsTableObj;
 	this.cartTableObject = org.OpenGeoPortal.cartTableObj;
@@ -63,8 +63,8 @@ org.OpenGeoPortal.UserInterface = function(){
 					jQuery('#savedLayers').dataTable().fnDraw();
 					break;
 				}
-			}	
-			
+			}
+
 		});
 		this.togglePanels();
 		jQuery('.searchBox').keypress(function(event){
@@ -82,7 +82,7 @@ org.OpenGeoPortal.UserInterface = function(){
 					keyword = jQuery("#advancedKeywordText").val();
 				}
 				analytics.track("Search", search, keyword);
-			} 
+			}
 		});
 		jQuery("#advancedSearchSubmit").click(function(){that.searchSubmit();});
 		jQuery("#advancedSearchClear").click(function(){that.clearAdvancedSearch();});
@@ -108,7 +108,7 @@ org.OpenGeoPortal.UserInterface = function(){
 			}
 		});
 		//info dialogs
-		
+
 		//temporary notice
 		/*var mapitDiv = '<div id="mapitNotice" class="dialog infoDialog"><p>Map It functionality to export your maps directly into GeoCommons is coming soon.</p></div>';
 		jQuery("body").append(mapitDiv);
@@ -117,15 +117,15 @@ org.OpenGeoPortal.UserInterface = function(){
     		title: "COMING SOON",
     		resizable: false,
     		minWidth: 415,
-    		autoOpen: false		
+    		autoOpen: false
 		});*/
-		
+
 		jQuery('#highlights').dialog({
     		zIndex: 2999,
     		title: "HIGHLIGHTS",
     		resizable: true,
     		minWidth: 415,
-    		autoOpen: false		
+    		autoOpen: false
 		});
 		jQuery("#highlightsLink").click(function(){
 			jQuery('#highlights').dialog("open");
@@ -141,7 +141,7 @@ org.OpenGeoPortal.UserInterface = function(){
     		resizable: false,
     		minHeight: 382,
     		minWidth: 473,
-    		autoOpen: false		
+    		autoOpen: false
 		});
 		jQuery("#aboutLink").click(function(){
 			jQuery('#about').dialog("open");
@@ -153,7 +153,7 @@ org.OpenGeoPortal.UserInterface = function(){
     		resizable: false,
     		minHeight: 222,
     		minWidth: 405,
-    		autoOpen: false		
+    		autoOpen: false
 		});
 		jQuery("#contactLink").click(function(){
 			jQuery('#contact').dialog("open");
@@ -164,7 +164,7 @@ org.OpenGeoPortal.UserInterface = function(){
     		resizable: true,
     		height: 425,
     		width: 745,
-    		autoOpen: false		
+    		autoOpen: false
 		});
 		jQuery("#userGuideLink").click(function(){
 			if (jQuery("#userGuide").length == 0){
@@ -176,7 +176,7 @@ org.OpenGeoPortal.UserInterface = function(){
 						resizable: true,
 						height: 425,
 						width: 745,
-						autoOpen: false	
+						autoOpen: false
 					});
 					that.anchorsToNiceScroll("userGuide", {top: -10, left: -30});
 					jQuery('#userGuide').dialog("open");
@@ -214,17 +214,17 @@ org.OpenGeoPortal.UserInterface = function(){
 				current.val("");
 		    }
 		});
-	    //needs to check if the input has focus 
+	    //needs to check if the input has focus
 		jQuery("input#geosearch").val(this.geocodeText);
 	    jQuery("input#geosearch").hover(function(){
-	    				jQuery(this).css("opacity", "1"); 
-	    				jQuery(this).data("mouseOverInput", true); 
-	    			}, 
+	    				jQuery(this).css("opacity", "1");
+	    				jQuery(this).data("mouseOverInput", true);
+	    			},
 	    			function(){
-	    				jQuery(this).data("mouseOverInput", false); 
+	    				jQuery(this).data("mouseOverInput", false);
 	    				if(!jQuery(this).is(":focus")){
 	    					jQuery(this).css("opacity", ".7");
-	    				} 
+	    				}
 	    			});
 	    jQuery("input#geosearch").focusin(function(){
 	    	jQuery(this).css("opacity", "1");});
@@ -256,7 +256,7 @@ org.OpenGeoPortal.UserInterface = function(){
 		jQuery(document).bind("showLoadIndicator",function(e){
 			that.utility.showLoadIndicator("mapLoadIndicator");
 		 });
-		
+
 		jQuery(document).bind("hideLoadIndicator", function(e){
 				that.utility.hideLoadIndicator("mapLoadIndicator");
 			 });
@@ -267,29 +267,29 @@ org.OpenGeoPortal.UserInterface = function(){
 			jQuery(this).attr("src", that.utility.getImage("slider_plus_hover.png"));
 			//jQuery(this).css("cursor", "pointer");
 		});
-		
+
 		jQuery(document).on("mouseleave", zoomPlusSelector, function(){
 			jQuery(this).attr("src", that.utility.getImage("zoom-plus-mini.png"));
 		});
-		
+
 		jQuery(document).on("click", zoomPlusSelector, function(){
 			that.mapObject.zoomIn();
 		});
-		
+
 		var zoomMinusSelector = '.olControlModPanZoomBar img[id*="zoomout"]';
 		jQuery(document).on("mouseenter", zoomMinusSelector, function(){
 			jQuery(this).attr("src", that.utility.getImage("slider_minus_hover.png"));
 			//jQuery(this).css("cursor", "pointer");
 		});
-		
+
 		jQuery(document).on("mouseleave", zoomMinusSelector, function(){
 			jQuery(this).attr("src", that.utility.getImage("zoom-minus-mini.png"));
 		});
-		
+
 		jQuery(document).on("click", zoomMinusSelector, function(){
 			that.mapObject.zoomOut();
 		});
-		
+
 		jQuery('#tabs a').bind("mousedown", function(){
 			//console.log(jQuery(this));
 				var tabImage = jQuery(this).find("img");
@@ -306,7 +306,7 @@ org.OpenGeoPortal.UserInterface = function(){
 		jQuery('#main').width(containerWidth);
 		jQuery('#container').height(containerHeight);
 		jQuery('#left_tabs').height(containerHeight);
-		jQuery("#left_col").width(this.getSearchPanelWidth());
+		jQuery("#left_col").width(Math.min((Math.floor(jQuery(window).width() * 2 / 3)), 1200));
 		jQuery('#map').width(jQuery("#container").width() - this.getSearchPanelWidth() - 1);
 		if (parseInt(jQuery("#map").width()) > 1200) {
 			//org.OpenGeoPortal.map.zoomTo(org.OpenGeoPortal.map.getZoom() + 1);
@@ -318,7 +318,7 @@ org.OpenGeoPortal.UserInterface = function(){
 			//org.OpenGeoPortal.map.events.triggerEvent('zoomend');
 			that.mapObject.events.triggerEvent('zoomend');
 		});
-		
+
 		jQuery(window).resize(function(){
 			var containerHeight = Math.max((jQuery(window).height() - jQuery("#header").height() - jQuery("#footer").height() - 2), 680);
 			jQuery('#container').height(containerHeight);
@@ -330,7 +330,6 @@ org.OpenGeoPortal.UserInterface = function(){
 			if (jQuery("#left_col").css("display") == "none"){
 				jQuery('#map').width(jQuery("#container").width() - 18);
 			} else if (jQuery("#map").css("display") != "none"){
-				//jQuery("#left_col").width(org.OpenGeoPortal.ui.searchPanelWidth);
 				var mapWidth = jQuery("#container").width() - jQuery("#left_col").width() - 1;
 				if (mapWidth >= 415){
 					jQuery('#map').width(mapWidth);
@@ -339,7 +338,7 @@ org.OpenGeoPortal.UserInterface = function(){
 					jQuery('#map').width(415);
 					that.setSearchPanelWidth(jQuery("#left_col").width());
 				}
-				
+
 			} else {
 				jQuery("#left_col").width(jQuery("#container").width() - 1);
 				that.setSearchPanelWidth(jQuery("#left_col").width());
@@ -352,7 +351,7 @@ org.OpenGeoPortal.UserInterface = function(){
 				that.filterResults();
 			}
 		});
-		
+
 		jQuery(document).on('click', '#downloadHeaderCheck', that.toggleChecksSaved);
 		jQuery("#headerLogin").click(function(event){that.promptLogin(event);});
 
@@ -373,7 +372,7 @@ org.OpenGeoPortal.UserInterface = function(){
 
 			analytics.track("Results Pagination", direction + " Results Page");
 		});
-		
+
 		jQuery("#main").fadeTo('fast', 1);
 
 		/*jQuery(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError){
@@ -393,7 +392,7 @@ org.OpenGeoPortal.UserInterface = function(){
 			console.log(ajaxSettings);
 			console.log(thrownError);*/
 		//});
-		//this.checkUserInput();			
+		//this.checkUserInput();
 		/*jQuery("body").delegate(".ui-dialog-titlebar", "dblclick", function(){
 			var id = jQuery(this).parent().children(".dialog").attr("id");
 			if (that.isDialogMinimized(id)){
@@ -419,7 +418,7 @@ org.OpenGeoPortal.UserInterface.prototype.createBasemapMenu = function() {
 		//if (mapType == org.OpenGeoPortal.map.getCurrentBackgroundMap()){
 		if (mapType == this.mapObject.getCurrentBackgroundMap()){
 			isDefault = ' checked="checked"';
-		} 
+		}
 		radioHtml += '<input type="radio" id="basemapRadio' + mapType + '" name="basemapRadio" value="' + mapType + '"' + isDefault + ' onchange="org.OpenGeoPortal.ui.baseMapChanged()" />';
 		radioHtml += '<label for="basemapRadio' + mapType + '">' + backgroundMapsConfig[mapType].name + '</label>';
 	}
@@ -433,15 +432,15 @@ org.OpenGeoPortal.UserInterface.prototype.createBasemapMenu = function() {
 };
 
 /**
- * creates html and behaviours for a css styled dropdown 
- * 
+ * creates html and behaviours for a css styled dropdown
+ *
  * @param divId the id of the div element to turn into a styled dropdown
  * @param paramObj .text is the displayed text, .menuHtml is the Html for the dropdown menu
  */
 org.OpenGeoPortal.UserInterface.prototype.styledSelect = function(divId, paramObj) {
 	var selectElement = jQuery('#' + divId);
 	selectElement.addClass("styledDropdown");
-	
+
 	var selectHtml = '<button id="' + divId + 'Select" class="styledButton styledSelect" title="' + paramObj.text + '">';
 	selectHtml += '<span class="styledSelectText">' + paramObj.text;
 	selectHtml += '</span><img class="styledSelectArrow" src="' + this.getImage('arrow_down.png') + '">';
@@ -449,9 +448,9 @@ org.OpenGeoPortal.UserInterface.prototype.styledSelect = function(divId, paramOb
     selectHtml += '<div id="' + divId + 'Menu" class="styledSelectMenu">';
     selectHtml += paramObj.menuHtml;
     selectHtml += '</div>';
-    
+
     selectElement.html(selectHtml);
-    
+
 	jQuery("#" + divId + "Select").button();
 	jQuery("#" + divId + "Select .styledSelectText").width(jQuery("#" + divId).width() - jQuery("#" + divId + "Select .styledSelectArrow").width() - 39);
 	jQuery("#" + divId + "Menu").buttonset().addClass("raised").hide();
@@ -497,8 +496,8 @@ org.OpenGeoPortal.UserInterface.prototype.createSortMenu = function() {
 	};
 	this.styledSelect("sortDropdown", params);
 	jQuery('.sortDropdownRadio').hide();
-	
-	var buttonHtml = defaultField; 
+
+	var buttonHtml = defaultField;
 	jQuery(".sortDropdownSelect > span > span").html(buttonHtml);
 	var that = this;
 	jQuery("#sortDropdownMenu span.ui-button-text").bind("click", function(){
@@ -521,7 +520,7 @@ org.OpenGeoPortal.UserInterface.prototype.createInstitutionsMenu = function() {
 		menuHtml += '<div>';
 		menuHtml += '<label for="sourceCheck' + institution + '">';
 		var institutionIcon = institutionConfig[institution]["graphics"]["sourceIcon"];
-		menuHtml += '<img src="' + institutionIcon["resourceLocation"] + '" alt="' + institutionIcon["altDisplay"]; 
+		menuHtml += '<img src="' + institutionIcon["resourceLocation"] + '" alt="' + institutionIcon["altDisplay"];
 		menuHtml += ' title="' + institutionIcon["tooltipText"] + '"/>';
 		menuHtml += institution;
 		menuHtml += '</label>';
@@ -546,7 +545,7 @@ org.OpenGeoPortal.UserInterface.prototype.createDataTypesMenu = function() {
 	for (var dataTypeIndex in dataTypes){
 		menuHtml += '<div>';
 		menuHtml += '<label for="dataTypeCheck' + dataTypeIndex + '">';
-		menuHtml += '<img src="' + dataTypes[dataTypeIndex]["source"] + '" alt="' + dataTypes[dataTypeIndex]["displayName"]; 
+		menuHtml += '<img src="' + dataTypes[dataTypeIndex]["source"] + '" alt="' + dataTypes[dataTypeIndex]["displayName"];
 		menuHtml += ' title="' + dataTypes[dataTypeIndex]["displayName"] + '"/>';
 		menuHtml += dataTypes[dataTypeIndex]["displayName"] + '</label>';
 		menuHtml += '<input type="checkbox" class="dataTypeCheck" id="dataTypeCheck' + dataTypeIndex + '" value="' + dataTypeIndex + '" checked=true/>';
@@ -611,7 +610,7 @@ org.OpenGeoPortal.UserInterface.prototype.createTopicsMenu = function() {
 		if (selectedField == "None"){
 			selectedField = "Select a topic";
 		}
-		
+
 		jQuery("#topicDropdownSelect > span > span").html(selectedField);
 	});
 };
@@ -623,7 +622,7 @@ org.OpenGeoPortal.UserInterface.prototype.createTopicsMenu = function() {
 org.OpenGeoPortal.UserInterface.prototype.createColumnsMenu = function() {
 	var menuHtml = "";
 	var tableObj = this.utility.whichTab().tableObject();
-	var fields = tableObj.tableHeadingsObj.getTableHeadings();			
+	var fields = tableObj.tableHeadingsObj.getTableHeadings();
 	for (var i in fields){
 		if (fields[i].organize){
 			if(i == "score"){
@@ -681,7 +680,7 @@ org.OpenGeoPortal.UserInterface.prototype.createColumnsMenu = function() {
  * function that removes the welcome message from the search tab and shows the search results table
  */
 org.OpenGeoPortal.UserInterface.prototype.showSearchResults = function(){
-	jQuery("div#welcomeTextSearchTab").remove();	
+	jQuery("div#welcomeTextSearchTab").remove();
 	jQuery("#resultsSubHeader > span").css("display", "inline");
 	jQuery("#resultsSubHeader > div").css("display", "inline-block");
 
@@ -691,7 +690,7 @@ org.OpenGeoPortal.UserInterface.prototype.showSearchResults = function(){
 
 /**
  * checks the state of the map filter
- * 
+ *
  * @returns a boolean that is true if the map filter is on
  */
 org.OpenGeoPortal.UserInterface.prototype.filterState = function(){
@@ -789,7 +788,7 @@ org.OpenGeoPortal.UserInterface.prototype.clearAdvancedSearch = function(){
 			this.checked = true;
 			if (jQuery(this).attr("id") == "restrictedCheck"){
 				this.checked = false;
-			}	
+			}
 		} else if (tag == 'radio'){
 			this.checked = false;
 		} else if (tag == 'select'){
@@ -854,12 +853,12 @@ org.OpenGeoPortal.UserInterface.prototype.toggleSearch = function(thisObj){
     		  jQuery('#advancedSearchBox').animate(
     			  {height: 'hide'},
     			  {queue: false, duration: 0}
-    		  );	
+    		  );
 	}
 	this.resultsTableObject.setTableLength();
 };
 
-org.OpenGeoPortal.UserInterface.prototype.searchPanelWidth = 450;
+org.OpenGeoPortal.UserInterface.prototype.searchPanelWidth = 1200;
 
 org.OpenGeoPortal.UserInterface.prototype.getSearchPanelWidth = function(){
 	return this.searchPanelWidth;
@@ -891,7 +890,7 @@ org.OpenGeoPortal.UserInterface.prototype.togglePanels = function(){
 			analytics.track("Interface", "Expand/Collapse Buttons", button);
 
           switch (jQuery(this).attr('src')){
-          case rollUp: 
+          case rollUp:
         	  jQuery(userDiv).toggle("blind",{},250, function(){that.resultsTableObject.setTableLength();});
         	  jQuery(this).attr('src', rollDown);
           break;
@@ -902,7 +901,7 @@ org.OpenGeoPortal.UserInterface.prototype.togglePanels = function(){
         	  that.resultsTableObject.adjustTableLength(adjRows);
   			  jQuery(userDiv).toggle("blind",{},250, function(){that.resultsTableObject.setTableLength();});
   			  jQuery(this).attr('src', rollUp);
-          break;	
+          break;
           case rollLeft:
           	//logic to expand map to full size
         	  var panelSelector = jQuery("#left_col");
@@ -1006,7 +1005,7 @@ org.OpenGeoPortal.UserInterface.prototype.updateSortMenu = function(){
 //should add to cartTable code
 org.OpenGeoPortal.UserInterface.prototype.initSortable = function(){
 	var that = this;
-	jQuery( "#savedLayers > tbody" ).sortable({helper: "original", opacity: .5, containment: "parent", 
+	jQuery( "#savedLayers > tbody" ).sortable({helper: "original", opacity: .5, containment: "parent",
 		items: "tr", tolerance: "pointer", cursor: "move",
 		start: function(event, ui){
 				//this code is ugly...optimize
@@ -1043,9 +1042,9 @@ org.OpenGeoPortal.UserInterface.prototype.initSortable = function(){
 						that.mapObject.setLayerIndex(layer, tableLength - (i+1));
 					}
 				}
-				
+
 				that.cartTableObject.callbackExpand();
-			
+
 			}
 	});
 };
@@ -1075,7 +1074,7 @@ org.OpenGeoPortal.UserInterface.prototype.toggleChecksSaved = function(eventObj)
 		} else {
 			jQuery(target).attr('title', "Select All");
 			jQuery(".cartCheckBox").each(function(){
-				jQuery(this).attr('checked', false);	
+				jQuery(this).attr('checked', false);
 			});
 		}
 };
@@ -1166,7 +1165,7 @@ org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
     		dialogContent += "The selected layers have an invalid data type and can not be downloaded.";
     	}
     }
-    
+
     var that = this;
     var params = {
     		zIndex: 3000,
@@ -1249,7 +1248,7 @@ org.OpenGeoPortal.UserInterface.prototype.downloadContinue = function(){
 	}
 	//requestObj.format = fileFormat;
 	requestObj.layers = layerIds;
-	
+
 	//first, check to see if anything is in savedLayers & checked
 	var that = this;
 	pluralSuffix = function(totalNumber){
@@ -1314,10 +1313,10 @@ org.OpenGeoPortal.UserInterface.prototype.checkAddress = function(emailAddress){
 			return false;
 		} else if ((domainArray[0].length + domainArray[1].length + userString.length) < 3){
 			return false;
-		} 
+		}
 	}
 	return true;
-	
+
 };
 
 org.OpenGeoPortal.UserInterface.prototype.isClipped = function(){
@@ -1329,7 +1328,7 @@ org.OpenGeoPortal.UserInterface.prototype.isClipped = function(){
 };
 
 org.OpenGeoPortal.UserInterface.prototype.requestErrorMessage = function(errorMessageObj){
-	
+
 	var line = "";
 	for (var failedToDownload in data.failed){
 		line += "<tr>";
@@ -1339,10 +1338,10 @@ org.OpenGeoPortal.UserInterface.prototype.requestErrorMessage = function(errorMe
 			line += "</td>";
 			line += "<td>";
 			line += data.failed[failedToDownload]["institution"];
-			line += "</td>";						
+			line += "</td>";
 			line += "<td>";
 			line += data.failed[failedToDownload]["title"];
-			line += "</td>";						
+			line += "</td>";
 			line += "<td>";
 			line += data.failed[failedToDownload]["layerId"];
 			line += "</td>";
@@ -1363,7 +1362,7 @@ org.OpenGeoPortal.UserInterface.prototype.requestErrorMessage = function(errorMe
 org.OpenGeoPortal.UserInterface.prototype.requestDownloadSuccess = function(data){
 	//this will simply be a request ID.  add it to the  request queue.
 	org.OpenGeoPortal.downloadQueue.registerLayerRequest(data.requestId);
-	
+
 	//will also have status info for requested layers in this returned object
 	/*var line = "";
 	for (var failedToDownload in data.failed){
@@ -1374,10 +1373,10 @@ org.OpenGeoPortal.UserInterface.prototype.requestDownloadSuccess = function(data
 			line += "</td>";
 			line += "<td>";
 			line += data.failed[failedToDownload]["institution"];
-			line += "</td>";						
+			line += "</td>";
 			line += "<td>";
 			line += data.failed[failedToDownload]["title"];
-			line += "</td>";						
+			line += "</td>";
 			line += "<td>";
 			line += data.failed[failedToDownload]["layerId"];
 			line += "</td>";
@@ -1404,10 +1403,10 @@ org.OpenGeoPortal.UserInterface.prototype.requestDownloadSuccess = function(data
 				line += "<tr>";
 				line += "<td>";
 				line += data.succeeded[successful]["institution"];
-				line += "</td>";						
+				line += "</td>";
 				line += "<td>";
 				line += data.succeeded[successful]["title"];
-				line += "</td>";						
+				line += "</td>";
 				//line += "<td>";
 				//line += data.succeeded[successful]["layerId"];
 				//line += "</td>";
@@ -1417,10 +1416,10 @@ org.OpenGeoPortal.UserInterface.prototype.requestDownloadSuccess = function(data
 				line += "</tr>";
 			}
 		}
-		
+
 		if (line.length > 0){
 			var message = "<p>A link for the following layers was emailed to '" + requestObj.email + "'.  ";
-			message += '<span class="notice">It may take up to 10 minutes to receive the email.</span></p>'; 
+			message += '<span class="notice">It may take up to 10 minutes to receive the email.</span></p>';
 			message += '<table class="downloadStatus">';
 			message += line;
 			message += "</table>";
@@ -1475,9 +1474,9 @@ org.OpenGeoPortal.UserInterface.prototype.genericModalDialog = function(customMe
     		resizable: true,
     		modal: true,
     		minWidth: 415,
-    		autoOpen: false		
+    		autoOpen: false
 		});
-		
+
 	jQuery('#' + divId).dialog('open');
 	return divId;
 };
@@ -1505,7 +1504,7 @@ org.OpenGeoPortal.UserInterface.prototype.authenticationWarning = function(check
 			this.cartTableObject.addToCart(checkboxObj, rowData);
 			return;
 		}
-		warningMessage += '<span class="notice">Restricted layers can be added to the Cart, but you must login before you can preview or download restricted layers.</span>'; 
+		warningMessage += '<span class="notice">Restricted layers can be added to the Cart, but you must login before you can preview or download restricted layers.</span>';
 		ignoreWarningId += "Internal";
 		disposition = "home";
 	} else {
@@ -1514,7 +1513,7 @@ org.OpenGeoPortal.UserInterface.prototype.authenticationWarning = function(check
 			return;
 		}
 		warningMessage += '<span class="notice">Restricted layers can be added to the Cart here, but you must use ' + institution;
-		warningMessage += "'s site and login to preview or download restricted layers.</span>"; 
+		warningMessage += "'s site and login to preview or download restricted layers.</span>";
 		ignoreWarningId += "External";
 		disposition = "external";
 	}
@@ -1523,13 +1522,13 @@ org.OpenGeoPortal.UserInterface.prototype.authenticationWarning = function(check
 	warningMessage += '<span class="ignoreWarning"><input id="ignoreAuthenticationWarning" type="checkbox" /><label for="ignoreAuthenticationWarning">Don\'t show this message again.</span>';
 
 	var divId = this.genericModalDialog(warningMessage, "RESTRICTED LAYER");
-	
+
 	var addToCartFunction = function() {
  		that.IgnoreAuthenticationWarning[disposition] = jQuery("#" + ignoreWarningId).is(":checked");
 		jQuery(this).dialog('close');
 		that.cartTableObject.addToCart(checkboxObj, rowData);
 	};
-	
+
 	var loginAndAddFunction = function(){
 		that.IgnoreAuthenticationWarning[disposition] = jQuery("#" + ignoreWarningId).is(":checked");
 		//that.promptLogin();
@@ -1547,14 +1546,14 @@ org.OpenGeoPortal.UserInterface.prototype.authenticationWarning = function(check
 			dialogBox.dialog("enable");
 		});
 	};
-	
+
 	var cancelFunction = function(){
 	 	that.IgnoreAuthenticationWarning[disposition] = jQuery("#" + ignoreWarningId).is(":checked");
 	 	jQuery(this).dialog('close');
 	 	//some code to deselect the layer check box;
 	 	jQuery(checkboxObj).attr("checked", false);
  	};
- 	
+
 	var buttons = {};
 	if (canLogin){
 		buttons["Login & Add"] = loginAndAddFunction;
@@ -1564,14 +1563,14 @@ org.OpenGeoPortal.UserInterface.prototype.authenticationWarning = function(check
 		buttons["Add"] = addToCartFunction;
 		buttons["Cancel"] = cancelFunction;
 	}
-	
-	jQuery('#' + divId).dialog(	
+
+	jQuery('#' + divId).dialog(
 			{width: 535,
 				buttons: buttons
 			}
 	);
-	
-	
+
+
 };
 
 org.OpenGeoPortal.UserInterface.prototype.availableLayerLogic = function(action, rowData){
@@ -1599,7 +1598,7 @@ org.OpenGeoPortal.UserInterface.prototype.availableLayerLogic = function(action,
 		return true;
 		break;
 	case "download":
-		//no external restricted layers, no local restricted layers if not logged in. 
+		//no external restricted layers, no local restricted layers if not logged in.
 		var institution = rowData[this.cartTableObject.tableHeadingsObj.getColumnIndex('Institution')].toLowerCase();
 		var access = rowData[this.cartTableObject.tableHeadingsObj.getColumnIndex('Access')].toLowerCase();
 		var dataType = rowData[this.cartTableObject.tableHeadingsObj.getColumnIndex('DataType')].toLowerCase();
@@ -1718,7 +1717,7 @@ org.OpenGeoPortal.UserInterface.prototype.doPrint = function(){
 org.OpenGeoPortal.UserInterface.prototype.printImage = function(){
 	//just not fast enough to be reliable
 	//jQuery('head').append('<link rel="stylesheet" type="text/css" media="print" href="css/print.css" />');
-	//setTimeout("org.OpenGeoPortal.ui.doPrint()", 100);	
+	//setTimeout("org.OpenGeoPortal.ui.doPrint()", 100);
 	window.print();
 };
 
@@ -1746,7 +1745,7 @@ org.OpenGeoPortal.UserInterface.prototype.saveImage = function(imageFormat, reso
 		break;
 	default: throw new Error("This image format (" + imageFormat + ") is unavailable.");
 	}
-	
+
 	var requestObj = {};
 	requestObj.layers = [];
 
@@ -1758,7 +1757,7 @@ org.OpenGeoPortal.UserInterface.prototype.saveImage = function(imageFormat, reso
     	if (currentLayer.visibility == false){
     		continue;
     	}
-    	
+
     	var sld = this.layerStateObject.getState(currentLayer.name, "sld");
 		var opacity = this.layerStateObject.getState(currentLayer.name, "opacity");
     	if (opacity == 0){
@@ -1782,10 +1781,10 @@ org.OpenGeoPortal.UserInterface.prototype.saveImage = function(imageFormat, reso
    		layerObj.layerId = currentLayer.name;
 		requestObj.layers.push(layerObj);
     }
-    
+
 	var bbox;
 	bbox = this.mapObject.getExtent().toBBOX();
-	
+
 	requestObj.format = format;
 	requestObj.bbox = bbox;
 	requestObj.srs = 'EPSG:900913';
@@ -1814,10 +1813,10 @@ org.OpenGeoPortal.UserInterface.prototype.saveImage = function(imageFormat, reso
 						line += "</td>";
 						line += "<td>";
 						//line += data.failed[failedToDownload]["institution"];
-						line += "</td>";						
+						line += "</td>";
 						line += "<td>";
 						//line += data.failed[failedToDownload]["title"];
-						line += "</td>";						
+						line += "</td>";
 						line += "<td>";
 						//line += data.failed[failedToDownload]["layerId"];
 						line += "</td>";
@@ -1847,7 +1846,7 @@ org.OpenGeoPortal.UserInterface.prototype.saveImage = function(imageFormat, reso
 						});
 				}*/
 
-				
+
 			}
 	};
 
@@ -1928,17 +1927,17 @@ org.OpenGeoPortal.UserInterface.prototype.shortenLink = function(longLink){
 	var request = {"link": longLink};
 	var url = "shortenLink";
 	var that = this;
-	var ajaxArgs = {url: url, 
+	var ajaxArgs = {url: url,
 			data: jQuery.param(request),
-			type: "GET", 
+			type: "GET",
 			dataType: "json",
 			success: function(data){
 				var shortLink = data["shortLink"];
 				jQuery("#shareText").attr("rows", that.calculateRows(shortLink));
 				jQuery("#shareDialog").dialog('open');
-				jQuery("#shareText").text(shortLink).focus();} 
+				jQuery("#shareText").text(shortLink).focus();}
 		};
-	
+
 	jQuery.ajax(ajaxArgs);
 };
 
@@ -1972,7 +1971,7 @@ org.OpenGeoPortal.UserInterface.prototype.shareLayers = function(){
     	dialogContent += '<p>Use this link to share this Cart</p>';
     	this.shortenLink(shareLink);
     }
-    
+
 	this.createShareDialog(dialogContent);
 };
 
@@ -2023,8 +2022,8 @@ org.OpenGeoPortal.UserInterface.prototype.shareServices = function(){
    	} else {
     	//console.log(queryString);
     	//console.log(jQuery.param(queryString, true));
-   		var serviceTypes = [{"type": "WFS", "title": "Web Feature Service (WFS):", "caption": "Creates a vector web service. Only available for vector data."}, 
-   		                    {"type":"WMS", "title": "Web Mapping Service (WMS):", "caption": "Creates a raster web service for all your data. Vector data will be converted to raster format."}];//WCS later?  		   		
+   		var serviceTypes = [{"type": "WFS", "title": "Web Feature Service (WFS):", "caption": "Creates a vector web service. Only available for vector data."},
+   		                    {"type":"WMS", "title": "Web Mapping Service (WMS):", "caption": "Creates a raster web service for all your data. Vector data will be converted to raster format."}];//WCS later?
    		var path = top.location.href.substring(0, top.location.href.lastIndexOf("/"));
    		dialogContent += '<p>Web Services are provided in two formats. Paste the selected link into your desktop mapping software.</p>';
 		dialogContent += '<div id="owsServicesArea">\n';
@@ -2040,8 +2039,8 @@ org.OpenGeoPortal.UserInterface.prototype.shareServices = function(){
 		dialogContent += '</div>';
 
    	}
-    
-    
+
+
     if (typeof jQuery('#shareDialog')[0] == 'undefined'){
     	var shareDiv = '<div id="shareServicesDialog" class="dialog"> \n';
         shareDiv += '</div> \n';
@@ -2059,7 +2058,7 @@ org.OpenGeoPortal.UserInterface.prototype.shareServices = function(){
 					jQuery(".downloadSelection, .downloadUnselection").removeClass("downloadSelection downloadUnselection");
 				}
     	}});
-    } 
+    }
         	//replace dialog text/controls & open the instance of 'dialog' that already exists
     jQuery("#shareServicesDialog").html(dialogContent);
     var that = this;
@@ -2068,7 +2067,7 @@ org.OpenGeoPortal.UserInterface.prototype.shareServices = function(){
 	});
 
 	jQuery("#shareServicesDialog").dialog('open');
-	
+
     jQuery('.shareServicesText').bind("focus", function(){
         // Select input field contents
         this.select();
@@ -2078,9 +2077,9 @@ org.OpenGeoPortal.UserInterface.prototype.shareServices = function(){
 };
 
 /*
- * 
+ *
  * login code
- * 
+ *
  */
 
 
@@ -2093,7 +2092,7 @@ org.OpenGeoPortal.UserInterface.prototype.logoutResponse = function(data, textSt
 	this.login.userId = null;
 	this.changeControlsToLoginButtons(this.config.getHomeInstitution());//get local inst.
 	//
-	//will also need to turn on login labels for layers in search results and cart, remove 
+	//will also need to turn on login labels for layers in search results and cart, remove
 	//restricted layers from preview?
 	//should we logout on page load to prevent weird states? or just check the state at page load?
 };
@@ -2120,7 +2119,7 @@ org.OpenGeoPortal.UserInterface.prototype.changeLoginButtonsToControls = functio
 			if (tableName == "searchResults"){
 				jQuery(this).parent().html(that.resultsTableObject.getActivePreviewControl(rowObj));
 			} else if (tableName == "savedLayers"){
-				jQuery(this).parent().html(that.cartTableObject.getActivePreviewControl(rowObj));	
+				jQuery(this).parent().html(that.cartTableObject.getActivePreviewControl(rowObj));
 			}
 		}
 	});
@@ -2141,9 +2140,9 @@ org.OpenGeoPortal.UserInterface.prototype.changeControlsToLoginButtons = functio
 			if (tableName == "searchResults"){
 				jQuery(this).parent().html(that.resultsTableObject.getPreviewControl(rowObj));
 			} else if (tableName == "savedLayers"){
-				jQuery(this).parent().html(that.cartTableObject.getPreviewControl(rowObj));	
+				jQuery(this).parent().html(that.cartTableObject.getPreviewControl(rowObj));
 			}
-		
+
 	});
 };
 
@@ -2157,7 +2156,7 @@ org.OpenGeoPortal.UserInterface.prototype.applyLoginActions = function(){
 	jQuery("#headerLogin").unbind("click");
 	jQuery("#headerLogin").click(function(event){event.preventDefault();
 	//for logout capability
-		var ajaxArgs = {url: "logout", 
+		var ajaxArgs = {url: "logout",
 			context: that,
 			dataType: "json",
 			success: that.logoutResponse
@@ -2187,7 +2186,7 @@ org.OpenGeoPortal.UserInterface.prototype.toggleFeatureInfo = function(thisObj, 
 		  layerStateObject.setState(layerID, {"getFeature": true});
 		  layerStateObject.getFeatureTitle = displayName;
 	  } else {
-		  //update layer state, turn off get feature 
+		  //update layer state, turn off get feature
 		  layerStateObject.setState(layerID, {"getFeature": false});
 	  }
 
@@ -2261,7 +2260,7 @@ org.OpenGeoPortal.UserInterface.prototype.colorDialog = function(layerID, dataTy
 		height: 'auto',
 		title: '<img src="' + this.getImage('header_colors.png') + '" />',
 		resizable: false
-	  });    	  
+	  });
 	  jQuery("#colorDialog").dialog('open');
 };
 
@@ -2286,10 +2285,10 @@ org.OpenGeoPortal.UserInterface.prototype.toggleOutline = function(thisObj, laye
 	 if (jQuery(thisObj).is(':checked') == true){
 		 layerStateObject.setState(layerID, {"graphicWidth": 1});
 	 } else {
-		 layerStateObject.setState(layerID, {"graphicWidth": 0}); 
+		 layerStateObject.setState(layerID, {"graphicWidth": 0});
 	 }
-	 //org.OpenGeoPortal.map.changeStyle(layerID, dataType); 
-	 this.mapObject.changeStyle(layerID, dataType);  
+	 //org.OpenGeoPortal.map.changeStyle(layerID, dataType);
+	 this.mapObject.changeStyle(layerID, dataType);
 };
 
 org.OpenGeoPortal.UserInterface.prototype.mouseCursor = function(){
@@ -2312,7 +2311,7 @@ org.OpenGeoPortal.UserInterface.prototype.mouseCursor = function(){
 			layerStateObject.resetState('getFeature');
 			jQuery('.attributeInfoControl').attr('src', that.utility.getImage('preview.gif'));
 		});
-		
+
 		jQuery(document).bind('panActivated', function(){
 			jQuery('.olMap').css('cursor', "-moz-grab");
 			var mapLayers = that.mapObject.layers;
@@ -2381,7 +2380,7 @@ org.OpenGeoPortal.UserInterface.prototype.cartOptionText = function(){
 			jQuery(".downloadSelection, .downloadUnselection").removeClass("downloadSelection downloadUnselection");}});
 	jQuery("#shareButton").click(function(){that.shareLayers();});
 	jQuery("#webServiceButton").hover(function(){jQuery("#optionDetails").html(webServiceHtml);that.getLayerList("webService");},
-			function(){if ((jQuery("#shareServicesDialog").length == 0)||(!jQuery("#shareServicesDialog").dialog("isOpen"))){jQuery("#optionDetails").html(noSelectionHtml);	
+			function(){if ((jQuery("#shareServicesDialog").length == 0)||(!jQuery("#shareServicesDialog").dialog("isOpen"))){jQuery("#optionDetails").html(noSelectionHtml);
 			jQuery(".downloadSelection, .downloadUnselection").removeClass("downloadSelection downloadUnselection");}});
 	jQuery("#webServiceButton").click(function(){that.shareServices();});
 	jQuery("#downloadButton").hover(function(){jQuery("#optionDetails").html(downloadHtml);that.getLayerList("download");},
@@ -2390,7 +2389,7 @@ org.OpenGeoPortal.UserInterface.prototype.cartOptionText = function(){
 	jQuery("#downloadButton").click(function(){that.downloadDialog();});
 	jQuery("#removeFromCartButton").hover(function(){that.getLayerList("removeFromCart");},
 			function(){jQuery(".downloadSelection, .downloadUnselection").removeClass("downloadSelection downloadUnselection");});
-	jQuery("#removeFromCartButton").click(function(){that.cartTableObject.removeRows();}); 
+	jQuery("#removeFromCartButton").click(function(){that.cartTableObject.removeRows();});
 };
 
 org.OpenGeoPortal.UserInterface.prototype.anchorsToNiceScroll = function(affectedDiv, offsetHash){

@@ -2,14 +2,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>GeoData@Tufts</title>
+<link rel="shortcut icon" type="image/x-icon" href="./favicon.ico"/>
+<title>Florida Geographic Data Library</title>
 <%@include file="jspf/includes.jspf"%>
 </head>
 <body>
 <div id="main">
 	<%@include file="jspf/header.jspf"%>
-	<div id="menu"> 
-		<div id="map_tabs"> 
+	<div id="menu">
+		<div id="map_tabs">
 			<span class="styledButton" title="Save map image" onclick="org.OpenGeoPortal.ui.saveImage();">Save Image</span>
 			<span class="styledButton" title="Print map" onclick="org.OpenGeoPortal.ui.printImage();">Print</span>
 			<div id="basemapDropdown">
@@ -17,7 +18,7 @@
 				<div id="basemapMenu">
 				</div>
 			</div>
-		</div>  
+		</div>
 	</div>
 	<div id="container">
 		<div id="roll_right" class="arrow_buttons"><img src="resources/media/button_arrow_right.png" class="button" /></div>
@@ -28,7 +29,7 @@
 			<%@include file="jspf/map.jspf"%>
 		</div>
 	</div>
-	<%@include file="jspf/footer.jspf"%>	
+	<%@include file="jspf/footer.jspf"%>
 </div>
 </body>
 </html>

@@ -1,17 +1,16 @@
 <div id="footer">
 	<span id="footerInfo">
-		<span id="aboutLink" class="infoLinks">About</span> 
-		|  
-		<span id="contactLink" class="infoLinks">Contact</span> 
+		<span id="aboutLink" class="infoLinks">About</span>
+		|
+		<span id="contactLink" class="infoLinks">Contact</span>
 	</span>
-	<div id="footerLogos"> 
-		<div class="itLogo" title="UIT" onclick="location.href='http://uit.tufts.edu/'">
+	<div id="footerLogos">
+		<div class="itLogo" title="GeoPlan Center" onclick="location.href='http://www.geoplan.ufl.edu/'">
 	    </div>
-	    <div class="gisLogo" title="GIS@Tufts" onclick="location.href='http://gis.tufts.edu/'">
+	    <div class="gisLogo" title="Florida Geographic Data Library" onclick="location.href='http://www.fgdl.org/'">
 	    </div>
-	</div> 
+	</div>
 </div>
-<%@include file="about.jspf"%> 
-<%@include file="contact.jspf"%> 
-<%@include file="highlights.jspf"%> 
-    	
+<%@include file="about.jspf"%>
+<%@include file="contact.jspf"%>
+<%@include file="highlights.jspf"%>
