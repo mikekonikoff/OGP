@@ -2309,8 +2309,8 @@ org.OpenGeoPortal.LayerTable.TableHeadings = function(thisObj){
 		            		"fnRender": function(oObj){return thisObj.getTypeIcon(oObj);}}},
 //   		     "Abstract": {"ajax": true, "resizable": true, "minWidth": 200, "currentWidth": 400, "organize": "alpha", "displayName": "Abstract", "columnConfig":
 //            			{"sName": "Abstract", "sTitle": "Abstract", "bVisible": true, "aTargets": [ 23 ], "sClass": "colTitle", "bSortable": false}},
-		     "Name": {"ajax": true, "resizable": false, "organize": false, "columnConfig":
-		            	{"sName": "Name", "sTitle": "LayerName", "bVisible": false, "aTargets": [ 6 ], "bSortable": false}},
+//		     "Name": {"ajax": true, "resizable": false, "organize": false, "columnConfig":
+//		            	{"sName": "Name", "sTitle": "LayerName", "bVisible": false, "aTargets": [ 6 ], "bSortable": false}},
 		     "LayerDisplayName": {"ajax": true, "resizable": true, "minWidth": 28, "currentWidth": 215, "organize": "alpha", "displayName": "Name", "columnConfig":
 		            	{"sName": "LayerDisplayName", "sTitle": "Name", "bVisible": true, "aTargets": [ 7 ], "sClass": "colTitle", "bSortable": false}},
 		     "Originator": {"ajax": true, "resizable": true, "minWidth": 47, "currentWidth": 81, "organize": "group", "displayName": "Originator", "columnConfig":
@@ -2347,8 +2347,12 @@ org.OpenGeoPortal.LayerTable.TableHeadings = function(thisObj){
 		            	{"sName": "GeoReferenced", "sTitle": "Georeferenced", "bVisible": false, "aTargets": [ 21 ], "bSortable": false}},
 		   	 "Availability": {"ajax": true, "resizable": false, "organize": false, "columnConfig":
 		            	{"sName": "Availability", "sTitle": "Availability", "bVisible": false, "aTargets": [ 22 ], "bSortable": false}},
- 		     "ThemeKeywords": {"ajax": true, "resizable": true, "minWidth": 30, "currentWidth": 32, "organize": "alpha", "displayName": "Keywords", "columnConfig":
-				{"sName": "ThemeKeywords", "sTitle": "Keywords", "bVisible": true, "aTargets": [ 23 ], "sClass": "colKeywords", "bSortable": false}}
+// 		     "ThemeKeywords": {"ajax": true, "resizable": true, "minWidth": 30, "currentWidth": 32, "organize": "alpha", "displayName": "Keywords", "columnConfig":
+//				{"sName": "ThemeKeywords", "sTitle": "Keywords", "bVisible": true, "aTargets": [ 23 ], "sClass": "colKeywords", "bSortable": false}},
+ 		     "Name": {"ajax": true, "resizable": true, "minWidth": 30, "currentWidth": 32, "organize": "alpha", "displayName": "Filename", "columnConfig":
+				{"sName": "Name", "sTitle": "Filename", "bVisible": true, "aTargets": [ 23 ], "sClass": "colName", "bSortable": false}},
+ 		     "ContentDate": {"ajax": true, "resizable": true, "minWidth": 15, "currentWidth": 32, "organize": false, "displayName": "Publication Date", "columnConfig":
+				{"sName": "ContentDate", "sTitle": "Publication Date", "bVisible": true, "aTargets": [ 24 ], "sClass": "colContentDate", "bSortable": false}}
 			};
 	//this should be a function, so some params can be set on init
 	//fnRender functions and targets should be generated on init
