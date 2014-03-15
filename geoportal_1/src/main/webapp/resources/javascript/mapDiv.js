@@ -65,8 +65,8 @@ org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
     //display mouse coords in lon-lat
     var displayCoords = new OpenLayers.Control.MousePosition({displayProjection: new OpenLayers.Projection("EPSG:4326")});
     var mapBounds = new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34);
-    mapBounds.extend(this.WGS84ToMercator(-88, 31));
-    mapBounds.extend(this.WGS84ToMercator(-80, 24));
+//    mapBounds.extend(this.WGS84ToMercator(-88, 31));
+//    mapBounds.extend(this.WGS84ToMercator(-80, 24));
 
 	var options = {
 	        allOverlays: true,
@@ -100,9 +100,10 @@ org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
 	//default background map
 	this.setBackgroundMap();
 
-    var center = this.WGS84ToMercator(0, 0);
+    var center = this.WGS84ToMercator(-84, 28);
 	//set map position
 	this.setCenter(center);
+	this.zoomTo(5);
 
 	//register events
 	jQuery('#' + userDiv).resize(function () {that.updateSize();});

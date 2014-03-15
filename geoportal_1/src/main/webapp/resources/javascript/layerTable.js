@@ -2309,16 +2309,16 @@ org.OpenGeoPortal.LayerTable.TableHeadings = function(thisObj){
 		            		"fnRender": function(oObj){return thisObj.getTypeIcon(oObj);}}},
 //   		     "Abstract": {"ajax": true, "resizable": true, "minWidth": 200, "currentWidth": 400, "organize": "alpha", "displayName": "Abstract", "columnConfig":
 //            			{"sName": "Abstract", "sTitle": "Abstract", "bVisible": true, "aTargets": [ 23 ], "sClass": "colTitle", "bSortable": false}},
-//		     "Name": {"ajax": true, "resizable": false, "organize": false, "columnConfig":
-//		            	{"sName": "Name", "sTitle": "LayerName", "bVisible": false, "aTargets": [ 6 ], "bSortable": false}},
+		     "Name": {"ajax": true, "resizable": true, "minWidth": 24, "currentWidth": 25, "organize": "alpha", "displayName": "Filename", "columnConfig":
+		     			{"sName": "Name", "sTitle": "Filename", "bVisible": true, "aTargets": [ 6 ], "sClass": "colName", "bSortable": false}},
 		     "LayerDisplayName": {"ajax": true, "resizable": true, "minWidth": 28, "currentWidth": 215, "organize": "alpha", "displayName": "Name", "columnConfig":
 		            	{"sName": "LayerDisplayName", "sTitle": "Name", "bVisible": true, "aTargets": [ 7 ], "sClass": "colTitle", "bSortable": false}},
 		     "Originator": {"ajax": true, "resizable": true, "minWidth": 47, "currentWidth": 81, "organize": "group", "displayName": "Originator", "columnConfig":
 		            	{"sName": "Originator", "sTitle": "Originator", "bVisible": true, "aTargets": [ 8 ], "sClass": "colOriginator", "bSortable": false}},
 		     "Publisher": {"ajax": true, "resizable": true, "minWidth": 47, "currentWidth": 80, "organize": "group", "displayName": "Publisher", "columnConfig":
 		            	{"sName": "Publisher", "sTitle": "Publisher", "bVisible": false, "aTargets": [ 9 ], "sClass": "colPublisher", "bSortable": false}},
-		     "ContentDate": {"ajax": true, "resizable": false, "organize": "numeric", "displayName": "Date", "columnConfig":
-		            	{"sName": "ContentDate", "sTitle": "Date", "bVisible": false, "aTargets": [ 10 ], "sClass": "colDate", "sWidth": "25px", "bSortable": false, "bUseRendered": true,
+		     "ContentDate": {"ajax": true, "resizable": false, "organize": "numeric", "displayName": "Publication Date", "columnConfig":
+		            	{"sName": "ContentDate", "sTitle": "Date", "bVisible": true, "aTargets": [ 10 ], "sClass": "colDate", "sWidth": "25px", "bSortable": false, "bUseRendered": true,
 		            		"fnRender": function(oObj){return oObj.aData[oObj.iDataColumn].substr(0, 4);}}},
 		     "Institution": {"ajax": true, "resizable": false, "organize": "alpha", "displayName": "Repository", "columnConfig":
 		            	{"sName": "Institution", "sTitle": "Rep", "bVisible": true, "aTargets": [ 11 ], "sClass": "colSource", "sWidth": "19px", "bSortable": false, "bUseRendered": false,
@@ -2349,10 +2349,6 @@ org.OpenGeoPortal.LayerTable.TableHeadings = function(thisObj){
 		            	{"sName": "Availability", "sTitle": "Availability", "bVisible": false, "aTargets": [ 22 ], "bSortable": false}},
 // 		     "ThemeKeywords": {"ajax": true, "resizable": true, "minWidth": 30, "currentWidth": 32, "organize": "alpha", "displayName": "Keywords", "columnConfig":
 //				{"sName": "ThemeKeywords", "sTitle": "Keywords", "bVisible": true, "aTargets": [ 23 ], "sClass": "colKeywords", "bSortable": false}},
- 		     "Name": {"ajax": true, "resizable": true, "minWidth": 30, "currentWidth": 32, "organize": "alpha", "displayName": "Filename", "columnConfig":
-				{"sName": "Name", "sTitle": "Filename", "bVisible": true, "aTargets": [ 23 ], "sClass": "colName", "bSortable": false}},
- 		     "ContentDate": {"ajax": true, "resizable": true, "minWidth": 15, "currentWidth": 32, "organize": false, "displayName": "Publication Date", "columnConfig":
-				{"sName": "ContentDate", "sTitle": "Publication Date", "bVisible": true, "aTargets": [ 24 ], "sClass": "colContentDate", "bSortable": false}}
 			};
 	//this should be a function, so some params can be set on init
 	//fnRender functions and targets should be generated on init

@@ -1,6 +1,6 @@
 {"config":{"homeInstitution": "FGDL", "institutionSpecificCss": "resources/css/institutionFgdl.css",
         "institutionSpecificJavaScript": "",
-	"googleAnalyticsId": "",
+	"googleAnalyticsId": "UA-48791433-1",
 	"googleAPIKey": "",
 	"search":{"serviceType": "solr", "serviceAddress": "https://geoportal02.geoplan.ufl.edu/solr/collectionFgdl/select"},
 	"institutions": {"Tufts": {"login": {"loginType": "form", "authenticationPage": "login"},
