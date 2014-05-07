@@ -23,23 +23,23 @@
  *
  *--------------------------------------------------------------------------*/
 
-/**  
-*  
+/**
+*
 *  Contains portions of Rico <http://openrico.org/>
-* 
-*  Copyright 2005 Sabre Airline Solutions  
-*  
+*
+*  Copyright 2005 Sabre Airline Solutions
+*
 *  Licensed under the Apache License, Version 2.0 (the "License"); you
 *  may not use this file except in compliance with the License. You
 *  may obtain a copy of the License at
-*  
-*         http://www.apache.org/licenses/LICENSE-2.0  
-*  
+*
+*         http://www.apache.org/licenses/LICENSE-2.0
+*
 *  Unless required by applicable law or agreed to in writing, software
 *  distributed under the License is distributed on an "AS IS" BASIS,
 *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
 *  implied. See the License for the specific language governing
-*  permissions and limitations under the License. 
+*  permissions and limitations under the License.
 *
 **/
 
@@ -95,22 +95,22 @@
  * OpenLayers.Util.pagePosition is based on Yahoo's getXY method, which is
  * Copyright (c) 2006, Yahoo! Inc.
  * All rights reserved.
- * 
+ *
  * Redistribution and use of this software in source and binary forms, with or
  * without modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
- * 
+ *
  * * Redistributions in binary form must reproduce the above copyright notice,
  *   this list of conditions and the following disclaimer in the documentation
  *   and/or other materials provided with the distribution.
- * 
+ *
  * * Neither the name of Yahoo! Inc. nor the names of its contributors may be
  *   used to endorse or promote products derived from this software without
  *   specific prior written permission of Yahoo! Inc.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -120,7 +120,7 @@
  * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */(function(){if(window.google&&google.gears){return;}
 var factory=null;if(typeof GearsFactory!='undefined'){factory=new GearsFactory();}else{try{factory=new ActiveXObject('Gears.Factory');if(factory.getBuildInfo().indexOf('ie_mobile')!=-1){factory.privateSetGlobalObject(this);}}catch(e){if((typeof navigator.mimeTypes!='undefined')&&navigator.mimeTypes["application/x-googlegears"]){factory=document.createElement("object");factory.style.display="none";factory.width=0;factory.height=0;factory.type="application/x-googlegears";document.documentElement.appendChild(factory);}}}
@@ -1963,7 +1963,7 @@ Math.pow(xy.y-last.xy.y,2));var speed=dist/time;if(speed==0||speed<this.threshol
 var theta=Math.asin((xy.y-last.xy.y)/dist);if(last.xy.x<=xy.x){theta=Math.PI-theta;}
 return{speed:speed,theta:theta};},move:function(info,callback){var v0=info.speed;var fx=Math.cos(info.theta);var fy=-Math.sin(info.theta);var time=0;var initialTime=new Date().getTime();var lastX=0;var lastY=0;var timerCallback=function(){if(this.timerId==null){return;}
 time+=this.interval;var realTime=new Date().getTime()-initialTime;var t=(time+realTime)/2.0;var p=(-this.deceleration*Math.pow(t,2))/2.0+v0*t;var x=p*fx;var y=p*fy;var args={};args.end=false;var v=-this.deceleration*t+v0;if(v<=0){clearInterval(this.timerId);this.timerId=null;args.end=true;}
-args.x=x-lastX;args.y=y-lastY;lastX=x;lastY=y;callback(args.x,args.y,args.end);};this.timerId=window.setInterval(OpenLayers.Function.bind(timerCallback,this),this.interval);},CLASS_NAME:"OpenLayers.Kinetic"});OpenLayers.ProxyHost="";OpenLayers.nullHandler=function(request){OpenLayers.Console.userError(OpenLayers.i18n("unhandledRequest",{'statusText':request.statusText}));};OpenLayers.loadURL=function(uri,params,caller,onComplete,onFailure){if(typeof params=='string'){params=OpenLayers.Util.getParameters(params);}
+args.x=x-lastX;args.y=y-lastY;lastX=x;lastY=y;callback(args.x,args.y,args.end);};this.timerId=window.setInterval(OpenLayers.Function.bind(timerCallback,this),this.interval);},CLASS_NAME:"OpenLayers.Kinetic"});OpenLayers.ProxyHost="/cgi-bin/proxy.cgi?url=";OpenLayers.nullHandler=function(request){OpenLayers.Console.userError(OpenLayers.i18n("unhandledRequest",{'statusText':request.statusText}));};OpenLayers.loadURL=function(uri,params,caller,onComplete,onFailure){if(typeof params=='string'){params=OpenLayers.Util.getParameters(params);}
 var success=(onComplete)?onComplete:OpenLayers.nullHandler;var failure=(onFailure)?onFailure:OpenLayers.nullHandler;return OpenLayers.Request.GET({url:uri,params:params,success:success,failure:failure,scope:caller});};OpenLayers.parseXMLString=function(text){var index=text.indexOf('<');if(index>0){text=text.substring(index);}
 var ajaxResponse=OpenLayers.Util.Try(function(){var xmldom=new ActiveXObject('Microsoft.XMLDOM');xmldom.loadXML(text);return xmldom;},function(){return new DOMParser().parseFromString(text,'text/xml');},function(){var req=new XMLHttpRequest();req.open("GET","data:"+"text/xml"+";charset=utf-8,"+encodeURIComponent(text),false);if(req.overrideMimeType){req.overrideMimeType("text/xml");}
 req.send(null);return req.responseXML;});return ajaxResponse;};OpenLayers.Ajax={emptyFunction:function(){},getTransport:function(){return OpenLayers.Util.Try(function(){return new XMLHttpRequest();},function(){return new ActiveXObject('Msxml2.XMLHTTP');},function(){return new ActiveXObject('Microsoft.XMLHTTP');})||false;},activeRequestCount:0};OpenLayers.Ajax.Responders={responders:[],register:function(responderToAdd){for(var i=0;i<this.responders.length;i++){if(responderToAdd==this.responders[i]){return;}}
