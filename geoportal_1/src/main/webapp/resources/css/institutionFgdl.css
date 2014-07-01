@@ -7,8 +7,8 @@ body {
 
 /*main logo.  The width will probably have to be changed to accomodate your specific logo */
 #logo {
-	width: 200px;
-	background-image: url(../media/t200_88.gif);
+	width: 300px;
+	background-image: url(../media/fgdl_logo_draft300.jpg);
 }
 
 /* css for the Contact dialog */

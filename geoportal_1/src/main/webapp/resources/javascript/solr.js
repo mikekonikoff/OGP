@@ -136,7 +136,7 @@ org.OpenGeoPortal.Solr.prototype.getMetadataQuery = function getMetadataQuery(la
 org.OpenGeoPortal.Solr.prototype.getTermQuery = function getFacetQuery(termField, requestTerm)
 {
 	var jsonClause = this.getReturnTypeClause();
-	requestTerm = requestTerm + ".*";
+	requestTerm = ".*" + requestTerm + ".*";
 	var solrQuery = "terms.fl=" + termField + "&terms.regex=" + requestTerm + "&terms.regex.flag=case_insensitive&terms.limit=-1&" +jsonClause;
 	return solrQuery;
 };
@@ -276,7 +276,7 @@ org.OpenGeoPortal.Solr.prototype.escapeSolrValue = function escapeSolrValue(solr
 
 //filter out characters that cause problems for solr
 org.OpenGeoPortal.Solr.prototype.filterCharacters = function filterCharacters(solrValue){
-	solrValue = solrValue.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
+	solrValue = solrValue.replace(/[&\/\\#,+()$~%'":*?<>{}]/g,'');
 	return solrValue;
 };
 
