@@ -26,7 +26,7 @@ org.OpenGeoPortal.UserInterface = function(){
 	this.geocodeText = "Find Place (Example: Boston, MA)";
 	//default text for the search input box
 	this.searchText = "Search for data layers...";
-	
+	this.lastSearchTime;
 	this.mapObject = org.OpenGeoPortal.map;
 	this.resultsTableObject = org.OpenGeoPortal.resultsTableObj;
 	this.cartTableObject = org.OpenGeoPortal.cartTableObj;
@@ -70,9 +70,6 @@ org.OpenGeoPortal.UserInterface = function(){
 		jQuery('.searchBox').keypress(function(event){
 			var type, search, keyword;
 
-			if (event.keyCode == '13') {
-				event.preventDefault();
-				that.searchSubmit();
 			type = org.OpenGeoPortal.Utility.whichSearch().type;
 			if (type == "basicSearch") {
 				search = "Basic";
@@ -81,6 +78,32 @@ org.OpenGeoPortal.UserInterface = function(){
 				search = "Advanced";
 				keyword = jQuery("#advancedKeywordText").val();
 			}
+
+			var d = new Date();
+
+			if (keyword.length >= 2) {
+				if (that.lastSearchTime == null || d - that.lastSearchTime >= 500) {
+					if (that.resultsTableObject.getLastSolrSearch() == null || keyword != that.resultsTableObject.getLastSolrSearch().getBasicKeywords().toString()) {
+						that.searchSubmit();
+						that.lastSearchTime = d;
+						console.log('searching at ' + d);
+					} else {
+						console.log('nothing changed from "' + keyword + '" to "' + that.resultsTableObject.getLastSolrSearch().getBasicKeywords() + '"');
+					}
+				} else {
+					console.log('wait awhile');
+				}
+			} else {
+				console.log('too short');
+			}
+
+			if (event.keyCode == '13') {
+				if (d != that.lastSearchTime) {
+					that.searchSubmit();
+					that.lastSearchTime = d;
+					console.log('entered searching at ' + d);
+				}
+				event.preventDefault();
 				analytics.track("Search", search, keyword);
 			}
 		});
