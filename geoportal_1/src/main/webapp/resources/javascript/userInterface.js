@@ -26,7 +26,7 @@ org.OpenGeoPortal.UserInterface = function(){
 	this.geocodeText = "Find Place (Example: Boston, MA)";
 	//default text for the search input box
 	this.searchText = "Search for data layers...";
-
+	
 	this.mapObject = org.OpenGeoPortal.map;
 	this.resultsTableObject = org.OpenGeoPortal.resultsTableObj;
 	this.cartTableObject = org.OpenGeoPortal.cartTableObj;
@@ -73,14 +73,14 @@ org.OpenGeoPortal.UserInterface = function(){
 			if (event.keyCode == '13') {
 				event.preventDefault();
 				that.searchSubmit();
-				type = org.OpenGeoPortal.Utility.whichSearch().type;
-				if (type == "basicSearch") {
-					search = "Basic";
-					keyword = jQuery("#basicSearchTextField").val();
-				} else if (type == "advancedSearch") {
-					search = "Advanced";
-					keyword = jQuery("#advancedKeywordText").val();
-				}
+			type = org.OpenGeoPortal.Utility.whichSearch().type;
+			if (type == "basicSearch") {
+				search = "Basic";
+				keyword = jQuery("#basicSearchTextField").val();
+			} else if (type == "advancedSearch") {
+				search = "Advanced";
+				keyword = jQuery("#advancedKeywordText").val();
+			}
 				analytics.track("Search", search, keyword);
 			}
 		});
@@ -2521,6 +2521,44 @@ org.OpenGeoPortal.UserInterface.prototype.autocomplete = function(){
         		};
         		var facetError = function(){jQuery( "#advancedOriginatorText" ).autocomplete( "destroy" );
         			jQuery( "#advancedOriginatorText" ).removeClass("ui-autocomplete-loading");
+        		};
+           solr.termQuery(query, facetSuccess, facetError, this);
+
+        },
+        minLength: 2,
+        select: function( event, ui ) {
+
+        },
+        open: function() {
+            jQuery( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+        },
+        close: function() {
+            jQuery( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+        }
+    });
+
+	jQuery( "#filenameText" ).autocomplete({
+        source: function( request, response ) {
+        	var solr = new org.OpenGeoPortal.Solr();
+        	var fieldName = "Name";
+        	var query = solr.getTermQuery(fieldName, request.term);
+        		var facetSuccess = function(data){
+                    var labelArr = [];
+                    var dataArr = data.terms[fieldName];
+                    for (var i in dataArr){
+                    if (i%2 != 0){
+                        continue;
+                        }
+                        var temp = {"label": dataArr[i].toUpperCase(), "value": '"' + dataArr[i].toUpperCase() + '"'};
+                        labelArr.push(temp);
+                        i++;
+                        i++;
+                    }
+                    //console.log("here");
+                response(labelArr);
+        		};
+        		var facetError = function(){jQuery( "#filenameText" ).autocomplete( "destroy" );
+        			jQuery( "#filenameText" ).removeClass("ui-autocomplete-loading");
         		};
            solr.termQuery(query, facetSuccess, facetError, this);
 

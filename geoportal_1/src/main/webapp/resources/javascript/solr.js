@@ -191,6 +191,8 @@ org.OpenGeoPortal.Solr.prototype.PlaceKeywordsTerm = {term: "PlaceKeywordsSynony
 org.OpenGeoPortal.Solr.prototype.PublisherTerm = {term: "Publisher", hasBoost: true, boost: "1.0", hasCap: false};
 org.OpenGeoPortal.Solr.prototype.OriginatorTerm = {term: "Originator", hasBoost: true, boost: "1.0", hasCap: false};
 org.OpenGeoPortal.Solr.prototype.IsoTopicTerm = {term: "ThemeKeywordsSynonymsIso", hasBoost: true, boost: "4.0", hasCap: false};
+org.OpenGeoPortal.Solr.prototype.NameTerm = {term: "Name", hasBoost: true, boost: "4.0", hasCap: false};
+
 
 org.OpenGeoPortal.Solr.prototype.GenericPhraseBoost = "9.0";
 
@@ -199,7 +201,8 @@ org.OpenGeoPortal.Solr.prototype.BasicKeywordTerms = [org.OpenGeoPortal.Solr.pro
                                                       org.OpenGeoPortal.Solr.prototype.ThemeKeywordsTerm,
                                                       org.OpenGeoPortal.Solr.prototype.PlaceKeywordsTerm,
                                                       org.OpenGeoPortal.Solr.prototype.PublisherTerm,
-                                                      org.OpenGeoPortal.Solr.prototype.OriginatorTerm];
+                                                      org.OpenGeoPortal.Solr.prototype.OriginatorTerm,
+                                                      org.OpenGeoPortal.Solr.prototype.NameTerm];
 
 org.OpenGeoPortal.Solr.prototype.AdvancedKeywordTerms = [org.OpenGeoPortal.Solr.prototype.LayerDisplayNameTerm,
                                                       org.OpenGeoPortal.Solr.prototype.ThemeKeywordsTerm,
@@ -222,6 +225,7 @@ org.OpenGeoPortal.Solr.prototype.AccessDisplay = null;
 
 org.OpenGeoPortal.Solr.prototype.Publisher = null;
 org.OpenGeoPortal.Solr.prototype.Originator = null;
+org.OpenGeoPortal.Solr.prototype.Filename = null;
 org.OpenGeoPortal.Solr.prototype.AdvancedKeywordString = null;
 
 // the OpenGeoPortal UI provides a pull-down with topics such as "Agriculture and Farming"
@@ -266,7 +270,7 @@ org.OpenGeoPortal.Solr.prototype.tokenize = function tokenize(searchTerms)
 
 org.OpenGeoPortal.Solr.prototype.escapeSolrValue = function escapeSolrValue(solrValue)
 {
-	solrValue = this.filterCharacters(solrValue);
+	//solrValue = this.filterCharacters(solrValue);
     solrValue = solrValue.replace(/{/g, "\\{").replace(/}/g, "\\}").replace(/\[/g, "\\[").replace(/]/g, "\\]")
     	.replace(/!/g, "\\!").replace(/[+]/g, "\\+").replace(/&/g, "\\&").replace(/~/g, "\\~").replace(/[(]/g, "\\(")
     	.replace(/[)]/g, "\\)").replace(/-/g, "\\-").replace(/\^/g, "\\^");
@@ -1058,6 +1062,11 @@ org.OpenGeoPortal.Solr.prototype.setOriginator = function setOriginator(originat
 	this.Originator = originator;
 };
 
+org.OpenGeoPortal.Solr.prototype.setFilename = function setFilename(filename)
+{
+	this.Filename = filename;
+};
+
 org.OpenGeoPortal.Solr.prototype.getAndFilter = function(term, values){
 	if ((values == null) || (values == "")){
 		return "";
@@ -1093,6 +1102,13 @@ org.OpenGeoPortal.Solr.prototype.getOriginatorFilter = function getOriginatorFil
 	return this.getAndFilter("Originator", this.Originator);
 
 };
+
+org.OpenGeoPortal.Solr.prototype.getFilenameFilter = function getFilenameFilter()
+{
+	return this.getAndFilter("Name", this.Filename);
+
+};
+
 
 /*
  * should search results include restricted data from remote institutions
@@ -1339,11 +1355,12 @@ org.OpenGeoPortal.Solr.prototype.getSearchQuery = function getSearchQuery()
 	var accessFilter = this.getAccessFilter();
 	var publisher = this.getPublisherFilter();
 	var originator = this.getOriginatorFilter();
+	var filename = this.getFilenameFilter();
 	var restrictedFilter = this.getRestrictedFilter();
 	var shardClause = this.getShardServerNames();  // "shards=geoportal-dev.atech.tufts.edu/solr,gis.lib.berkeley.edu:8080/solr/";
 	var extras = this.combineFiltersAndClauses([spatialFilter, returnType, returnedColumns, rowCount, startRow, shardClause,
 	                                            sortClause, keywordFilter, dateFilter, dataTypeFilter, institutionFilter,
-						    accessFilter, publisher, originator, restrictedFilter, topicFilter]);
+						    accessFilter, publisher, originator, filename, restrictedFilter, topicFilter]);
 
 	var query = "q=" + queryClause + "&debugQuery=false&" + extras; //spatialFilter + "&" + returnType + "&" + returnedColumns;
 	//foo = query;

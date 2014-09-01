@@ -1818,6 +1818,9 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	   // solr.setPublisher(publisher);
 	    solr.setOriginator(publisher);
 
+		var filename = jQuery('#filenameText').val().trim();
+	    solr.setFilename(filename);
+
 	    var topicsElement = jQuery("input[type=radio][name=topicRadio]");
 	    var selectedTopic = topicsElement.filter(":checked").val();
 	    // first topic says "Select a topic"
