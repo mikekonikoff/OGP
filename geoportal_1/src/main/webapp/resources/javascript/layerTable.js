@@ -1654,7 +1654,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		var sortColumn = sortObj.organizeBy;
 		if ((sortColumn == null) || (sortColumn == "score"))
 			sortColumn = "score";
-	    else if ((sortColumn == "ContentDate") || (sortColumn == "Access"))
+	    else if ((sortColumn == "ContentDate") || (sortColumn == "Access") || (sortColumn == "Name"))
 	           sortColumn == sortColumn;  // nothing to do, sortColumn doesn't need adjustment
 		else
 			sortColumn = sortColumn + "Sort";  // use solr sort column that haven't been tokenized
