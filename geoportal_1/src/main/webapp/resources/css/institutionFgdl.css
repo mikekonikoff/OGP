@@ -19,7 +19,7 @@ body {
 #contactLogos {
     background: none repeat scroll 0 0 #CCCCCC;
     bottom: 15px;
-    height: 30px;
+    height: 40px;
     left: 33px;
     padding-top: 5px;
     position: absolute;
@@ -35,6 +35,9 @@ body {
 
 #contactLogos > div.gisLogo {
 	float: right;
+	margin-right: 5px;
+	margin-top: 5px;
+	height: 15px;
 }
 
 #contactLogos > div.itLogo {
@@ -42,18 +45,27 @@ body {
 	margin-left: 10px;
 }
 
+#footerLogos > div.gisLogo {
+	height: 24px;
+}
+
 /*logos in the footer and in contact dialog */
 .itLogo {
-	margin-top: 0px;
-	width: 150px;
-	background: url(../media/geoplan_logo.png) no-repeat transparent;
-	}
+	line-height: 25px;
+	color: white;
+	font-weight: 900;
+/*	width: 150px;
+ 	background: url(../media/geoplan_logo.png) no-repeat transparent;
+ */	}
 
 .gisLogo {
 	vertical-align: bottom;
+	width: 50px;
+ 	background: url(../media/t60_24.gif) no-repeat white;
+/*	vertical-align: bottom;
 	width: 75px;
-	background: url(../media/fgdl_logo.png) no-repeat transparent;
-	}
+ 	background: url(../media/fgdl_logo.png) no-repeat transparent;
+ */	}
 
 h1 {
 	font-size: 14px;

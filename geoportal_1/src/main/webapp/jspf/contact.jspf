@@ -10,8 +10,9 @@
 
 	<div id="contactLogos">
 	    <div class="gisLogo" title="Florida Geographic Data Library" onclick="location.href='http://www.fgdl.org/'">
-	    </div>
-		<div class="itLogo" title="GeoPlan Center" onclick="location.href='http://www.geoplan.ufl.edu/'">
+		</div>
+		<div class="itLogo" title="University of Florida GeoPlan Center" onclick="location.href='http://www.geoplan.ufl.edu/'">
+			University of Florida GeoPlan Center
 	    </div>
 	</div>
 </div>

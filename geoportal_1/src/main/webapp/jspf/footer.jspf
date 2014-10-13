@@ -5,10 +5,11 @@
 		<span id="contactLink" class="infoLinks">Contact</span>
 	</span>
 	<div id="footerLogos">
-		<div class="itLogo" title="GeoPlan Center" onclick="location.href='http://www.geoplan.ufl.edu/'">
+		<div class="itLogo" title="University of Florida GeoPlan Center" onclick="location.href='http://www.geoplan.ufl.edu/'">
+			University of Florida GeoPlan Center
 	    </div>
 	    <div class="gisLogo" title="Florida Geographic Data Library" onclick="location.href='http://www.fgdl.org/'">
-	    </div>
+	</div>
 	</div>
 </div>
 <%@include file="about.jspf"%>
