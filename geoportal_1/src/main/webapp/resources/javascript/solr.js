@@ -270,7 +270,7 @@ org.OpenGeoPortal.Solr.prototype.tokenize = function tokenize(searchTerms)
 
 org.OpenGeoPortal.Solr.prototype.escapeSolrValue = function escapeSolrValue(solrValue)
 {
-	//solrValue = this.filterCharacters(solrValue);
+	solrValue = this.filterCharacters(solrValue);
     solrValue = solrValue.replace(/{/g, "\\{").replace(/}/g, "\\}").replace(/\[/g, "\\[").replace(/]/g, "\\]")
     	.replace(/!/g, "\\!").replace(/[+]/g, "\\+").replace(/&/g, "\\&").replace(/~/g, "\\~").replace(/[(]/g, "\\(")
     	.replace(/[)]/g, "\\)").replace(/-/g, "\\-").replace(/\^/g, "\\^");
@@ -280,7 +280,8 @@ org.OpenGeoPortal.Solr.prototype.escapeSolrValue = function escapeSolrValue(solr
 
 //filter out characters that cause problems for solr
 org.OpenGeoPortal.Solr.prototype.filterCharacters = function filterCharacters(solrValue){
-	solrValue = solrValue.replace(/[&\/\\#,+()$~%'":*?<>{}]/g,'');
+	//solrValue = solrValue.replace(/[&\/\\#,.+()$~%'":*?<>{}]/g,'');
+	solrValue = solrValue.replace(/[&\/\\#,+()$~%'":?<>{}]/g,'');
 	return solrValue;
 };
 
@@ -667,7 +668,7 @@ org.OpenGeoPortal.Solr.prototype.getBaseKeywordQuery = function getBaseKeywordQu
 				var elements = currentKeyword.split(":");
 				var fieldName = elements[0];
 				var fieldValue = elements[1];
-				keywordQuery += "query({!dismax qf=" + fieldName + " v='" + fieldValue + "'})";
+				keywordQuery += "query({!dismax qf=" + fieldName + " v='" + fieldValue + "*'})";
 			} else {
 				// here if user entered keywords they want searched against standard fields
 				useKeywordQuery = true;
@@ -770,7 +771,7 @@ org.OpenGeoPortal.Solr.prototype.getKeywordFilter = function(keywords, arrFilter
 			// here if we have something of the form Field:Value
 			// that is, user supplied the Solr field name and its value
 			// nothing to do for the filter
-		} else {
+		} else if (currentKeyword.length > 0) {
 			useKeywordFilter = true;
 			// here if user entered keywords they want searched against standard fields
 			processedKeywordArr.push(currentKeyword);
@@ -779,7 +780,7 @@ org.OpenGeoPortal.Solr.prototype.getKeywordFilter = function(keywords, arrFilter
 	}
 
 	if (useKeywordFilter){
-		if (keywords.length > 1){
+		if (processedKeywordArr.length > 1){
 			processedKeyword = "(" + processedKeywordArr.join(" ") + ")";
 		} else {
 			processedKeyword = processedKeywordArr[0];
@@ -1316,6 +1317,10 @@ org.OpenGeoPortal.Solr.prototype.getSearchQuery = function getSearchQuery()
 
 	if (basicKeywords != null){
 		keywordQuery = this.getBasicKeywordQuery();
+		if (keywordQuery == "") {
+			console.debug("escaped keywords are empty, nothing to search. solr query will be aborted.")
+			return "";
+		}
 		var arrBasicTerms = this.getBasicKeywordTermsArr();
 		keywordFilter = this.getKeywordFilter(basicKeywords, arrBasicTerms);
 		keywordFilter += this.getKeywordPhraseFilter(basicKeywords, this.getBasicKeywordTerms());
@@ -1418,7 +1423,8 @@ org.OpenGeoPortal.Solr.prototype.combineQueries = function combineQueries(spatia
 org.OpenGeoPortal.Solr.prototype.executeSearchQuery = function executeSearchQuery(success, error)
 {
 	var query = this.getSearchQuery();
-	this.sendToSolr(query, success, error);
+	if (query != "")
+		this.sendToSolr(query, success, error);
 };
 
 

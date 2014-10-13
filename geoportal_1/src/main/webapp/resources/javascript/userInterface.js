@@ -23,7 +23,7 @@ if (typeof org.OpenGeoPortal == 'undefined'){
 
 org.OpenGeoPortal.UserInterface = function(){
 	//default text for the geocoder input box
-	this.geocodeText = "Find Place (Example: Boston, MA)";
+	this.geocodeText = "Find Place (Example: Jacksonville, FL)";
 	//default text for the search input box
 	this.searchText = "Search for data layers...";
 	this.lastSearchTime;
@@ -67,34 +67,55 @@ org.OpenGeoPortal.UserInterface = function(){
 
 		});
 		this.togglePanels();
+//		jQuery('.searchBox').keydown(function(event) {
+//			var unicode = String.fromCharCode(event.which);
+//			var isBackspace = event.which == 8;
+//			var isDelete = event.which == 46;
+//			var isArrow = event.keyCode >= 36 && event.keyCode <= 39;
+//			var isPaste = event.ctrlKey && (event.which == 86 ||event.which == 118);
+//			var nextSearchableCharacter = !(isBackspace || isDelete || isArrow) && /[\S]/.test(unicode) ? String.fromCharCode(event.which) : "";
+//
+//			console.debug('search box keydown event.keyCode: ' + event.keyCode + ' event.which: ' + event.which + ' unicode: "' + unicode + '" searchable: ' + (nextSearchableCharacter != "") + " isPaste: " + isPaste + " value " + jQuery("#basicSearchTextField").val());
+//		});
 		jQuery('.searchBox').keypress(function(event){
 			var type, search, keyword;
+			var unicode = String.fromCharCode(event.which);
+			var nextSearchableCharacter = event.which != 8 && event.which != 46 && !(event.keyCode >= 36 && event.keyCode <= 39) && /[\S]/.test(unicode) ? String.fromCharCode(event.which) : "";
+
+			console.debug('search box keypress event.keyCode: ' + event.keyCode + ' event.which: ' + event.which + ' unicode: "' + unicode + '" searchable: ' + (nextSearchableCharacter != ""));
 
 			type = org.OpenGeoPortal.Utility.whichSearch().type;
 			if (type == "basicSearch") {
 				search = "Basic";
-				keyword = jQuery("#basicSearchTextField").val();
+				keyword = jQuery("#basicSearchTextField").val().trim() + nextSearchableCharacter;
 			} else if (type == "advancedSearch") {
 				search = "Advanced";
-				keyword = jQuery("#advancedKeywordText").val();
+				keyword = jQuery("#advancedKeywordText").val().trim() + nextSearchableCharacter;
 			}
 
 			var d = new Date();
+			var searchTimeDelta = that.lastSearchTime == null ? Number.POSITIVE_INFINITY : d - that.lastSearchTime;
+			var lastKeyword = that.resultsTableObject.getLastSolrSearch() == null ? null : that.resultsTableObject.getLastSolrSearch().getBasicKeywords();
 
-			if (keyword.length >= 2) {
-				if (that.lastSearchTime == null || d - that.lastSearchTime >= 500) {
-					if (that.resultsTableObject.getLastSolrSearch() == null || keyword != that.resultsTableObject.getLastSolrSearch().getBasicKeywords().toString()) {
-						that.searchSubmit();
-						that.lastSearchTime = d;
-						console.log('searching at ' + d);
+			if (event.keyCode >= 36 && event.keyCode <= 39) {
+				console.debug('ignoring character "' + String.fromCharCode(event.which) + '"');
+			} else {
+				if (keyword.length >= 2 || keyword.length == 0) {
+					console.debug('it has been ' + searchTimeDelta + ' ms since last search. last keyword was: ' + lastKeyword);
+					if (searchTimeDelta >= 250 || lastKeyword == null) {
+						if (lastKeyword == null || keyword != lastKeyword.toString()) {
+							that.searchSubmit();
+							that.lastSearchTime = d;
+							console.debug('searching at ' + d + ' for ' + keyword.length + ' length keyword: "' + keyword + '"');
+						} else {
+							console.debug('nothing changed from "' + keyword + '" to "' + lastKeyword + '"');
+						}
 					} else {
-						console.log('nothing changed from "' + keyword + '" to "' + that.resultsTableObject.getLastSolrSearch().getBasicKeywords() + '"');
+						console.debug('waiting at ' + d + ', it has only been ' + searchTimeDelta + ' ms ');
 					}
 				} else {
-					console.log('wait awhile');
+					console.debug('waiting at ' + d + ', keyword too short, only ' + keyword.length + ' characters ');
 				}
-			} else {
-				console.log('too short');
 			}
 
 			if (event.keyCode == '13') {
