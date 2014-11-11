@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="application/xml; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.*, javax.xml.transform.*, java.net.URLDecoder, javax.xml.transform.dom.*, javax.xml.transform.stream.*, 
-    org.OpenGeoPortal.Utilities.Http.HttpRequester, org.OpenGeoPortal.Metadata.LayerInfoRetriever, org.OpenGeoPortal.Solr.*, java.io.*, javax.xml.parsers.DocumentBuilderFactory, 
-    javax.xml.parsers.DocumentBuilder, org.w3c.dom.NodeList, org.w3c.dom.Node, org.w3c.dom.Document, java.net.URLConnection, java.util.Set, java.util.HashSet, java.util.Map, 
+    pageEncoding="UTF-8" import="java.util.*, javax.xml.transform.*, java.net.URLDecoder, javax.xml.transform.dom.*, javax.xml.transform.stream.*,
+    org.OpenGeoPortal.Utilities.Http.HttpRequester, org.OpenGeoPortal.Metadata.LayerInfoRetriever, org.OpenGeoPortal.Solr.*, java.io.*, javax.xml.parsers.DocumentBuilderFactory,
+    javax.xml.parsers.DocumentBuilder, org.w3c.dom.NodeList, org.w3c.dom.Node, org.w3c.dom.Document, java.net.URLConnection, java.util.Set, java.util.HashSet, java.util.Map,
     org.springframework.context.*, org.springframework.web.context.support.*, org.springframework.beans.factory.* "%><%
     	response.setHeader("Content-disposition","attachment; filename=\"wfs.xml\"");
 
@@ -19,17 +19,17 @@
     	String[] layerIds = layers.split(",");
     	//String[] layerIds = request.getParameterValues("layerId");
    		Set<String> layerIdSet = new HashSet<String>();
-   		
+
 		for (int i = 0; i < layerIds.length; i++){
 			layerIdSet.add(layerIds[i]);
    		}
-		
+
 		ApplicationContext injector = WebApplicationContextUtils.getWebApplicationContext(request.getSession().getServletContext());
 
 		LayerInfoRetriever layerInfoRetriever = (LayerInfoRetriever) injector.getBean("layerInfoRetriever.solr");
    		List<SolrRecord> solrRecords = layerInfoRetriever.fetchAllLayerInfo(layerIdSet);
    		HttpRequester httpRequester = (HttpRequester) injector.getBean("httpRequester.generic");
-   		
+
    		//There is some info that requires the getCapabilities doc (native epsg code),
    		//so we must request it and parse it.  The benefit is that we can just grab the appropriate FeatureType node and
    		//insert it into this response.  Eventually, if we can get the epsg code from solr reliably, solr might be the
@@ -37,12 +37,12 @@
    		String institution = solrRecords.get(0).getInstitution();
    		//String serverName = ParseJSONSolrLocationField.getWfsUrl(layerInfoMap.get(layerIds[0]).get("Location"));
 
-   		String serverName = "http://geoserver01.uit.tufts.edu";
+   		String serverName = "https://geoportal04.geoplan.ufl.edu/"; //"http://geoserver01.uit.tufts.edu";
    		String servicePoint = serverName + "/wfs";
 		String featureTypeInfo = "";
 
 		for (int i = 0; i < layerIds.length; i++){
-			String workspace = "sde";
+			String workspace = "fgdl_data";
    			//String workspace = layerInfoMap.get(layerIds[i]).get("WorkspaceName");
    			String layerName = solrRecords.get(0).getName();
 
@@ -58,10 +58,10 @@
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			//Parse the document
 			Document document = builder.parse(inputStream);
-		
+
 			NodeList layerNodeList = document.getElementsByTagName("FeatureType");
 			Node layerNode = layerNodeList.item(0);
-			
+
 	    	StringWriter stw = new StringWriter();
         	Transformer serializer = TransformerFactory.newInstance().newTransformer();
         	serializer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -70,8 +70,8 @@
        		featureTypeInfo += stw.toString();
        		System.out.println(featureTypeInfo);
 		}
-		
-		
+
+
 		/*
 		//parse the returned XML
 		// Create a factory
@@ -83,7 +83,7 @@
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		//Parse the document
 		Document document = builder.parse(inputStream);
-		
+
 		NodeList elementNodes = document.getElementsByTagName("Name");
 		for (int i = 0; i < elementNodes.getLength(); i++){
 			Node featureTypeNameElement = elementNodes.item(i);
@@ -97,7 +97,7 @@
    	             	serializer.setOutputProperty(OutputKeys.INDENT, "yes");
 					serializer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
    	            	serializer.transform(new DOMSource(featureTypeElement), new StreamResult(stw));
-   	            	featureTypeInfo += stw.toString();  
+   	            	featureTypeInfo += stw.toString();
    					break;
    				}
    			}

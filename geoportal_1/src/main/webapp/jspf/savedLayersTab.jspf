@@ -14,15 +14,16 @@
 		<span id="shareButton" class="styledButton">Share</span>
 		<span id="mapItButton" class="styledButton">Map It</span>
 		<div id="optionDetails"></div>
-	</div> 
+		<div style="margin-top: -10px; padding-left: 5px"><%@include file="ftpSite.jspf" %></div>
+	</div>
 	<div class="sub_header">
 		<span class="sub_headerTitle">
 		LAYERS
 		</span>
 
 		<span class="savedLayersNumber"></span>
-		<span class="sub_headerButtons">	
-		
+		<span class="sub_headerButtons">
+
 			<span id="removeFromCartButton" class="deleteButton styledButtonSmall" title="Remove selected layers from the cart">
     		Remove
 			</span>

@@ -2,7 +2,9 @@
 	<p>
 		<%@include file="mailto.jspf"%>
 	</p>
-
+	<p>
+		For questions about specific FGDL data layers, please contact: <a href="mailto: data@fgdl.org">data@fgdl.org</a>
+	</p>
 	<div>
 		<h3>Project Management:</h3>
 		Crystal Goodison, GIS Database Administrator, Project Manager, GeoPlan Center, University of Florida
@@ -12,7 +14,6 @@
 	    <div class="gisLogo" title="Florida Geographic Data Library" onclick="location.href='http://www.fgdl.org/'">
 		</div>
 		<div class="itLogo" title="University of Florida GeoPlan Center" onclick="location.href='http://www.geoplan.ufl.edu/'">
-			University of Florida GeoPlan Center
-	    </div>
+		</div>
 	</div>
 </div>

@@ -668,7 +668,7 @@ org.OpenGeoPortal.Solr.prototype.getBaseKeywordQuery = function getBaseKeywordQu
 				var elements = currentKeyword.split(":");
 				var fieldName = elements[0];
 				var fieldValue = elements[1];
-				keywordQuery += "query({!dismax qf=" + fieldName + " v='" + fieldValue + "*'})";
+				keywordQuery += "query({!dismax qf=" + fieldName + " v='*" + fieldValue + "*'})";
 			} else {
 				// here if user entered keywords they want searched against standard fields
 				useKeywordQuery = true;
@@ -700,7 +700,7 @@ org.OpenGeoPortal.Solr.prototype.getKeywordQueryTemplate = function getKeywordQu
 	}
 
 	var keywordQuery = "product" + capPrefix + "(query({!dismax qf=" + termObject.term;
-	keywordQuery += " v='" + keyword + "'})," + capSuffix + termObject.boost + ")";
+	keywordQuery += " v='*" + keyword + "*'})," + capSuffix + termObject.boost + ")";
 	return keywordQuery;
 };
 
@@ -787,7 +787,7 @@ org.OpenGeoPortal.Solr.prototype.getKeywordFilter = function(keywords, arrFilter
 		}
 
 		var numFields = arrFilterFields.length;
-		var term = ":" + processedKeyword;
+		var term = ":*" + processedKeyword + "*";
 		var joiner = "+OR+";
 		keywordFilter += arrFilterFields.join(term + joiner);
 		if (numFields > 0){
@@ -837,7 +837,7 @@ org.OpenGeoPortal.Solr.prototype.getKeywordPhraseFilter = function(keywords, arr
 			}
 		}
 		if (keywords.length > 1){
-			processedKeyword = "'" + processedKeywordArr.join(" ") + "'";
+			processedKeyword = "'*" + processedKeywordArr.join(" ") + "*'";
 			var numFields = arrFilterFields.length;
 			var term = ":" + processedKeyword;
 			var boost = "^" + this.GenericPhraseBoost;

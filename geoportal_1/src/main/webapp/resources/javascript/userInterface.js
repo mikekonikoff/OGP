@@ -102,7 +102,7 @@ org.OpenGeoPortal.UserInterface = function(){
 			} else {
 				if (keyword.length >= 2 || keyword.length == 0) {
 					console.debug('it has been ' + searchTimeDelta + ' ms since last search. last keyword was: ' + lastKeyword);
-					if (searchTimeDelta >= 250 || lastKeyword == null) {
+					if (searchTimeDelta >= 350 || lastKeyword == null) {
 						if (lastKeyword == null || keyword != lastKeyword.toString()) {
 							that.searchSubmit();
 							that.lastSearchTime = d;
@@ -195,7 +195,7 @@ org.OpenGeoPortal.UserInterface = function(){
     		zIndex: 2999,
     		title: "CONTACT INFORMATION",
     		resizable: false,
-    		minHeight: 222,
+    		minHeight: 265,
     		minWidth: 405,
     		autoOpen: false
 		});
@@ -568,7 +568,7 @@ org.OpenGeoPortal.UserInterface.prototype.createInstitutionsMenu = function() {
 		menuHtml += ' title="' + institutionIcon["tooltipText"] + '"/>';
 		menuHtml += institution;
 		menuHtml += '</label>';
-		menuHtml += '<input type="checkbox" class="sourceCheck" id="sourceCheck' + institution + '" value="' + institution + '" checked=true />';
+		menuHtml += '<input type="checkbox" class="sourceCheck" id="sourceCheck' + institution + '" value="' + institution + '" ' + (institution==org.OpenGeoPortal.InstitutionInfo.homeInstitution ? 'checked=true' : '') + '/>';
 		menuHtml += '</div>';
 	}
 	var params = {
@@ -1192,7 +1192,7 @@ org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
     	rasterControl += "<option value=\"GeoTIFF\">GeoTiff</option> \n";
     	rasterControl += '<option value="kmz">KMZ</option> \n';
     	rasterControl += "</select><br/> \n";
-    	var clipControl = '<input id="checkClip" type="checkbox" checked="checked" /><label for="checkClip" id="checkClipLabel">Clip data to map extent</label><br/> \n';
+    	var clipControl = '<input id="checkClip" type="checkbox" /><label for="checkClip" id="checkClipLabel">Clip data to map extent</label><br/> \n';
     	//var emailInput = '<label for="emailAddress">Enter your email address:</label><input id="emailAddress" type="text" /> </br>\n';
     	var formatLabel = "<span>Select format for:</span><br />\n";
     	if (showVectorControl || showRasterControl){
@@ -1667,7 +1667,7 @@ org.OpenGeoPortal.UserInterface.prototype.availableLayerLogic = function(action,
 		if (dataType == "libraryrecord"){
 			return false;
 		}
-		if ((institution != "mit")||(access != "public")){
+		if ((institution != "fgdl")||(access != "public")){
 			return false;
 		} else {
 			return true;

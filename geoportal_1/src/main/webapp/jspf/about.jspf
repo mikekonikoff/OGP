@@ -1,24 +1,12 @@
 <div id="about" class="dialog infoDialog">
 	<p>
-		<h2>TODO</h2>
-		<div style="margin-top: 1em; margin-bottom: 1em;">Get <em>new</em> text from Crystal.</div>
-		<button onclick="jQuery('#oldText').toggle()">Toggle Default Text</button>
-	</p>
-	<div id="oldText" style="display: none;">
-	<p>
-	GeoData@Tufts is developed and maintained by Tufts University Information Technology.
-	Tufts is leading the development in collaboration with Harvard of this open source, federated web application to rapidly discover, preview,
-	and retrieve geospatial data from multiple repositories. GeoData@Tufts combines an intuitive, map-based search interface along with traditional
-	text-based metadata search tools for rapid data discovery and for use in teaching, learning, and research.
+		FGDL-OGP (The Florida Geographic Data Library OpenGeoportal) is a mechanism for accessing, previewing, and distributing geospatial data.
+		The FGDL is warehoused and maintained at the University of Florida's GeoPlan Center, a GIS Research Center affiliated with the Department of Urban and Regional Planning in the College of Design, Construction, and Planning.
 	</p>
 	<p>
-	GeoData@Tufts is part of <a href="http://www.opengeoportal.org">The Open Geoportal</a>. The Open Geoportal is a consortium comprised of contributions
-	of several universities and organizations to help facilitate the discovery and acquisition of geospatial data across many organizations and platforms.
-	Current partners include: Harvard, MIT, MassGIS, Princeton, Columbia, Stanford, UC Berkeley, UCLA, Yale, and UConn. Built on open source technology,
-	The Open Geoportal provides organizations the opportunity to share thousands of geospatial data layers, maps, metadata, and development resources through
-	a single common interface.
+		The OpenGeoportal is an open source, federated web application developed by Tufts University, Harvard, and MIT.
+		The OpenGeoportal web application supports map-based and text-based metadata searches to quickly find geospatial data and use in research, learning, outreach and service.
 	</p>
-	</div>
 	<p>
     	<%@include file="mailto.jspf"%>
 	</p>

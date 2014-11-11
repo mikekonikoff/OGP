@@ -19,7 +19,7 @@ body {
 #contactLogos {
     background: none repeat scroll 0 0 #CCCCCC;
     bottom: 15px;
-    height: 40px;
+    height: 30px;
     left: 33px;
     padding-top: 5px;
     position: absolute;
@@ -29,7 +29,7 @@ body {
 #contactLogos > div {
 	cursor: pointer;
     display: inline-block;
-    height: 25px;
+    height: 16px;
     padding: 5px;
 }
 
@@ -42,27 +42,39 @@ body {
 
 #contactLogos > div.itLogo {
 	float: left;
-	margin-left: 10px;
+	margin-left: 25%;
 }
 
 #footerLogos > div.gisLogo {
-	height: 24px;
+	height: 25px;
+	float:right;
+	margin-left:1px;
+}
+
+#footerLogos {
+	margin-right: 30px;
 }
 
 /*logos in the footer and in contact dialog */
+/*
 .itLogo {
 	line-height: 25px;
 	color: white;
 	font-weight: 900;
-/*	width: 150px;
+	width: 150px;
  	background: url(../media/geoplan_logo.png) no-repeat transparent;
- */	}
+	}
+*/
+
+.itLogo {
+	width: 160px;
+ 	background: url(../media/GeoPlan-Logo-Final-CMYK-small.gif) no-repeat white 0px -27px;
+}
 
 .gisLogo {
-	vertical-align: bottom;
-	width: 50px;
- 	background: url(../media/t60_24.gif) no-repeat white;
+	width: 0px;
 /*	vertical-align: bottom;
+ 	background: url(../media/t60_24.gif) no-repeat white -0px 1px;
 	width: 75px;
  	background: url(../media/fgdl_logo.png) no-repeat transparent;
  */	}
@@ -90,7 +102,7 @@ h2 {
 }
 
 #top_menu {
- 	width: 252px;
+ 	width: 202px;
  	background: url(../media/top_menu_bg.png) no-repeat transparent;
  }
 
@@ -100,6 +112,10 @@ h2 {
 
 #top_menu a:hover {
 	color:#FFFF66;
+}
+
+span.login {
+	display: none;
 }
 
 #welcome {
@@ -123,6 +139,13 @@ h2 {
 	color:#FFFF66;
 }
 
+a.normalLink:link {
+	color: #0000EE;
+}
+
+a.normalLink:visited {
+	color: #551A8B;
+}
 .highlight_row {
 	background-color: #edf4fa;
 }
