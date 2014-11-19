@@ -1185,6 +1185,7 @@ org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
     	var vectorControl = "<label for=\"vectorDownloadType\" class=\"downloadSelect\">Vector files</label>";
     	vectorControl += "<select id=\"vectorDownloadType\" class=\"downloadSelect\"> \n";
     	vectorControl += "<option value=\"shp\">shapefile</option> \n";
+    	vectorControl += "<option value=\"lyr\">layer file</option> \n";
     	vectorControl += "<option value=\"kmz\">KMZ</option> \n";
     	vectorControl += "</select><br/> \n";
     	var rasterControl = "<label for=\"rasterDownloadType\" class=\"downloadSelect\">Raster files</label>";

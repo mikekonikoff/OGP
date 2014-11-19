@@ -16,9 +16,9 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 
 public class OgpDownloadConfigRetriever extends ConfigRetriever implements DownloadConfigRetriever, BeanFactoryAware{
-	
+
 	/*
-	 * 
+	 *
 	 * (non-Javadoc)
 	 * @see org.OpenGeoPortal.Download.DownloadConfigRetriever#getClassKey(org.OpenGeoPortal.Download.RequestedLayer)
 	 */
@@ -31,7 +31,7 @@ public class OgpDownloadConfigRetriever extends ConfigRetriever implements Downl
 		this.readConfigFile();
 		SolrRecord record = layer.getLayerInfo();
 		JsonNode institutions = this.configContents.path("institutions");
-		if (!institutions.isArray()){
+		if (!institutions.isContainerNode()){
 			try{
 				return this.getDefaultDownloadKey(institutions, layer);
 			} catch (Exception e){
@@ -51,20 +51,20 @@ public class OgpDownloadConfigRetriever extends ConfigRetriever implements Downl
 				continue;
 			}
 			logger.debug("access match");
-			
+
 
 			Boolean dataTypeMatch = matchNode(currentNode, "dataType", getGeneralizedDataType(record.getDataType().toLowerCase()));
 			if (!dataTypeMatch){
 				continue;
 			}
 			logger.debug("data type match");
-			
+
 			Boolean outputFormatMatch = matchNode(currentNode, "outputFormats", layer.getRequestedFormat().toLowerCase());
 			if (!outputFormatMatch){
 				continue;
 			}
 			logger.debug("requested format match");
-			
+
 			classKey = currentNode.path("classKey").getTextValue();
 			if (accessMatch && dataTypeMatch && outputFormatMatch){
 				break;
@@ -79,7 +79,7 @@ public class OgpDownloadConfigRetriever extends ConfigRetriever implements Downl
 			}
 		}
 		logger.info(layer.getId() + ": " + classKey);
-		
+
 		if (hasRequirements(classKey, layer)){
 			return classKey;
 		} else {
@@ -90,7 +90,7 @@ public class OgpDownloadConfigRetriever extends ConfigRetriever implements Downl
 				throw new Exception("Class Key not defined for this layer.");
 			}
 		}
-		
+
 	}
 
 	private static String getGeneralizedDataType(String dataType){
@@ -99,7 +99,7 @@ public class OgpDownloadConfigRetriever extends ConfigRetriever implements Downl
 		}
 		return dataType;
 	}
-	
+
 	private static Boolean matchNode(JsonNode parentNode, String path, String value){
 		Boolean match = false;
 		JsonNode matchNode = parentNode.path(path);
@@ -128,8 +128,8 @@ public class OgpDownloadConfigRetriever extends ConfigRetriever implements Downl
 
 	/**
 	 * a method to get a concrete class of type LayerDownloader given a string key defined in WEB-INF/download.xml
-	 * 
-	 * 
+	 *
+	 *
 	 * @param downloaderKey a string key that identifies a concrete class of LayerDownloader
 	 * @return the concrete LayerDownloader object
 	 */
@@ -140,14 +140,14 @@ public class OgpDownloadConfigRetriever extends ConfigRetriever implements Downl
 		}
 		return layerDownloader;
 	}
-	
+
 	private Boolean hasRequirements(String classKey, LayerRequest layer){
 		//query the download method to see if it has the info it needs
 		LayerDownloader testDownloader = getLayerDownloader(classKey);
 		Boolean hasInfo = testDownloader.hasRequiredInfo(layer);
 		return hasInfo;
 	}
-	
+
 	private String getDefaultDownloadKey(JsonNode institutions, LayerRequest layer) throws Exception{
 		logger.info("Trying default method...");
 		JsonNode defaultNode = institutions.path("default");
@@ -182,6 +182,6 @@ public class OgpDownloadConfigRetriever extends ConfigRetriever implements Downl
 			throw new Exception(errMsg);
 		}
 	}
-	
-	
+
+
 }

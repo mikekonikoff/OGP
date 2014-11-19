@@ -149,3 +149,69 @@ a.normalLink:visited {
 .highlight_row {
 	background-color: #edf4fa;
 }
+
+/* corner wrapper css from http://css-tricks.com/snippets/css/corner-ribbon/ */
+.wrapper {
+  margin: 50px auto;
+  width: 280px;
+  height: 370px;
+  background: white;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 8px rgba(0,0,0,0.3);
+  -moz-box-shadow:    0px 0px 8px rgba(0,0,0,0.3);
+  box-shadow:         0px 0px 8px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 90;
+}
+
+.ribbon-wrapper-red {
+  width: 85px;
+  height: 88px;
+  overflow: hidden;
+  position: absolute;
+  top: -3px;
+  left: -3px;
+}
+
+.ribbon-red {
+  font: bold 15px Sans-Serif;
+  color: #333;
+  text-align: center;
+  text-shadow: rgba(255,255,255,0.5) 0px 1px 0px;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform:    rotate(-45deg);
+  -ms-transform:     rotate(-45deg);
+  -o-transform:      rotate(-45deg);
+  position: relative;
+  padding: 7px 0;
+  right: -5px;
+  top: 15px;
+  width: 120px;
+  float: right;
+  background-color: #FA161C;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#FA161C), to(#FA272D));
+  background-image: -webkit-linear-gradient(top, #FA161C, #FA272D);
+  background-image:    -moz-linear-gradient(top, #FA161C, #FA272D);
+  background-image:     -ms-linear-gradient(top, #FA161C, #FA272D);
+  background-image:      -o-linear-gradient(top, #FA161C, #FA272D);
+  color: #A20409;
+  -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+  -moz-box-shadow:    0px 0px 3px rgba(0,0,0,0.3);
+  box-shadow:         0px 0px 3px rgba(0,0,0,0.3);
+}
+
+.ribbon-red:before, .ribbon-red:after {
+  content: "";
+  border-top:   3px solid #D1050B;
+  border-left:  3px solid transparent;
+  border-right: 3px solid transparent;
+  position:absolute;
+  bottom: -3px;
+}
+
+.ribbon-red:before {
+  left: 0;
+}
+.ribbon-red:after {
+  right: 0;
+}

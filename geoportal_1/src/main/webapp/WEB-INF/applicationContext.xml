@@ -131,6 +131,11 @@
 		<beans:property name="httpRequester" ref="httpRequester.generic" />
 	</beans:bean>
 
+	<beans:bean id="downloadMethod.lyr"
+		class="org.OpenGeoPortal.Download.Methods.LyrDownloadMethod" scope="prototype">
+		<beans:property name="httpRequester" ref="httpRequester.generic" />
+	</beans:bean>
+
 	<!-- LayerDownloader -->
 	<beans:bean id="layerDownloader.wfs"
 		class="org.OpenGeoPortal.Download.PerLayerDownloader" scope="prototype">
@@ -163,6 +168,10 @@
 	<beans:bean id="layerDownloader.file"
 		class="org.OpenGeoPortal.Download.PerLayerDownloader" scope="prototype">
 		<beans:property name="perLayerDownloadMethod" ref="downloadMethod.file" />
+	</beans:bean>
+	<beans:bean id="layerDownloader.lyr"
+		class="org.OpenGeoPortal.Download.PerLayerDownloader" scope="prototype">
+		<beans:property name="perLayerDownloadMethod" ref="downloadMethod.lyr" />
 	</beans:bean>
 
 	<!-- HGL specific -->
