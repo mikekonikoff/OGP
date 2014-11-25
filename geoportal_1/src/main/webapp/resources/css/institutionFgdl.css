@@ -9,6 +9,8 @@ body {
 #logo {
 	width: 300px;
 	background-image: url(../media/fgdl_logo_draft300.jpg);
+    border: 1px solid #edf4fa;
+    border-radius: 20px;
 }
 
 /* css for the Contact dialog */
@@ -42,7 +44,7 @@ body {
 
 #contactLogos > div.itLogo {
 	float: left;
-	margin-left: 25%;
+	margin-left: 0%;
 }
 
 #footerLogos > div.gisLogo {
@@ -52,7 +54,7 @@ body {
 }
 
 #footerLogos {
-	margin-right: 30px;
+	margin-right: 10%;
 }
 
 /*logos in the footer and in contact dialog */
@@ -68,7 +70,9 @@ body {
 
 .itLogo {
 	width: 160px;
- 	background: url(../media/GeoPlan-Logo-Final-CMYK-small.gif) no-repeat white 0px -27px;
+ 	background: url(../media/GeoPlan-Logo-Final-CMYK-small.gif) no-repeat white 2px -27px;
+    border: 1px solid #003366;
+    border-radius: 20px;
 }
 
 .gisLogo {
