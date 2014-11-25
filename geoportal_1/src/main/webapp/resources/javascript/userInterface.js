@@ -100,12 +100,13 @@ org.OpenGeoPortal.UserInterface = function(){
 			if (event.keyCode >= 36 && event.keyCode <= 39) {
 				console.debug('ignoring character "' + String.fromCharCode(event.which) + '"');
 			} else {
-				if (keyword.length >= 2 || keyword.length == 0) {
+				if (keyword.length >= 3 || keyword.length == 0) {
 					console.debug('it has been ' + searchTimeDelta + ' ms since last search. last keyword was: ' + lastKeyword);
 					if (searchTimeDelta >= 350 || lastKeyword == null) {
 						if (lastKeyword == null || keyword != lastKeyword.toString()) {
 							that.searchSubmit();
 							that.lastSearchTime = d;
+							analytics.track("Search", search, keyword);
 							console.debug('searching at ' + d + ' for ' + keyword.length + ' length keyword: "' + keyword + '"');
 						} else {
 							console.debug('nothing changed from "' + keyword + '" to "' + lastKeyword + '"');
@@ -1185,7 +1186,7 @@ org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
     	var vectorControl = "<label for=\"vectorDownloadType\" class=\"downloadSelect\">Vector files</label>";
     	vectorControl += "<select id=\"vectorDownloadType\" class=\"downloadSelect\"> \n";
     	vectorControl += "<option value=\"shp\">shapefile</option> \n";
-    	vectorControl += "<option value=\"lyr\">layer file</option> \n";
+    	vectorControl += "<option value=\"lyr\">ArcGIS Layer file</option> \n";
     	vectorControl += "<option value=\"kmz\">KMZ</option> \n";
     	vectorControl += "</select><br/> \n";
     	var rasterControl = "<label for=\"rasterDownloadType\" class=\"downloadSelect\">Raster files</label>";
@@ -1316,7 +1317,7 @@ org.OpenGeoPortal.UserInterface.prototype.downloadContinue = function(){
     if ((layerNumber - needEmailInput) > 0){
     	downloadContinue += '<div>A zip file will be generated. \n';
     	downloadContinue += 'It may take up to 10 minutes to process your file.<br /> \n';
-    	downloadContinue += '<span class="notice">Do not close the GeoData website.</span></div>\n';
+    	downloadContinue += '<span class="notice">Do not close the FGDL website.</span></div>\n';
     }
     downloadContinue += addEmail;
 	  jQuery("#downloadDialog").html(downloadContinue);

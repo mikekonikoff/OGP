@@ -1,10 +1,10 @@
 /* This javascript module creates all the global objects, namespaces them
- * 
+ *
  * author: Chris Barnett
- * 
+ *
  */
 
-if (typeof org == 'undefined'){ 
+if (typeof org == 'undefined'){
 	org = {};
 } else if (typeof org != "object"){
 	throw new Error("org already exists and is not an object");
@@ -19,14 +19,14 @@ if (typeof org.OpenGeoPortal == 'undefined'){
 
 org.OpenGeoPortal.init = function(){
 	org.OpenGeoPortal.InstitutionInfo.getInstitutionInfo();
-	document.title = "GeoData@" + org.OpenGeoPortal.InstitutionInfo.getHomeInstitution();
+	document.title = "Florida Geographic Data Library (FGDL)"; //GeoData@" + org.OpenGeoPortal.InstitutionInfo.getHomeInstitution();
 
 	//we do this here so that we can try to get the css before the document is ready (should we do this in the jsp instead?)
 	var url = org.OpenGeoPortal.InstitutionInfo.getCustomCss();
 	if (document.createStyleSheet){
 		document.createStyleSheet(url);
 	} else {
-		jQuery('<link rel="stylesheet" type="text/css" href="' + url + '" />').appendTo('head'); 
+		jQuery('<link rel="stylesheet" type="text/css" href="' + url + '" />').appendTo('head');
 	}
 };
 
@@ -47,9 +47,9 @@ jQuery(document).ready(function (){
 	org.OpenGeoPortal.cartTableObj.hideCol("Save");
 	org.OpenGeoPortal.cartTableObj.showCol("checkBox");
 	org.OpenGeoPortal.ui.addSharedLayersToCart();
-	
+
 	org.OpenGeoPortal.downloadQueue = new org.OpenGeoPortal.Downloader();
-	
+
 	/*downtime notice */
 	/*var downtimeText = "Layers will be unavailable until later this afternoon while we perform server maintenance. We apologize for the inconvenience.";
 	var downtimeDiv = '<div id="downtimeNotice" class="dialog infoDialog"><p>' + downtimeText + '</p></div>';
@@ -59,9 +59,8 @@ jQuery(document).ready(function (){
 		title: "Downtime",
 		resizable: false,
 		minWidth: 415,
-		autoOpen: false		
+		autoOpen: false
 	});
 	jQuery("#downtimeNotice").dialog("open");
 	*/
 });
-  
