@@ -219,3 +219,7 @@ a.normalLink:visited {
 .ribbon-red:after {
   right: 0;
 }
+
+.downloadSettingsDialog select {
+	width: 10em;
+}

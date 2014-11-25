@@ -1195,6 +1195,7 @@ org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
     	rasterControl += '<option value="kmz">KMZ</option> \n';
     	rasterControl += "</select><br/> \n";
     	var clipControl = '<input id="checkClip" type="checkbox" /><label for="checkClip" id="checkClipLabel">Clip data to map extent</label><br/> \n';
+    	clipControl += '<span id="noClip" style="display: none; margin-left: 2em; font-size: 90%">Clipping not available for selected format.</span> \n';
     	//var emailInput = '<label for="emailAddress">Enter your email address:</label><input id="emailAddress" type="text" /> </br>\n';
     	var formatLabel = "<span>Select format for:</span><br />\n";
     	if (showVectorControl || showRasterControl){
@@ -1233,6 +1234,18 @@ org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
 			jQuery("#downloadDialog").dialog( "option", "disabled", false );
 	}
 	jQuery("#downloadDialog").dialog(params);
+	jQuery("#vectorDownloadType").change(function () {
+		if (jQuery(this).val() == "lyr"){
+			jQuery("#checkClip").attr("checked", false);
+			jQuery("#checkClip").prop("disabled", true);
+			jQuery("#checkClipLabel").css("color", "#777");
+			jQuery("#noClip").show();
+		} else {
+			jQuery("#checkClip").prop("disabled", false);
+			jQuery("#checkClipLabel").css("color", "#000");
+			jQuery("#noClip").hide();
+		}
+	});
 	var buttons;
 	if (counter == 0){
 		buttons = {

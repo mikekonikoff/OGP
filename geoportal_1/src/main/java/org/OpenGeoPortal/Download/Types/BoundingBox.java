@@ -6,11 +6,12 @@ package org.OpenGeoPortal.Download.Types;
  *
  */
 public class BoundingBox {
+	public static final BoundingBox WORLD = new BoundingBox(-180D, -90D, 180D, 90D);
 	private Double minX;
 	private Double minY;
 	private Double maxX;
 	private Double maxY;
-	
+
 	/**
 	 * BoundingBox constructor from Doubles
 	 * @param minX
@@ -21,7 +22,7 @@ public class BoundingBox {
 	public BoundingBox(Double minX, Double minY, Double maxX, Double maxY){
 		this.init(minX, minY, maxX, maxY);
 	}
-	
+
 	/**
 	 * BoundingBox constructor from Strings
 	 * @param minX
@@ -32,41 +33,41 @@ public class BoundingBox {
 	public BoundingBox(String minX, String minY, String maxX, String maxY){
 		this.init(Double.parseDouble(minX), Double.parseDouble(minY), Double.parseDouble(maxX), Double.parseDouble(maxY));
 	}
-	
+
 	private void init(Double minX, Double minY, Double maxX, Double maxY){
 		this.minX = minX;
 		this.minY = minY;
 		this.maxX = maxX;
 		this.maxY = maxY;
 	}
-	
+
 	public Double getMinX(){
 		return this.minX;
 	}
-	
+
 	public Double getMaxX(){
 		return this.maxX;
 	}
-	
+
 	public Double getMinY(){
 		return this.minY;
 	}
-	
+
 	public Double getMaxY(){
 		return this.maxY;
 	}
-	
+
 	@Override
 	public String toString(){
 		return Double.toString(this.minX) + "," + Double.toString(this.minY) + "," +Double.toString(this.maxX) + "," + Double.toString(this.maxY);
 	}
-	
+
 	public Double getAspectRatio(){
 		Double aspectRatio = (this.getMinX() - this.getMaxX())/(this.getMinY() - this.getMaxY());
 		aspectRatio = Math.abs(aspectRatio);
 		return aspectRatio;
 	}
-	
+
 	public String generateGMLEnvelope(int epsgCode){
    		String envelope = "<gml:Envelope srsName=\"http://www.opengis.net/gml/srs/epsg.xml#" + String.valueOf(epsgCode) + "\">"
    		+ "<gml:pos>" + Double.toString(this.getMinX()) + " " + Double.toString(this.getMinY()) + "</gml:pos>"
@@ -74,7 +75,7 @@ public class BoundingBox {
    		+ "</gml:Envelope>";
    		return envelope;
 	}
-	
+
 	public String generateOWSBoundingBox(int epsgCode){
 		String bounds  = "<ows:BoundingBox crs=\"urn:ogc:def:crs:EPSG::" + epsgCode + "\">" +
 				"<ows:LowerCorner>" + Double.toString(this.getMinY()) + " " + Double.toString(this.getMinX()) + "</ows:LowerCorner>" +
@@ -94,7 +95,7 @@ public class BoundingBox {
    		+ "</gml:Box>";
    		return envelope;
 	}
-	
+
 	public BoundingBox getIntersection(BoundingBox anotherBoundingBox){
 		Double intersectionMinX = Math.max(this.getMinX(), anotherBoundingBox.getMinX());
 		Double intersectionMaxX = Math.min(this.getMaxX(), anotherBoundingBox.getMaxX());
@@ -103,7 +104,7 @@ public class BoundingBox {
 		BoundingBox intersection = new BoundingBox(intersectionMinX, intersectionMinY, intersectionMaxX, intersectionMaxY);
 		return intersection;
 	}
-	
+
 	public Boolean isEquivalent(BoundingBox anotherBoundingBox){
 		double acceptableDelta = .001;
 		if ((Math.abs(this.minX - anotherBoundingBox.minX) < acceptableDelta)&&
@@ -113,12 +114,12 @@ public class BoundingBox {
 			return true;
 		} else {
 			return false;
-		} 
+		}
 	}
 
 	public String toString1_3() {
 		//wms 1.3 reverses the axes
 		return Double.toString(this.minY) + "," + Double.toString(this.minX) + "," + Double.toString(this.maxY) + "," + Double.toString(this.maxX);
 	}
-	
+
 }

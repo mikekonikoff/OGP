@@ -5,6 +5,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.OpenGeoPortal.Download.LayerDownloader;
+import org.OpenGeoPortal.Download.Types.BoundingBox;
 import org.OpenGeoPortal.Download.Types.LayerRequest;
 import org.OpenGeoPortal.Solr.SolrRecord;
 import org.codehaus.jackson.JsonNode;
@@ -66,6 +67,13 @@ public class OgpDownloadConfigRetriever extends ConfigRetriever implements Downl
 			logger.debug("requested format match");
 
 			classKey = currentNode.path("classKey").getTextValue();
+
+			Boolean isClipped = !layer.getRequestedBounds().isEquivalent(BoundingBox.WORLD);
+			if (isClipped && "layerDownloader.file".equals(classKey)) {
+				classKey = null;
+				continue;
+			}
+
 			if (accessMatch && dataTypeMatch && outputFormatMatch){
 				break;
 			}
