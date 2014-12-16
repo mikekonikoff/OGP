@@ -118,7 +118,8 @@ h2 {
 	color:#FFFF66;
 }
 
-span.login {
+/* Hiding stuff that isn't implemented for FGDL yet */
+span.login, span.webServiceButton {
 	display: none;
 }
 
@@ -154,7 +155,7 @@ a.normalLink:visited {
 	background-color: #edf4fa;
 }
 
-/* corner wrapper css from http://css-tricks.com/snippets/css/corner-ribbon/ */
+/* START corner wrapper css from http://css-tricks.com/snippets/css/corner-ribbon/ */
 .wrapper {
   margin: 50px auto;
   width: 280px;
@@ -219,6 +220,7 @@ a.normalLink:visited {
 .ribbon-red:after {
   right: 0;
 }
+/* END corner wrapper css from http://css-tricks.com/snippets/css/corner-ribbon/ */
 
 .downloadSettingsDialog select {
 	width: 10em;
