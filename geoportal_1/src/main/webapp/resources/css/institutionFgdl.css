@@ -119,7 +119,7 @@ h2 {
 }
 
 /* Hiding stuff that isn't implemented for FGDL yet */
-span.login, span.webServiceButton {
+span.login, #webServiceButton {
 	display: none;
 }
 
