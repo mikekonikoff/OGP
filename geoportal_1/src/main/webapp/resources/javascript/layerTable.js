@@ -933,11 +933,12 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 			var rowOne = tableObj.fnGetNodes(0);
 	        var layerState = org.OpenGeoPortal.layerState;
         	if (typeof layerState.previewCount == "undefined"){
-        		jQuery(rowOne).find('img').first().trigger('click');
+//        		jQuery(rowOne).find('img').first().trigger('click');
         		layerState.previewCount = true;
        		} else {
        			that.callbackExpand();
-       		}
+      		}
+    		jQuery(rowOne).find('img').first().trigger('click');
 			jQuery(".previewedLayer").removeClass('previewSeparator');
 			jQuery(".previewedLayer").last().addClass('previewSeparator');
 			tableObj.fnDraw();
@@ -1162,10 +1163,14 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 			  stateVal = false;
 		  }
 		  var rowNum = rowObj.iDataRow;
+		  var img = '<img onclick="jQuery(\'#cart' + rowNum + '\').attr(\'checked\', true).show();jQuery(this).hide();' + context + '.saveLayer(document.getElementById(\'cart' + rowNum + '\'), ' + rowNum + ')" alt="Save" class="tableCheckBox saveControl" title="Add this layer to your cart for download." id="plus' + rowNum + '" src="resources/media/icon_crosshair_off.png" style="display:none;"/>';
+		  var cb = '<input onclick="jQuery(\'#plus' + rowNum + '\').show();jQuery(this).hide();' + context + '.saveLayer(this, ' + rowNum + ')" type="checkbox" class="tableCheckBox saveControl" title="Remove this layer from your cart." id="cart' + rowNum + '" style="display:none; margin-left:2px; margin-top: 0px;" checked=true/>';
 		  if (stateVal == true){
-			  return '<input type="checkbox" onclick="' + context + '.saveLayer(this, ' + rowNum + ')" alt="Save" class="tableCheckBox saveControl" title="Remove this layer from your cart." checked=true />';
+			  //return '<input type="checkbox" onclick="' + context + '.saveLayer(this, ' + rowNum + ')" alt="Save" class="tableCheckBox saveControl" title="Remove this layer from your cart." checked=true />';
+			  return img + cb.replace("display:none;", "");
 		  } else {
-			  return '<input type="checkbox" onclick="' + context + '.saveLayer(this, ' + rowNum + ')" alt="Save" class="tableCheckBox saveControl" title="Add this layer to your cart for download." />';
+			  //return '<input type="checkbox" onclick="' + context + '.saveLayer(this, ' + rowNum + ')" alt="Save" class="tableCheckBox saveControl" title="Add this layer to your cart for download." />';
+			  return img.replace("display:none;", "") + cb.replace("checked=true", "");
 		  }
 	  };
 
@@ -2303,7 +2308,7 @@ org.OpenGeoPortal.LayerTable.TableHeadings = function(thisObj){
 			            {"sName": "expandControls", "sTitle": "", "bVisible": true, "aTargets": [ 2 ], "sClass": "colExpand", "sWidth": "8px", "bSortable": false,
 							"fnRender": function(oObj){return thisObj.getExpandIcon(oObj);}}},
 			"Save": {"ajax": false, "resizable": false, "organize": false, "columnConfig":
-		                {"sName": "Save", "sTitle": "<img src=\"resources/media/shoppingcart.png\" alt=\"Add to cart\" title=\"Add layers to your cart for download.\" />", "bVisible": true, "aTargets": [ 3 ], "sClass": "colSave", "sWidth": "19px", "bSortable": false,
+		                {"sName": "Save", "sTitle": "<img src=\"resources/media/shoppingcart.png\" alt=\"Add to cart\" title=\"Add layers to your cart for download.\" />", "bVisible": true, "aTargets": [ 14 ], "sClass": "colSave", "sWidth": "20px", "bSortable": false,
 		              		"fnRender": function(oObj){return thisObj.getSaveControl(oObj);}}},
 		    "score": {"ajax": true, "resizable": true, "minWidth": 27, "currentWidth": 27, "organize": true, "displayName": "Relevancy", "columnConfig":
 		                    {"sName": "score", "sTitle": "Relevancy", "bVisible": false, "aTargets": [ 4 ], "sClass": "colScore", "sWidth": "27px", "bSortable": false }},
@@ -2315,7 +2320,7 @@ org.OpenGeoPortal.LayerTable.TableHeadings = function(thisObj){
 		     "Name": {"ajax": true, "resizable": true, "minWidth": 24, "currentWidth": 25, "organize": "alpha", "displayName": "Filename", "columnConfig":
 		     			{"sName": "Name", "sTitle": "Filename", "bVisible": true, "aTargets": [ 6 ], "sClass": "colName", "bSortable": false}},
 		     "LayerDisplayName": {"ajax": true, "resizable": true, "minWidth": 28, "currentWidth": 215, "organize": "alpha", "displayName": "Name", "columnConfig":
-		            	{"sName": "LayerDisplayName", "sTitle": "Name", "bVisible": true, "aTargets": [ 7 ], "sClass": "colTitle", "bSortable": false}},
+		            	{"sName": "LayerDisplayName", "sTitle": "Title", "bVisible": true, "aTargets": [ 7 ], "sClass": "colTitle", "bSortable": false}},
 		     "Originator": {"ajax": true, "resizable": true, "minWidth": 47, "currentWidth": 81, "organize": "group", "displayName": "Originator", "columnConfig":
 		            	{"sName": "Originator", "sTitle": "Originator", "bVisible": true, "aTargets": [ 8 ], "sClass": "colOriginator", "bSortable": false}},
 		     "Publisher": {"ajax": true, "resizable": true, "minWidth": 47, "currentWidth": 80, "organize": "group", "displayName": "Publisher", "columnConfig":
@@ -2327,12 +2332,12 @@ org.OpenGeoPortal.LayerTable.TableHeadings = function(thisObj){
 		            	{"sName": "Institution", "sTitle": "Rep", "bVisible": true, "aTargets": [ 11 ], "sClass": "colSource", "sWidth": "19px", "bSortable": false, "bUseRendered": false,
 		            		"fnRender": function(oObj){return thisObj.getSourceIcon(oObj);}}},
 		     "Metadata": {"ajax": false, "resizable": false, "organize": false, "columnConfig":
-		                {"sName": "Metadata", "sTitle": "<img src=\"resources/media/icon_meta.png\" alt=\"Metadata\" title=\"show metadata\" />", "bVisible": true, "aTargets": [ 12 ], "sClass": "colMetadata", "sWidth": "17px", "bSortable": false, "bUseRendered": false,
+		                {"sName": "Metadata", "sTitle": "Meta", "sTitle-old": "<img src=\"resources/media/icon_meta.png\" alt=\"Metadata\" title=\"show metadata\" />", "bVisible": true, "aTargets": [ 12 ], "sClass": "colMetadata", "sWidth": "25px", "bSortable": false, "bUseRendered": false,
 		                 	"fnRender": function(oObj){return thisObj.getMetadataIcon(oObj);}}},
 		     "Access": {"ajax": true, "resizable": false, "organize": "alpha", "displayName": "Access", "columnConfig":
 		                 {"sName": "Access", "sTitle": "Access", "bVisible": false, "aTargets": [ 13 ], "sClass": "colAccess", "sWidth": "53px", "bSortable": false}},
 		     "View": {"ajax": false, "resizable": false, "organize": false, "columnConfig":
-		            	{"sName": "View", "sTitle": "Preview", "bVisible": true, "aTargets": [ 14 ], "sClass": "colPreview", "sWidth": "39px", "bSortable": false,
+		            	{"sName": "View", "sTitle": "Preview", "bVisible": true, "aTargets": [ 3 ], "sClass": "colPreview", "sWidth": "39px", "bSortable": false,
 		            			"fnRender": function(oObj){return thisObj.getPreviewControl(oObj);}}},
 		     "Location": {"ajax": true, "resizable": false, "organize": false, "columnConfig":
 		            	{"sName": "Location", "sTitle": "WmsURL", "bVisible": false, "aTargets": [ 15 ], "bSortable": false}},

@@ -53,9 +53,20 @@ org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
         type: OpenLayers.Control.TYPE_BUTTON,
         title: "Clear the map", active: true
     });
+    var floridaExtent = new OpenLayers.Control.Button({
+        displayClass: "olControlZoomToFlExtent", trigger: function () {
+            var center = that.WGS84ToMercator(-84, 28);
+        	//set map position
+        	that.setCenter(center);
+        	that.zoomTo(5);
+        },
+        type: OpenLayers.Control.TYPE_BUTTON,
+        title: "FL", active: true
+    });
 
     panel.addControls([
                        globalExtent,
+                       floridaExtent,
                        nav.previous,
                        nav.next,
                        zoomBox,

@@ -1,7 +1,9 @@
 package org.OpenGeoPortal.Download;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +22,7 @@ import org.springframework.scheduling.annotation.Async;
 
 /**
  * packages downloaded layers together in a zip file. should be called by download job if certain conditions are met (downloads are finished)
- * 
+ *
  * @author Chris Barnett
  *
  */
@@ -31,11 +33,12 @@ public class DownloadPackagerImpl implements DownloadPackager {
 	private RequestStatusManager requestStatusManager;
 	private File directory;
 
+	final SimpleDateFormat timestamped = new SimpleDateFormat("yyyyMMMdd-hhmm");
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/**
-	 * @throws Exception 
-	 * 
+	 * @throws Exception
+	 *
 	 */
 	@Async
 	public void packageFiles(UUID requestId) throws Exception{
@@ -58,11 +61,11 @@ public class DownloadPackagerImpl implements DownloadPackager {
 			e.printStackTrace();
 		}
 		logger.debug(directory.getAbsolutePath());
-		File zipArchive = new File(directory, "OGPDownload.zip");
+		File zipArchive = new File(directory, "FGDLDownload" + timestamped.format(new Date()) + ".zip");
 		ZipFilePackager.addFilesToArchive(filesToPackage, zipArchive);
 		downloadRequest.setDownloadPackage(zipArchive);
 	}
-	
+
 	private Set<File> getFilesToPackage(List<LayerRequest> layers) throws Exception{
 		//we can get this from the DownloadStatusManager
 		logger.debug("Getting files to package...");
@@ -101,7 +104,7 @@ public class DownloadPackagerImpl implements DownloadPackager {
 
 		return filesToPackage;
 	}
-	
+
 	private void addMetadata(File directory, LayerRequest layer){
 		//get metadata for this layer, add the resulting xml file to the file list
 		logger.info("Retrieving metadata...");
@@ -121,7 +124,7 @@ public class DownloadPackagerImpl implements DownloadPackager {
 			//couldn't get the metadata, but don't kill the download
 			logger.error(e.getMessage());
 			e.printStackTrace();
-		} 
+		}
 	}
 
 }

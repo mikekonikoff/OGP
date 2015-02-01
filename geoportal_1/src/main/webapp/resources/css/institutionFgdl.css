@@ -225,3 +225,35 @@ a.normalLink:visited {
 .downloadSettingsDialog select {
 	width: 10em;
 }
+
+th.colSave img {
+	margin-left: 5px;
+}
+
+td.colPreview, td.colMetadata, td.colSave, td.colSource {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+#geosearchDiv > input {
+	background-color: white;
+	color: black;
+	opacity: .9;
+	filter:Alpha(Opacity=90);
+}
+
+.olControlZoomToFlExtentItemInactive {
+	width: 21px;
+	height: 20px;
+	color: black;
+	margin-top: 0px;
+ 	background: url("../media/fl_extent.png") no-repeat scroll 0 0 transparent;
+	border: 1px solid #777;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.olControlPanel .olControlZoomToMaxExtentItemInactive {
+	width: 22px;
+}

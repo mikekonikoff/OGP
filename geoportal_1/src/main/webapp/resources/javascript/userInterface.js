@@ -268,7 +268,7 @@ org.OpenGeoPortal.UserInterface = function(){
 	    			function(){
 	    				jQuery(this).data("mouseOverInput", false);
 	    				if(!jQuery(this).is(":focus")){
-	    					jQuery(this).css("opacity", ".7");
+	    					jQuery(this).css("opacity", ".9");
 	    				}
 	    			});
 	    jQuery("input#geosearch").focusin(function(){
@@ -1186,7 +1186,7 @@ org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
     	var vectorControl = "<label for=\"vectorDownloadType\" class=\"downloadSelect\">Vector files</label>";
     	vectorControl += "<select id=\"vectorDownloadType\" class=\"downloadSelect\"> \n";
     	vectorControl += "<option value=\"shp\">shapefile</option> \n";
-    	vectorControl += "<option value=\"lyr\">ArcGIS Layer file</option> \n";
+    	vectorControl += "<option value=\"lyr\">Map Service for ArcGIS</option> \n";
     	vectorControl += "<option value=\"kmz\">KMZ</option> \n";
     	vectorControl += "</select><br/> \n";
     	var rasterControl = "<label for=\"rasterDownloadType\" class=\"downloadSelect\">Raster files</label>";
