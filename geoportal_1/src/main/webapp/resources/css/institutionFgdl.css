@@ -257,3 +257,16 @@ td.colPreview, td.colMetadata, td.colSave, td.colSource {
 .olControlPanel .olControlZoomToMaxExtentItemInactive {
 	width: 22px;
 }
+
+#wildcardHint {
+	color: #888;
+	font-size: smaller;
+	height: 1em;
+	float:right;
+	margin-right: 75px
+}
+
+#wildcardHint > span {
+	font-size: large;
+	vertical-align: top
+}

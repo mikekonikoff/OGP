@@ -564,9 +564,8 @@ textarea:focus {
 #basicSearchMapFilterContainer {
 	margin-top: 5px;
 	display: inline-block;
-	visibility: hidden;
+	visibility: visible;
 }
-
 #advancedSearchBox {
 	display: none;
 	width: 350px;
@@ -601,8 +600,8 @@ textarea:focus {
 }
 
 #moreSearchOptions {
-	margin-top: 5px;
-	/*margin-left: 55px;*/
+	margin-top: 4px;
+	margin-left: 50px;
 	float: right;
 }
 

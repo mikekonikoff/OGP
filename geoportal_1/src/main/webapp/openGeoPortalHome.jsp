@@ -11,7 +11,8 @@
 	<%@include file="jspf/header.jspf"%>
 	<div id="menu">
 		<div id="map_tabs">
-			<span class="styledButton" title="Save map image" onclick="org.OpenGeoPortal.ui.saveImage();">Save Image</span>
+<!-- 			<span class="styledButton" title="Save map image" onclick="org.OpenGeoPortal.ui.saveImage();">Save Image</span>
+-->
 			<span class="styledButton" title="Print map" onclick="org.OpenGeoPortal.ui.printImage();">Print</span>
 			<div id="basemapDropdown">
 				<button id="basemapSelect" class="styledButton" title="Select base map"><span>Basemap<img src="resources/media/arrow_down.png" alt="Select base map" /></span></button>
