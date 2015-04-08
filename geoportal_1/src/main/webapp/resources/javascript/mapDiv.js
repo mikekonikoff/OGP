@@ -46,7 +46,7 @@ org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
             {title:"Pan by dragging the map"});
     panHand.events.register("activate", this, panListener);
     var globalExtent = new OpenLayers.Control.ZoomToMaxExtent({title:"Zoom to global extent"});
-    var panel = new OpenLayers.Control.Panel({defaultControl: panHand});
+    var panel = new OpenLayers.Control.Panel({defaultControl: zoomBox});
     var that = this;
     var clearMap = new OpenLayers.Control.Button({
         displayClass: "mapClearButton", trigger: function(){that.clearMap();},
@@ -656,7 +656,7 @@ org.OpenGeoPortal.MapController.prototype.showLayerBBox = function (mapObj) {
         var style_blue = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default']);
         style_blue.strokeColor = "blue";//'#003366';
         style_blue.fillColor = "blue";//'#003366';
-        style_blue.fillOpacity = .1;
+        style_blue.fillOpacity = 0;//.1;
         style_blue.pointRadius = 10;
         style_blue.strokeWidth = 2;
         style_blue.strokeLinecap = "butt";
@@ -834,7 +834,7 @@ org.OpenGeoPortal.MapController.prototype.addWMSLayer = function (mapObj) {
     newLayer.events.register('loadend', newLayer, function() {org.OpenGeoPortal.Utility.hideLoadIndicator("mapLoadIndicator", newLayer.name);});
 	var that = this;
 	//we do a check to see if the layer exists before we add it
-	jQuery("body").bind(mapObj.layerName + 'Exists', function(){console.log(newLayer);that.addLayer(newLayer);});
+	jQuery("body").bind(mapObj.layerName + 'Exists', function(){that.addLayer(newLayer);newLayer.events.triggerEvent("loadend");});
 	this.layerExists(mapObj);
 };
 
@@ -866,7 +866,7 @@ org.OpenGeoPortal.MapController.prototype.addArcGISRestLayer = function (mapObj)
     newLayer.events.register('loadend', newLayer, function() {org.OpenGeoPortal.Utility.hideLoadIndicator("mapLoadIndicator", newLayer.name);});
 	var that = this;
 	//we do a cursory check to see if the layer exists before we add it
-	jQuery("body").bind(mapObj.layerName + 'Exists', function(){that.addLayer(newLayer);});
+	jQuery("body").bind(mapObj.layerName + 'Exists', function(){that.addLayer(newLayer);newLayer.events.triggerEvent("loadend");});
 	this.layerExists(mapObj);
 };
 

@@ -2,11 +2,10 @@
     <!--<div id="mapClearButton" class="button ui-button" title="Clear all layers from the map" >
     	clear map
 	</div>-->
-	<div id="mapLoadIndicator" class="loadIndicator"></div>
-</div>	
+</div>
+<div id="mapLoadMessage"><span>Requesting map...</span><div id="mapLoadIndicator" class="loadIndicator"></div></div>
 <div class="ui-widget" id="geosearchDiv">
 	<input id="geosearch" />
 	<div class="button ui-button" id="goButton">go</div>
 </div>
 <div id="geoportalMap"></div>
-		

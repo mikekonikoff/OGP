@@ -344,30 +344,30 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		    } else {
 		    	attributeToolImg = this.getImage("preview.gif");
 		    }
-	    	var sizeVal = org.OpenGeoPortal.layerState.getState(layerID, "graphicWidth") + 'px';
-
-	    	sOut += '<div class="sizeControlCell">';
-	    	sOut += '<div class="sizeControl" >';
-	    	switch (dataType){
-	    	case "Polygon":
-	    		sOut += "border: ";
-	    		break;
-	    	case "Point":
-	    		sOut += "pt size: ";
-	    		break;
-	    	case "Line":
-	    		sOut += "ln width: ";
-	    		break;
-	    	}
-	    	sOut += '<div class="controlText sizeText" id="sizeText' +  tableID + escapedLayerID + '">' + sizeVal + '</div>';
-		    sOut += '<img src="' + this.getImage("arrow_down.png") + '" class="controlExpand button" />';
-	    	sOut += '</div>';
-		    sOut += '<div class="controlContainer"><div class="sizeSlider" title="Adjust size" id="size' +  tableID + escapedLayerID + '">';
-		    sOut += '<img src="' + this.getImage("opacity_bg.png") + '" /></div></div>';
+//	    	var sizeVal = org.OpenGeoPortal.layerState.getState(layerID, "graphicWidth") + 'px';
+//
+//	    	sOut += '<div class="sizeControlCell">';
+//	    	sOut += '<div class="sizeControl" >';
+//	    	switch (dataType){
+//	    	case "Polygon":
+//	    		sOut += "border: ";
+//	    		break;
+//	    	case "Point":
+//	    		sOut += "pt size: ";
+//	    		break;
+//	    	case "Line":
+//	    		sOut += "ln width: ";
+//	    		break;
+//	    	}
+//	    	sOut += '<div class="controlText sizeText" id="sizeText' +  tableID + escapedLayerID + '">' + sizeVal + '</div>';
+//		    sOut += '<img src="' + this.getImage("arrow_down.png") + '" class="controlExpand button" />';
+//	    	sOut += '</div>';
+//		    sOut += '<div class="controlContainer"><div class="sizeSlider" title="Adjust size" id="size' +  tableID + escapedLayerID + '">';
+//		    sOut += '<img src="' + this.getImage("opacity_bg.png") + '" /></div></div>';
 		    //sOut += '<input type="checkbox" class="outlineControl" title="Add an outline to polygon layer" id="outlineCheckBox' + tableID + layerID;
 		    //sOut += '" onclick="org.OpenGeoPortal.ui.toggleOutline(this, \'' + layerID + '\', \'' + dataType + '\')"/><label for="outlineCheckBox' + tableID + layerID + '" title="Add an outline to polygon layer">outline</label>';
-	    	sOut += '</div>';
-	    	sOut += '<div class="colorControlCell"><div class="colorPalette button" title="Change the layer color" id="colorPalette' + tableID + escapedLayerID + '" onclick="org.OpenGeoPortal.ui.colorDialog(\'' + layerID + '\', \'' + dataType + '\')"></div></div>';
+//	    	sOut += '</div>';
+//	    	sOut += '<div class="colorControlCell"><div class="colorPalette button" title="Change the layer color" id="colorPalette' + tableID + escapedLayerID + '" onclick="org.OpenGeoPortal.ui.colorDialog(\'' + layerID + '\', \'' + dataType + '\')"></div></div>';
 	    	sOut += '<div class="zoomToLayerControlCell"><img src="' + this.getImage("zoomextent.gif") + '" class="button zoomToLayerControl" alt="Zoom to geographic extent of layer" title="Zoom to geographic extent of layer" onclick="org.OpenGeoPortal.map.zoomToLayerExtent(\'' + extent.join() + '\')" /></div>';
 	    	sOut += '<div class="attributeInfoControlCell">';
 	    	sOut +=	'<img src="' + attributeToolImg + '" id="attributeInfoControl' + tableID + escapedLayerID + '"class="button attributeInfoControl" alt="Show Attributes" title="Click a previewed feature on the map to view its attributes" onclick="org.OpenGeoPortal.ui.toggleFeatureInfo(this, \'' + layerID + '\', \'' + displayName + '\')" /></div>';
@@ -575,7 +575,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 
     		  //trigger an event?
     		  if (jQuery(".colorPalette").length == 0){
-    			  setTimeout("org.OpenGeoPortal.ui.setPaletteColor(" + layerID + ")",250);
+    			  setTimeout("org.OpenGeoPortal.ui.setPaletteColor('" + layerID + "')",250);
     		  }
     		  org.OpenGeoPortal.ui.setPaletteColor(layerID);
 
@@ -1017,6 +1017,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	            	org.OpenGeoPortal.map.getLayersByName(layerID)[0].setOpacity(opacitySetting * .01);
 		            jQuery(thisObj).attr('title', hideLayerText);
 		            layerState.setState(layerID, {"preview": "on"});
+		            org.OpenGeoPortal.map.getLayersByName(layerID)[0].events.triggerEvent("loadend");
 	            } else{
 	            	//use switching logic here to allow other types of layer preview besides wms
 

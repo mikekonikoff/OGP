@@ -829,18 +829,16 @@ org.OpenGeoPortal.UserInterface.prototype.clearAdvancedSearch = function(){
 		var tag = this.tagName.toLowerCase();
 		if (type == 'text' || type == 'password' || tag == 'textarea'){
 			this.value = '';
-		} else if (type == 'checkbox'){
-			this.checked = true;
-			if (jQuery(this).attr("id") == "restrictedCheck"){
-				this.checked = false;
-			}
-		} else if (tag == 'radio'){
-			this.checked = false;
+		} else if (type == 'checkbox' || tag == 'radio'){
+			this.checked = this.defaultChecked;
 		} else if (tag == 'select'){
 			this.selectedIndex = 0;
 		}
-		jQuery(".topicRadio").first().attr("checked", true);
 	});
+	jQuery('.topicRadio').attr("checked", false);
+	jQuery("#topicDropdownMenu input[type=radio]").first().attr("checked", true);
+	jQuery("#topicDropdownSelect > span > span").html("Select a topic");
+	jQuery("#advancedSearchBox span.ui-helper-hidden-accessible").text("");
 };
 
 org.OpenGeoPortal.UserInterface.prototype.clearDefault = function(inputFieldName)
@@ -1257,13 +1255,13 @@ org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
 		};
 	} else {
 		buttons = {
-			Continue: function() {
-				that.downloadContinue();
-			},
 			Cancel: function() {
 				jQuery(this).dialog('close');
 				jQuery("#optionDetails").html("");
 				jQuery(".downloadSelection, .downloadUnselection").removeClass("downloadSelection downloadUnselection");
+			},
+			Continue: function() {
+				that.downloadContinue();
 			}
 		};
 	}

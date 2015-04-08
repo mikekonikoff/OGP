@@ -2,12 +2,12 @@
  * extra functions with no current home. org.OpenGeoPortal.Utility is a
  * namespace rather than an object.  The XML functions might go away when we
  * upgrade to a newer version of jQuery, as it contains functions to parse XML.
- * 
+ *
  * author: Chris Barnett
- * 
+ *
  */
 
-if (typeof org == 'undefined'){ 
+if (typeof org == 'undefined'){
 	org = {};
 } else if (typeof org != "object"){
 	throw new Error("org already exists and is not an object");
@@ -29,7 +29,7 @@ if (typeof org.OpenGeoPortal.Utility == 'undefined'){
 org.OpenGeoPortal.Utility.ImageLocation = "resources/media/";
 org.OpenGeoPortal.Utility.CssLocation = "resources/css/";
 org.OpenGeoPortal.Utility.JspfLocation = "jspf/"
-	
+
 org.OpenGeoPortal.Utility.InitSet = false;
 
 org.OpenGeoPortal.Utility.getImage = function(imageName){
@@ -66,7 +66,7 @@ org.OpenGeoPortal.Utility.whichTab = function(){
 		tabInfo.tableName = 'savedLayers';
 		break;
 	default:
-		//throw new Error('No tab is selected.');			
+		//throw new Error('No tab is selected.');
 	}
 	return tabInfo;
 };
@@ -116,7 +116,7 @@ org.OpenGeoPortal.Utility.hexFromRGB = function(r, g, b) {
 	return hex.join('').toUpperCase();
 };
 
-org.OpenGeoPortal.Utility.idEscape = function (domElementID) { 
+org.OpenGeoPortal.Utility.idEscape = function (domElementID) {
 	/*
 	 * ID and NAME tokens must begin with a letter ([A-Za-z]) and may be followed by any number of letters, digits ([0-9]), hyphens ("-"), underscores ("_"), colons (":"), and periods (".").
 	 * colons and periods are problematic for jQuery and css, so lets get rid of them as well
@@ -138,7 +138,7 @@ org.OpenGeoPortal.Utility.getMetadata = function (layerId){
 
 org.OpenGeoPortal.Utility.escapeQuotes = function(stringOfInterest){
 	return stringOfInterest.replace("'", "\\'").replace('"', '\\"');
-	
+
 };
 
 org.OpenGeoPortal.Utility.stripExtraSpaces = function(stringOfInterest){
@@ -151,10 +151,10 @@ org.OpenGeoPortal.Utility.loadIndicatorStatus = {"intervalId": "", "currentReque
 org.OpenGeoPortal.Utility.indicatorAnimationStart = function(div){
 	var indicatorFunction = function(){
 		try{
-			indicator.css("background-position", 
+			indicator.css("background-position",
 				function(a,b){
-					var y = parseInt(b.substr(b.indexOf(" "))); 
-					y -= 25; 
+					var y = parseInt(b.substr(b.indexOf(" ")));
+					y -= 25;
 					var value =  "0 " + y + "px";
 					return value;});
 		} catch (e){}
@@ -165,14 +165,15 @@ org.OpenGeoPortal.Utility.indicatorAnimationStart = function(div){
 	return intervalId;
 };
 
-org.OpenGeoPortal.Utility.showLoadIndicator = function(div){
+org.OpenGeoPortal.Utility.showLoadIndicator = function(div, msg){
 	var that = this;
+	console.debug("show load: intervalId " + that.loadIndicatorStatus["intervalId"] + " currentRequests " + that.loadIndicatorStatus["currentRequests"]);
 	/*var indicatorFunction = function(){
 		try{
-			indicator.css("background-position", 
+			indicator.css("background-position",
 				function(a,b){
-					var y = parseInt(b.substr(b.indexOf(" "))); 
-					y -= 25; 
+					var y = parseInt(b.substr(b.indexOf(" ")));
+					y -= 25;
 					var value =  "0 " + y + "px";
 					return value;});
 		} catch (e){}
@@ -184,7 +185,7 @@ org.OpenGeoPortal.Utility.showLoadIndicator = function(div){
 			//indicator.css("background-image", "url('" + org.OpenGeoPortal.Utility.getImage("progress.png") + "')");
 
 			that.loadIndicatorStatus["intervalId"] = org.OpenGeoPortal.Utility.indicatorAnimationStart(div);
-			indicator.fadeIn();
+			indicator.parent().fadeIn();
 			that.loadIndicatorStatus["currentRequests"] = 1;
 		} else {
 			//we don't need to setInterval or change intervalId; we do need to push a value into currentRequests
@@ -198,12 +199,16 @@ org.OpenGeoPortal.Utility.showLoadIndicator = function(div){
 			//pass in a value that is 1 larger than the largest value in the array to keep uniqueness
 			that.loadIndicatorStatus["currentRequests"] += 1;
 		}
+//		if (typeof(msg) != "undefined") {
+//			jQuery("#mapLoadMessage span").text(msg);
+//		}
 		//return j;
 		//console.log(that.loadIndicatorStatus["currentRequests"]);
 	};
-	
+
 org.OpenGeoPortal.Utility.hideLoadIndicator = function(div){
 	var that = this;
+	console.debug("hide load: intervalId " + that.loadIndicatorStatus["intervalId"] + " currentRequests " + that.loadIndicatorStatus["currentRequests"]);
 	var indicator = jQuery('#' + div);
 
 		//remove the passed ajaxRequestId from the currentRequests array.  if the array is now empty, then proceed
@@ -215,12 +220,14 @@ org.OpenGeoPortal.Utility.hideLoadIndicator = function(div){
 				break;
 			}
 		}*/
+	if (that.loadIndicatorStatus["currentRequests"] > 0){
 	that.loadIndicatorStatus["currentRequests"] -= 1;
+	}
 		if (that.loadIndicatorStatus["currentRequests"] == 0){
-			indicator.fadeOut();
+			indicator.parent().fadeOut();
 			clearInterval(that.loadIndicatorStatus["intervalId"]);
 			that.loadIndicatorStatus["intervalId"] = "";
 		}
-	
+
 };
 

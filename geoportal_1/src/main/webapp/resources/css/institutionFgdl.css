@@ -270,3 +270,23 @@ td.colPreview, td.colMetadata, td.colSave, td.colSource {
 	font-size: large;
 	vertical-align: top
 }
+.ui-dialog .ui-dialog-titlebar-close {
+	left: auto;
+	right: 0;
+}
+.ui-dialog .ui-dialog-title {
+	padding-left: 8px
+}
+.zoomToLayerControlCell {
+  left: 178px;
+}
+.attributeInfoControlCell {
+	left: 200px;
+}
+.tip {
+	color: #888;
+	font-size: 95%;
+}
+#advancedSearchBox {
+	width: 400px;
+}

@@ -2,18 +2,13 @@
  <div id="advancedSearchBox">
     <form id="advancedSearchForm" onsubmit="return false;">
     	<div class="searchFormRow">
-    	    <label class="searchFormLabel">Topic:</label>
-    		<div id="topicDropdown" class="searchFormInput">
-      		</div>
-    	</div>
+   			<label for="advancedOriginatorText" class="searchFormLabel">Originator:</label>
+   			<input name="advancedOriginatorText" type="text" class="searchFormInput" id="advancedOriginatorText"/>
+		</div>
 		<div class="searchFormRow">
     		<label for="advancedKeywordText" class="searchFormLabel">Keyword(s):</label>
     		<input name="advancedKeywordText" type="text" class="searchFormInput" id="advancedKeywordText"/>
     	</div>
-    	<div class="searchFormRow">
-   			<label for="advancedOriginatorText" class="searchFormLabel">Originator:</label>
-   			<input name="advancedOriginatorText" type="text" class="searchFormInput" id="advancedOriginatorText"/>
-		</div>
 		<div class="searchFormRow">
     		<label for="advancedDateFromText" class="searchFormLabel">Year(s):</label>
     		<span class="searchFormInput">
@@ -21,11 +16,17 @@
       			to
         		<input name="advancedDateToText" type="text" id="advancedDateToText" size="4" />
         	</span>
+        	<span class="tip">Time Period of Content</span>
         </div>
     	<div class="searchFormRow">
    			<label for="filenameText" class="searchFormLabel">Filename:</label>
    			<input name="filenameText" type="text" class="searchFormInput" id="filenameText"/>
 		</div>
+    	<div class="searchFormRow">
+    	    <label class="searchFormLabel">Topic:</label>
+    		<div id="topicDropdown" class="searchFormInput">
+      		</div>
+    	</div>
         <div class="searchFormRow">
    			<label class="searchFormLabel">Data Type:</label>
    			<div id="dataTypeDropdown" class="styledDropdown searchFormInput">
@@ -50,7 +51,7 @@
    			<span id="advancedSearchSubmit" class="styledButtonSmall">Search</span>
     	</div>
     	<div class="searchFormRow">
-   			<input type="checkbox" name="mapFilterCheck2" id="mapFilterCheck2" class="mapFilterFlag" onclick="org.OpenGeoPortal.ui.mapFilterStatus(this)" value="on" checked="checked" />
+   			<input type="checkbox" name="mapFilterCheck2" id="mapFilterCheck2" class="mapFilterFlag" onclick="//org.OpenGeoPortal.ui.mapFilterStatus(this)" />
     		<label for="mapFilterCheck2">Limit results to visible map area</label>
     		<span id="lessSearchOptions" class="searchToggle button" onclick="org.OpenGeoPortal.ui.toggleSearch(this)">basic options</span>
     	</div>
