@@ -135,9 +135,19 @@ org.OpenGeoPortal.Solr.prototype.getMetadataQuery = function getMetadataQuery(la
 //returns the solr query to obtain a layer's metadata document from the Solr server
 org.OpenGeoPortal.Solr.prototype.getTermQuery = function getFacetQuery(termField, requestTerm)
 {
+	return this.getTermsQuery([termField], requestTerm);
+};
+
+//returns the solr query to obtain a layer's metadata document from the Solr server
+org.OpenGeoPortal.Solr.prototype.getTermsQuery = function getFacetsQuery(termFields, requestTerm)
+{
 	var jsonClause = this.getReturnTypeClause();
+	var termsFl = "";
 	requestTerm = ".*" + requestTerm + ".*";
-	var solrQuery = "terms.fl=" + termField + "&terms.regex=" + requestTerm + "&terms.regex.flag=case_insensitive&terms.limit=-1&" +jsonClause;
+	jQuery.each(termFields, function(idx, val) {
+		termsFl += "terms.fl=" + val + "&";
+	});
+	var solrQuery = termsFl + "terms.regex=" + requestTerm + "&terms.regex.flag=case_insensitive&terms.limit=-1&" +jsonClause;
 	return solrQuery;
 };
 
@@ -192,6 +202,7 @@ org.OpenGeoPortal.Solr.prototype.PublisherTerm = {term: "Publisher", hasBoost: t
 org.OpenGeoPortal.Solr.prototype.OriginatorTerm = {term: "Originator", hasBoost: true, boost: "1.0", hasCap: false};
 org.OpenGeoPortal.Solr.prototype.IsoTopicTerm = {term: "ThemeKeywordsSynonymsIso", hasBoost: true, boost: "4.0", hasCap: false};
 org.OpenGeoPortal.Solr.prototype.NameTerm = {term: "Name", hasBoost: true, boost: "4.0", hasCap: false};
+org.OpenGeoPortal.Solr.prototype.AbstractTerm = {term: "Abstract", hasBoost: true, boost: "1.0", hasCap: false};
 
 
 org.OpenGeoPortal.Solr.prototype.GenericPhraseBoost = "9.0";
@@ -202,7 +213,8 @@ org.OpenGeoPortal.Solr.prototype.BasicKeywordTerms = [org.OpenGeoPortal.Solr.pro
                                                       org.OpenGeoPortal.Solr.prototype.PlaceKeywordsTerm,
                                                       org.OpenGeoPortal.Solr.prototype.PublisherTerm,
                                                       org.OpenGeoPortal.Solr.prototype.OriginatorTerm,
-                                                      org.OpenGeoPortal.Solr.prototype.NameTerm];
+                                                      org.OpenGeoPortal.Solr.prototype.NameTerm,
+                                                      org.OpenGeoPortal.Solr.prototype.AbstractTerm];
 
 org.OpenGeoPortal.Solr.prototype.AdvancedKeywordTerms = [org.OpenGeoPortal.Solr.prototype.LayerDisplayNameTerm,
                                                       org.OpenGeoPortal.Solr.prototype.ThemeKeywordsTerm,

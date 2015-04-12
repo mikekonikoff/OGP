@@ -67,65 +67,20 @@ org.OpenGeoPortal.UserInterface = function(){
 
 		});
 		this.togglePanels();
-//		jQuery('.searchBox').keydown(function(event) {
-//			var unicode = String.fromCharCode(event.which);
-//			var isBackspace = event.which == 8;
-//			var isDelete = event.which == 46;
-//			var isArrow = event.keyCode >= 36 && event.keyCode <= 39;
-//			var isPaste = event.ctrlKey && (event.which == 86 ||event.which == 118);
-//			var nextSearchableCharacter = !(isBackspace || isDelete || isArrow) && /[\S]/.test(unicode) ? String.fromCharCode(event.which) : "";
-//
-//			console.debug('search box keydown event.keyCode: ' + event.keyCode + ' event.which: ' + event.which + ' unicode: "' + unicode + '" searchable: ' + (nextSearchableCharacter != "") + " isPaste: " + isPaste + " value " + jQuery("#basicSearchTextField").val());
-//		});
 		jQuery('.searchBox').keypress(function(event){
 			var type, search, keyword;
-			var unicode = String.fromCharCode(event.which);
-			var nextSearchableCharacter = event.which != 8 && event.which != 46 && !(event.keyCode >= 36 && event.keyCode <= 39) && /[\S]/.test(unicode) ? String.fromCharCode(event.which) : "";
-
-			console.debug('search box keypress event.keyCode: ' + event.keyCode + ' event.which: ' + event.which + ' unicode: "' + unicode + '" searchable: ' + (nextSearchableCharacter != ""));
-
-			type = org.OpenGeoPortal.Utility.whichSearch().type;
-			if (type == "basicSearch") {
-				search = "Basic";
-				keyword = jQuery("#basicSearchTextField").val().trim() + nextSearchableCharacter;
-			} else if (type == "advancedSearch") {
-				search = "Advanced";
-				keyword = jQuery("#advancedKeywordText").val().trim() + nextSearchableCharacter;
-			}
-
-			var d = new Date();
-			var searchTimeDelta = that.lastSearchTime == null ? Number.POSITIVE_INFINITY : d - that.lastSearchTime;
-			var lastKeyword = that.resultsTableObject.getLastSolrSearch() == null ? null : that.resultsTableObject.getLastSolrSearch().getBasicKeywords();
-
-			if (event.keyCode >= 36 && event.keyCode <= 39) {
-				console.debug('ignoring character "' + String.fromCharCode(event.which) + '"');
-			} else {
-				if (keyword.length >= 3 || keyword.length == 0) {
-					console.debug('it has been ' + searchTimeDelta + ' ms since last search. last keyword was: ' + lastKeyword);
-					if (searchTimeDelta >= 350 || lastKeyword == null) {
-						if (lastKeyword == null || keyword != lastKeyword.toString()) {
-							that.searchSubmit();
-							that.lastSearchTime = d;
-							analytics.track("Search", search, keyword);
-							console.debug('searching at ' + d + ' for ' + keyword.length + ' length keyword: "' + keyword + '"');
-						} else {
-							console.debug('nothing changed from "' + keyword + '" to "' + lastKeyword + '"');
-						}
-					} else {
-						console.debug('waiting at ' + d + ', it has only been ' + searchTimeDelta + ' ms ');
-					}
-				} else {
-					console.debug('waiting at ' + d + ', keyword too short, only ' + keyword.length + ' characters ');
-				}
-			}
 
 			if (event.keyCode == '13') {
-				if (d != that.lastSearchTime) {
-					that.searchSubmit();
-					that.lastSearchTime = d;
-					console.log('entered searching at ' + d);
-				}
 				event.preventDefault();
+				that.searchSubmit();
+				type = org.OpenGeoPortal.Utility.whichSearch().type;
+				if (type == "basicSearch") {
+					search = "Basic";
+					keyword = jQuery("#basicSearchTextField").val();
+				} else if (type == "advancedSearch") {
+					search = "Advanced";
+					keyword = jQuery("#advancedKeywordText").val();
+				}
 				analytics.track("Search", search, keyword);
 			}
 		});
@@ -2556,80 +2511,66 @@ org.OpenGeoPortal.UserInterface.prototype.downloadEmailDialogHandler = function(
 
 org.OpenGeoPortal.UserInterface.prototype.autocomplete = function(){
 
-	jQuery( "#advancedOriginatorText" ).autocomplete({
-        source: function( request, response ) {
-        	var solr = new org.OpenGeoPortal.Solr();
-        	var fieldName = "OriginatorSort";
-        	var query = solr.getTermQuery(fieldName, request.term);
-        		var facetSuccess = function(data){
-                    var labelArr = [];
-                    var dataArr = data.terms[fieldName];
-                    for (var i in dataArr){
-                    if (i%2 != 0){
-                        continue;
-                        }
-                        var temp = {"label": dataArr[i], "value": '"' + dataArr[i] + '"'};
-                        labelArr.push(temp);
-                        i++;
-                        i++;
-                    }
-                    //console.log("here");
-                response(labelArr);
-        		};
-        		var facetError = function(){jQuery( "#advancedOriginatorText" ).autocomplete( "destroy" );
-        			jQuery( "#advancedOriginatorText" ).removeClass("ui-autocomplete-loading");
-        		};
-           solr.termQuery(query, facetSuccess, facetError, this);
+	jQuery( "#advancedOriginatorText" ).autocomplete(
+			this.getAutocompleteOptions("#advancedOriginatorText", ["OriginatorSort"])
+	);
 
-        },
-        minLength: 2,
-        select: function( event, ui ) {
+	jQuery( "#filenameText" ).autocomplete(
+			this.getAutocompleteOptions("#filenameText", ["Name"])
+	);
 
-        },
-        open: function() {
-            jQuery( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-        },
-        close: function() {
-            jQuery( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-        }
-    });
-
-	jQuery( "#filenameText" ).autocomplete({
-        source: function( request, response ) {
-        	var solr = new org.OpenGeoPortal.Solr();
-        	var fieldName = "Name";
-        	var query = solr.getTermQuery(fieldName, request.term);
-        		var facetSuccess = function(data){
-                    var labelArr = [];
-                    var dataArr = data.terms[fieldName];
-                    for (var i in dataArr){
-                    if (i%2 != 0){
-                        continue;
-                        }
-                        var temp = {"label": dataArr[i].toUpperCase(), "value": '"' + dataArr[i].toUpperCase() + '"'};
-                        labelArr.push(temp);
-                        i++;
-                        i++;
-                    }
-                    //console.log("here");
-                response(labelArr);
-        		};
-        		var facetError = function(){jQuery( "#filenameText" ).autocomplete( "destroy" );
-        			jQuery( "#filenameText" ).removeClass("ui-autocomplete-loading");
-        		};
-           solr.termQuery(query, facetSuccess, facetError, this);
-
-        },
-        minLength: 2,
-        select: function( event, ui ) {
-
-        },
-        open: function() {
-            jQuery( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-        },
-        close: function() {
-            jQuery( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-        }
-    });
+	jQuery( "#basicSearchTextField" ).autocomplete(
+		jQuery.extend({}, this.getAutocompleteOptions("#basicSearchTextField", ["Name", "OriginatorSort", "Abstract"]),
+		{
+			create: function () {
+				jQuery( this ).next("span.ui-helper-hidden-accessible").position({
+					my: "left bottom-15",
+					at: "left top",
+					of: "#basicSearchTextField"
+				});
+			},
+			select: function (evt, ui) {
+				jQuery("#basicSearchSubmit").click();
+			}
+		})
+	);
 };
 
+org.OpenGeoPortal.UserInterface.prototype.getAutocompleteOptions = function (inputSelector, fieldNames) {
+	var options = {
+	        source: function( request, response ) {
+	        	var solr = new org.OpenGeoPortal.Solr();
+	        	var query = solr.getTermsQuery(fieldNames, request.term);
+	        		var facetSuccess = function(data){
+	                    var labelArr = [];
+	                    jQuery.each(fieldNames, function(idx, val) {
+	                    	var dataArr = data.terms[val];
+	                    	for (var i in dataArr){
+	                    		if (i%2 != 0){
+	                    			continue;
+	                    		}
+	                    		var temp = {"label": dataArr[i].toUpperCase(), "value":  dataArr[i].toUpperCase()};
+	                    		labelArr.push(temp);
+	                    		i++;
+	                    		i++;
+	                    	}
+	                    });
+                    	response(labelArr);
+	        		};
+	        		var facetError = function(){jQuery(inputSelector).autocomplete( "destroy" );
+	        			jQuery( inputSelector ).removeClass("ui-autocomplete-loading");
+	        		};
+	           solr.termQuery(query, facetSuccess, facetError, this);
+
+	        },
+	        minLength: 2,
+	        open: function() {
+	            jQuery( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+	        },
+	        close: function() {
+	            jQuery( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+				jQuery( this ).next("span.ui-helper-hidden-accessible").text("");
+	        }
+	};
+	return options;
+};
