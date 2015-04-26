@@ -339,10 +339,13 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		    sOut += '</div>';
 	    } else {
 	    	var attributeToolImg;
+	    	var attributeToolClass;
 		    if (org.OpenGeoPortal.layerState.getState(layerID, "getFeature")){
 		    	attributeToolImg = this.getImage("preview_down.gif");
+		    	attributeToolClass = "activeButton";
 		    } else {
 		    	attributeToolImg = this.getImage("preview.gif");
+		    	attributeToolClass = "";
 		    }
 //	    	var sizeVal = org.OpenGeoPortal.layerState.getState(layerID, "graphicWidth") + 'px';
 //
@@ -370,7 +373,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 //	    	sOut += '<div class="colorControlCell"><div class="colorPalette button" title="Change the layer color" id="colorPalette' + tableID + escapedLayerID + '" onclick="org.OpenGeoPortal.ui.colorDialog(\'' + layerID + '\', \'' + dataType + '\')"></div></div>';
 	    	sOut += '<div class="zoomToLayerControlCell"><img src="' + this.getImage("zoomextent.gif") + '" class="button zoomToLayerControl" alt="Zoom to geographic extent of layer" title="Zoom to geographic extent of layer" onclick="org.OpenGeoPortal.map.zoomToLayerExtent(\'' + extent.join() + '\')" /></div>';
 	    	sOut += '<div class="attributeInfoControlCell">';
-	    	sOut +=	'<img src="' + attributeToolImg + '" id="attributeInfoControl' + tableID + escapedLayerID + '"class="button attributeInfoControl" alt="Show Attributes" title="Click a previewed feature on the map to view its attributes" onclick="org.OpenGeoPortal.ui.toggleFeatureInfo(this, \'' + layerID + '\', \'' + displayName + '\')" /></div>';
+	    	sOut +=	'<img src="' + attributeToolImg + '" id="attributeInfoControl' + tableID + escapedLayerID + '"class="button attributeInfoControl ' + attributeToolClass + '" alt="Show Attributes" title="Click a previewed feature on the map to view its attributes" onclick="org.OpenGeoPortal.ui.toggleFeatureInfo(this, \'' + layerID + '\', \'' + displayName + '\')" /></div>';
 	    }
 
 	    sOut += '</div>';
@@ -938,7 +941,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
        		} else {
        			that.callbackExpand();
       		}
-    		jQuery(rowOne).find('img').first().trigger('click');
+    		jQuery(rowOne).find('img.collapsed').first().trigger('click');
 			jQuery(".previewedLayer").removeClass('previewSeparator');
 			jQuery(".previewedLayer").last().addClass('previewSeparator');
 			tableObj.fnDraw();
@@ -1144,9 +1147,9 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		  var layerID = this.getLayerIdFromRow(rowObj);
 	      var layerExpanded = this.tableLayerState.getState(layerID, "expanded");
 	      if (layerExpanded){
-	    	  return '<img class="expandIcon button" src="' + this.getImage("arrow_down.png") + '" onclick="' + context + '.expandableRow(this)" class="button" title="Hide preview controls" alt="Hide preview controls" />';
+	    	  return '<img class="expandIcon button expanded" src="' + this.getImage("arrow_down.png") + '" onclick="' + context + '.expandableRow(this)" class="button" title="Hide preview controls" alt="Hide preview controls" />';
 	      } else {
-	    	  return '<img class="expandIcon button" src="' + this.getImage("arrow_right.png") + '" onclick="' + context + '.expandableRow(this)" class="button" title="Show preview controls" alt="Show preview controls" />';
+	    	  return '<img class="expandIcon button collapsed" src="' + this.getImage("arrow_right.png") + '" onclick="' + context + '.expandableRow(this)" class="button" title="Show preview controls" alt="Show preview controls" />';
 	      }
 	  };
 
@@ -1180,7 +1183,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		  var context;
 		  if (tableID == 'searchResults'){
 			  context = 'org.OpenGeoPortal.resultsTableObj';
-		  } else if (tableID ='savedLayers'){
+		  } else if (tableID == 'savedLayers'){
 			  context = 'org.OpenGeoPortal.cartTableObj';
 		  } else {
 			  throw new Error("Could not set context.");

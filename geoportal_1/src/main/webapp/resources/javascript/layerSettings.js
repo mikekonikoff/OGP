@@ -1,4 +1,4 @@
-if (typeof org == 'undefined'){ 
+if (typeof org == 'undefined'){
 	org = {};
 } else if (typeof org != "object"){
 	throw new Error("org already exists and is not an object");
@@ -31,7 +31,7 @@ org.OpenGeoPortal.LayerSettings = function(){
 	this.getRasterDefaults = function(){
 		return {"opacity": 100};
 	};
-	
+
 	this.layerStateDefined = function(layerID){
 		if (typeof settings[layerID] == 'undefined'){
 			return false;
@@ -39,7 +39,7 @@ org.OpenGeoPortal.LayerSettings = function(){
 			return true;
 		}
 	};
-	
+
 	this.addNewLayer = function(layerID, params){
 		var dataType = params.dataType;
 
@@ -75,7 +75,7 @@ org.OpenGeoPortal.LayerSettings = function(){
 			settings[layerID][key] = params[key];
 		}
 	};
-	
+
 	this.allLayersByParam = function(key, value){
 		var layers = new Array();
 		for (var layer in settings){
@@ -85,7 +85,7 @@ org.OpenGeoPortal.LayerSettings = function(){
 		}
 		return layers;
 	};
-	
+
 	this.getState = function(layerID, key){
 		//this checks to see if a layer has a particular value for a particular parameter, returns true or false
 		//if state info exists for the layer, key & value are matched against that value
@@ -107,9 +107,9 @@ org.OpenGeoPortal.LayerSettings = function(){
 		} else {
 			return this.getGenericDefaults()[key];
 		}
-		
+
 	};
-	
+
 	this.setState = function(layerID, updateObj){
 		var sync = false;
 		//if the layer has no state info, try to add it (dataType must be in updateObj to succeed)
@@ -130,11 +130,11 @@ org.OpenGeoPortal.LayerSettings = function(){
 			syncUi(updateObj);
 		}
 	};
-	
+
 	this.getImage = function(imageName){
 		return org.OpenGeoPortal.Utility.ImageLocation + imageName;
 	};
-	
+
 	this.resetState = function(columnName){
 		if (columnName == 'all'){
 			settings = {};
@@ -164,7 +164,7 @@ org.OpenGeoPortal.LayerSettings = function(){
 			}
 		}
 	};
-	
+
 	var syncUi = function (updateObj){
 		//console.log('syncUi');
 		//return true;
@@ -188,7 +188,7 @@ org.OpenGeoPortal.LayerSettings = function(){
 							//clauses for login and external needed
 						}
 					}
-				}); 
+				});
 				break;
 				case "opacity":
 					var stateVal = that.getState(updateObj.layerID, "opacity");
@@ -221,7 +221,7 @@ org.OpenGeoPortal.LayerSettings = function(){
 								continue;
 							}
 						}
-						jQuery('.attributeInfoControl').filter('[id$="' + escapedLayerID + '"]').attr("src", that.getImage("preview_down.gif"));
+						jQuery('.attributeInfoControl').filter('[id$="' + escapedLayerID + '"]').attr("src", that.getImage("preview_down.gif")).addClass("activeButton");
 						org.OpenGeoPortal.map.events.register("click", layer, org.OpenGeoPortal.map.wmsGetFeature);
 						jQuery(document).trigger("getFeatureActivated");
 						//console.log(["register layer:", layer]);
@@ -229,13 +229,13 @@ org.OpenGeoPortal.LayerSettings = function(){
 						org.OpenGeoPortal.map.getControlsByClass("OpenLayers.Control.Navigation")[0].deactivate();
 					  jQuery('.olMap').css('cursor', "crosshair");
 					} else {
-						jQuery('.attributeInfoControl').filter('[id$="' + escapedLayerID + '"]').attr("src", that.getImage("preview.gif"));
+						jQuery('.attributeInfoControl').filter('[id$="' + escapedLayerID + '"]').attr("src", that.getImage("preview.gif")).removeClass("activeButton");
 						org.OpenGeoPortal.map.events.unregister("click", layer, org.OpenGeoPortal.map.wmsGetFeature);
 
 				  }
 				  break;
 			  default:
-				  break;				  
+				  break;
 			  }
 		}
 	};

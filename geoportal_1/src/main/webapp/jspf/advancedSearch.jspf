@@ -6,7 +6,7 @@
    			<input name="advancedOriginatorText" type="text" class="searchFormInput" id="advancedOriginatorText"/>
 		</div>
 		<div class="searchFormRow">
-    		<label for="advancedKeywordText" class="searchFormLabel">Keyword(s):</label>
+    		<label for="advancedKeywordText" class="searchFormLabel">Keyword(s) / Abstract:</label>
     		<input name="advancedKeywordText" type="text" class="searchFormInput" id="advancedKeywordText"/>
     	</div>
 		<div class="searchFormRow">

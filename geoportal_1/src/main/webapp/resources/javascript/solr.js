@@ -201,7 +201,7 @@ org.OpenGeoPortal.Solr.prototype.PlaceKeywordsTerm = {term: "PlaceKeywordsSynony
 org.OpenGeoPortal.Solr.prototype.PublisherTerm = {term: "Publisher", hasBoost: true, boost: "1.0", hasCap: false};
 org.OpenGeoPortal.Solr.prototype.OriginatorTerm = {term: "Originator", hasBoost: true, boost: "1.0", hasCap: false};
 org.OpenGeoPortal.Solr.prototype.IsoTopicTerm = {term: "ThemeKeywordsSynonymsIso", hasBoost: true, boost: "4.0", hasCap: false};
-org.OpenGeoPortal.Solr.prototype.NameTerm = {term: "Name", hasBoost: true, boost: "4.0", hasCap: false};
+org.OpenGeoPortal.Solr.prototype.NameTerm = {term: "Name", hasBoost: true, boost: "4.0", hasCap: false, wildcards: {leading: true, trailing: true}};
 org.OpenGeoPortal.Solr.prototype.AbstractTerm = {term: "Abstract", hasBoost: true, boost: "1.0", hasCap: false};
 
 
@@ -218,7 +218,8 @@ org.OpenGeoPortal.Solr.prototype.BasicKeywordTerms = [org.OpenGeoPortal.Solr.pro
 
 org.OpenGeoPortal.Solr.prototype.AdvancedKeywordTerms = [org.OpenGeoPortal.Solr.prototype.LayerDisplayNameTerm,
                                                       org.OpenGeoPortal.Solr.prototype.ThemeKeywordsTerm,
-                                                      org.OpenGeoPortal.Solr.prototype.PlaceKeywordsTerm];
+                                                      org.OpenGeoPortal.Solr.prototype.PlaceKeywordsTerm,
+                                                      org.OpenGeoPortal.Solr.prototype.AbstractTerm];
 
 org.OpenGeoPortal.Solr.prototype.MinX = null;
 org.OpenGeoPortal.Solr.prototype.MaxX = null;
@@ -708,11 +709,17 @@ org.OpenGeoPortal.Solr.prototype.getKeywordQueryTemplate = function getKeywordQu
 	var capSuffix = "";
 	if (termObject.hasCap){
 		capPrefix = "(min";
-		capSuffix = termObject.cap + "),"
+		capSuffix = termObject.cap + "),";
+	}
+	var wcPrefix = "";
+	var wcSuffix = "";
+	if (termObject.wildcards) {
+		if (termObject.wildcards.leading) wcPrefix = "*";
+		if (termObject.wildcards.trailing) wcSuffix = "*";
 	}
 
 	var keywordQuery = "product" + capPrefix + "(query({!dismax qf=" + termObject.term;
-	keywordQuery += " v='" + keyword + "'})," + capSuffix + termObject.boost + ")";
+	keywordQuery += " v='" + wcPrefix + keyword + wcSuffix + "'})," + capSuffix + termObject.boost + ")";
 	return keywordQuery;
 };
 
@@ -804,6 +811,20 @@ org.OpenGeoPortal.Solr.prototype.getKeywordFilter = function(keywords, arrFilter
 		keywordFilter += arrFilterFields.join(term + joiner);
 		if (numFields > 0){
 			keywordFilter += term;
+		}
+		var basicTerms = this.getBasicKeywordTerms();
+		for (var i = 0; i < basicTerms.length; i++)
+		{
+			if(basicTerms[i].wildcards) {
+				if(basicTerms[i].wildcards.leading)
+					keywordFilter = keywordFilter.replace(basicTerms[i].term+":", basicTerms[i].term+":*");
+				if(basicTerms[i].wildcards.trailing) {
+					if (i == basicTerms.length-1)
+						keywordFilter += "*";
+					else
+						keywordFilter = keywordFilter.replace(joiner + basicTerms[i+1].term+":", "*" + joiner + basicTerms[i+1].term+":");
+				}
+			}
 		}
 	}
 	keywordFilter = "fq=" + keywordFilter;

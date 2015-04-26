@@ -81,6 +81,9 @@ org.OpenGeoPortal.UserInterface = function(){
 					search = "Advanced";
 					keyword = jQuery("#advancedKeywordText").val();
 				}
+				jQuery( "#basicSearchTextField" ).autocomplete('close');
+				// when message is No Search Results, ac is already closed and we have to clear the message manually
+				jQuery("#basicSearchTextField").parent("div").find("span.ui-helper-hidden-accessible").text("");
 				analytics.track("Search", search, keyword);
 			}
 		});

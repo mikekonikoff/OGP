@@ -283,10 +283,19 @@ td.colPreview, td.colMetadata, td.colSave, td.colSource {
 .attributeInfoControlCell {
 	left: 200px;
 }
+.attributeInfoControl {
+	filter: contrast(125%);
+}
+.activeButton {
+	border: solid red 1px;
+}
 .tip {
 	color: #888;
 	font-size: 95%;
 }
 #advancedSearchBox {
-	width: 400px;
+	width: 420px;
+}
+.searchFormLabel {
+	width: 120px;
 }
