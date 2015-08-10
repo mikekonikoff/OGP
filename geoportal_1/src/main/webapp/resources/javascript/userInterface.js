@@ -30,6 +30,7 @@ org.OpenGeoPortal.UserInterface = function(){
 	this.mapObject = org.OpenGeoPortal.map;
 	this.resultsTableObject = org.OpenGeoPortal.resultsTableObj;
 	this.cartTableObject = org.OpenGeoPortal.cartTableObj;
+	this.browseTableObject = org.OpenGeoPortal.browseTableObj;
 	this.layerStateObject = org.OpenGeoPortal.layerState;
 	this.utility = org.OpenGeoPortal.Utility;
 	this.config = org.OpenGeoPortal.InstitutionInfo;
@@ -50,7 +51,8 @@ org.OpenGeoPortal.UserInterface = function(){
 								var label,
 					idx = ui.index;
 
-				label = (idx == 2) && "Cart Tab" ||
+				label = (idx == 3) && "Cart Tab" ||
+						(idx == 2) && "Browse Tab" ||
 						(idx == 1) && "Search Tab" ||
 						"Getting Started Tab";
 				analytics.track("Interface", "Change Tab", label);
@@ -61,6 +63,9 @@ org.OpenGeoPortal.UserInterface = function(){
 					break;
 				case 'saved':
 					jQuery('#savedLayers').dataTable().fnDraw();
+					break;
+				case 'browsed':
+					jQuery('#browsedLayers').dataTable().fnDraw();
 					break;
 				}
 			}
@@ -107,6 +112,9 @@ org.OpenGeoPortal.UserInterface = function(){
 				break;
 			case 'saved':
 				jQuery('#savedLayers').dataTable().fnDraw();
+				break;
+			case 'browsed':
+				jQuery('#browsedLayers').dataTable().fnDraw();
 				break;
 			}
 		});
@@ -375,6 +383,12 @@ org.OpenGeoPortal.UserInterface = function(){
 
 			analytics.track("Results Pagination", direction + " Results Page");
 		});
+
+		// browse layers - initialize view model
+		layerBrowser = new org.fgdl.LayerBrowser();
+		// apply model bindings to template
+		ko.applyBindings(layerBrowser, jQuery("#browseLayersForm")[0]);
+		layerBrowser.init();
 
 		jQuery("#main").fadeTo('fast', 1);
 
@@ -1048,6 +1062,48 @@ org.OpenGeoPortal.UserInterface.prototype.initSortable = function(){
 
 			}
 	});
+	jQuery( "#browsedLayers > tbody" ).sortable({helper: "original", opacity: .5, containment: "parent",
+		items: "tr", tolerance: "pointer", cursor: "move",
+		start: function(event, ui){
+				//this code is ugly...optimize
+				jQuery("#browsedLayers .resultsControls").each(function(){
+					var rowObj = jQuery(this).parent()[0];
+					//console.log(rowObj);
+					var tableObj = jQuery("#browsedLayers").dataTable();
+					tableObj.fnClose(rowObj);
+					//why doesn't this close the row?
+					tableObj.fnDraw(false);
+				});
+			},
+		stop: function(event, ui){
+		 		var dataArr = [];
+		 		var tableObj = jQuery("#browsedLayers").dataTable();
+		 		dataArr = tableObj.fnGetData();
+		 		var newArr = [];
+		 		var openCount = 0;
+				jQuery("#browsedLayers > tbody > tr").each(function(index, Element){
+					var dataTableIndex = tableObj.fnGetPosition(Element);
+					if (typeof dataTableIndex == 'number'){
+						newArr[index - openCount] = dataArr[dataTableIndex];
+					} else {
+						openCount += 1;
+					}
+				});
+				tableObj.fnClearTable(false);
+				tableObj.fnAddData(newArr);
+				var tableLength = newArr.length;
+				for (var i in newArr){
+
+					if (typeof that.mapObject.getLayersByName(newArr[i][0])[0] != 'undefined'){
+						var layer = that.mapObject.getLayersByName(newArr[i][0])[0];
+						that.mapObject.setLayerIndex(layer, tableLength - (i+1));
+					}
+				}
+
+				that.browseTableObject.callbackExpand();
+
+			}
+	});
 };
 
 
@@ -1668,7 +1724,7 @@ org.OpenGeoPortal.UserInterface.prototype.getLayerList = function(downloadAction
 		var minX = aData[headingsObj.getColumnIndex('MinX')];
 		var minY = aData[headingsObj.getColumnIndex('MinY')];
 		var maxX = aData[headingsObj.getColumnIndex('MaxX')];
-		var maxY = aData[headingsObj.getColumnIndex('MinY')];
+		var maxY = aData[headingsObj.getColumnIndex('MaxY')];
 		var isValidLayer = that.availableLayerLogic(downloadAction, aData);
 		if (params.clipped != false){
 			//do a test to see if the layer's bbox is within the clip extent
@@ -1900,8 +1956,12 @@ org.OpenGeoPortal.UserInterface.prototype.addSharedLayersToCart = function(){
 	var query = solr.getInfoFromLayerIdQuery(params.layer);
 	solr.sendToSolr(query, this.getLayerInfoJsonpSuccess, this.getLayerInfoJsonpError, this);
 	var sharedExtent = params.minX + ',' + params.minY + ',' + params.maxX + ',' + params.maxY;
+//	zoomToLayerExtent must happen after tilesloaded,
+//	so addSharedLayersToCart is now called from MapController changeBackgroundMap,
+//	and only the first time the google basemap is loaded (not when it's changed).
+//	console.log("zooming to shared extent " + sharedExtent);
 	this.mapObject.zoomToLayerExtent(sharedExtent);
-	jQuery("#tabs").tabs("option", "active", 2);
+	jQuery("#tabs").tabs("option", "active", 3);
 	this.initSortable();
 };
 
@@ -1966,28 +2026,52 @@ org.OpenGeoPortal.UserInterface.prototype.calculateRows = function(theText){
 };
 
 org.OpenGeoPortal.UserInterface.prototype.shareLayers = function(){
-	var layers = [];
-	var layerObj = this.getLayerList("shareLink");
-	for (var layer in layerObj){
-		layers.push(layer);
-	}
 	var dialogContent = "";
-    if (layers.length == 0){
+    if (this.getSharedLayers().length == 0){
     	dialogContent = 'No layers have been selected.';
     	//this should probably call a dialog instance for error messages/notifications
     } else {
-    	var path = top.location.href.substring(0, top.location.href.lastIndexOf("/"));
-    	var shareLink = path + "/openGeoPortalHome.jsp";
-    	var geodeticBbox = this.mapObject.getGeodeticExtent();
-    	var queryString = '?' + jQuery.param({ layer: layers, minX: geodeticBbox.left, minY: geodeticBbox.bottom, maxX: geodeticBbox.right, maxY: geodeticBbox.top });
-    	shareLink += queryString;
-
-    	dialogContent = '<textarea id="shareText" class="linkText" ></textarea> \n';
-    	dialogContent += '<p>Use this link to share this Cart</p>';
-    	this.shortenLink(shareLink);
+    	dialogContent = '<h2>Use this link to share this Cart</h2>';
+    	dialogContent += '<textarea id="shareText" class="linkText" ></textarea> \n';
+    	dialogContent += '<fieldset><legend>Options</legend>';
+    	dialogContent += '<input type=radio value=currentExtent id=currentExtent name=sharedExtent class=sharedExtent checked/>';
+    	dialogContent += '<label for=currentExtent>Use current map extent</label>';
+    	dialogContent += '<input type=radio value=combinedExtent id=combinedExtent name=sharedExtent class=sharedExtent />';
+    	dialogContent += '<label for=combinedExtent>Use combined extent of shared layers</label>';
+    	dialogContent += '</fieldset>';
+    	this.updateShareLink(true);
     }
 
 	this.createShareDialog(dialogContent);
+};
+
+org.OpenGeoPortal.UserInterface.prototype.getSharedLayers = function(){
+	var layers = [];
+	var layerObj = this.getLayerList("shareLink");
+	for (var layer in layerObj) {
+		layers.push(layer);
+	}
+	return layers;
+};
+
+org.OpenGeoPortal.UserInterface.prototype.getSharedLayerObjects = function(){
+	var layers = [];
+	var layerObj = this.getLayerList("shareLink");
+	jQuery.each(layerObj, function () {
+		layers.push(this);
+	});
+	return layers;
+};
+
+org.OpenGeoPortal.UserInterface.prototype.updateShareLink = function(useCurrentExtent){
+//	console.log("use current extent is " + useCurrentExtent);
+	var layers = this.getSharedLayers();
+	var path = top.location.href.substring(0, top.location.href.lastIndexOf("/"));
+	var shareLink = path + "/openGeoPortalHome.jsp";
+	var geodeticBbox = useCurrentExtent ? this.mapObject.getGeodeticExtent() : this.mapObject.getCombinedExtent(this.getSharedLayerObjects());
+	var queryString = '?' + jQuery.param({ layer: layers, minX: geodeticBbox.left, minY: geodeticBbox.bottom, maxX: geodeticBbox.right, maxY: geodeticBbox.top });
+	shareLink += queryString;
+	this.shortenLink(shareLink);
 };
 
 org.OpenGeoPortal.UserInterface.prototype.createShareDialog = function(dialogContent){
@@ -2017,6 +2101,10 @@ org.OpenGeoPortal.UserInterface.prototype.createShareDialog = function(dialogCon
     jQuery('#shareText').focus(function(){
         // Select input field contents
         this.select();
+    });
+    jQuery('.sharedExtent').click({that: this},function(eventData){
+    	eventData.data.that.updateShareLink(this.value==="currentExtent");
+    	return true;
     });
 };
 
@@ -2135,6 +2223,8 @@ org.OpenGeoPortal.UserInterface.prototype.changeLoginButtonsToControls = functio
 				jQuery(this).parent().html(that.resultsTableObject.getActivePreviewControl(rowObj));
 			} else if (tableName == "savedLayers"){
 				jQuery(this).parent().html(that.cartTableObject.getActivePreviewControl(rowObj));
+			} else if (tableName == "browsedLayers"){
+				jQuery(this).parent().html(that.browseTableObject.getActivePreviewControl(rowObj));
 			}
 		}
 	});
@@ -2156,6 +2246,8 @@ org.OpenGeoPortal.UserInterface.prototype.changeControlsToLoginButtons = functio
 				jQuery(this).parent().html(that.resultsTableObject.getPreviewControl(rowObj));
 			} else if (tableName == "savedLayers"){
 				jQuery(this).parent().html(that.cartTableObject.getPreviewControl(rowObj));
+			} else if (tableName == "browsedLayers"){
+				jQuery(this).parent().html(that.browseTableObject.getActivePreviewControl(rowObj));
 			}
 
 	});
@@ -2523,7 +2615,7 @@ org.OpenGeoPortal.UserInterface.prototype.autocomplete = function(){
 	);
 
 	jQuery( "#basicSearchTextField" ).autocomplete(
-		jQuery.extend({}, this.getAutocompleteOptions("#basicSearchTextField", ["Name", "OriginatorSort", "Abstract"]),
+		jQuery.extend({}, this.getAutocompleteOptions("#basicSearchTextField", ["Name", "OriginatorSort"]), // , "Abstract"
 		{
 			create: function () {
 				jQuery( this ).next("span.ui-helper-hidden-accessible").position({

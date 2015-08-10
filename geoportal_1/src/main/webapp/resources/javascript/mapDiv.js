@@ -287,16 +287,16 @@ org.OpenGeoPortal.MapController.prototype.changeBackgroundMap = function(bgType)
 				backgroundMaps.params);
 
 			this.addLayer(bgMap);
-			google.maps.event.addListener(bgMap.mapObject, "tilesloaded", function() {
+			google.maps.event.addListenerOnce(bgMap.mapObject, "tilesloaded", function() {
 				  //console.log("Tiles loaded");
 				  that.render(that.userDiv);
 					jQuery(".mapClearButtonItemInactive").text("clear previews");
 					that.userMapAction = true;
 					jQuery(document).trigger("mapReady");
 					//really should only fire the first time
-					google.maps.event.clearListeners(bgMap.mapObject, "tilesloaded");
+					//google.maps.event.clearListeners(bgMap.mapObject, "tilesloaded");
 					jQuery("#geoportalMap").fadeTo("slow", 1);
-
+					org.OpenGeoPortal.ui.addSharedLayersToCart();
 				});
 
 		}
@@ -1082,23 +1082,47 @@ org.OpenGeoPortal.MapController.prototype.extentChanged = function(){
 	}
 };
 
-org.OpenGeoPortal.MapController.prototype.getGeodeticExtent = function(){
-	var mercatorExtent = this.getExtent();
+org.OpenGeoPortal.MapController.prototype.getGeodeticExtent = function(extent){
+	var mercatorExtent = extent instanceof OpenLayers.Bounds ? extent : this.getExtent();
 	var sphericalMercator = new OpenLayers.Projection('EPSG:900913');
 	var geodetic = new OpenLayers.Projection('EPSG:4326');
 	return mercatorExtent.transform(sphericalMercator, geodetic);
 };
 
-org.OpenGeoPortal.MapController.prototype.zoomToLayerExtent = function(extent){
-	var layerExtent = OpenLayers.Bounds.fromString(extent);
+org.OpenGeoPortal.MapController.prototype.getMercaturExtent = function(extent){
+	var layerExtent = extent instanceof OpenLayers.Bounds ? extent : OpenLayers.Bounds.fromString(extent);
+	var sphericalMercator = new OpenLayers.Projection('EPSG:900913');
+	var geodetic = new OpenLayers.Projection('EPSG:4326');
+	var newExtent = layerExtent.transform(geodetic, sphericalMercator);
+	return newExtent;
+};
+
+org.OpenGeoPortal.MapController.prototype.zoomToLayerExtentOld = function(extent){
+	var layerExtent = extent instanceof OpenLayers.Bounds ? extent : OpenLayers.Bounds.fromString(extent);
 	var lowerLeft = this.WGS84ToMercator(layerExtent.left, layerExtent.bottom);
 	var upperRight = this.WGS84ToMercator(layerExtent.right, layerExtent.top);
 
 	var newExtent = new OpenLayers.Bounds();
 	newExtent.extend(new OpenLayers.LonLat(lowerLeft.lon, lowerLeft.lat));
 	newExtent.extend(new OpenLayers.LonLat(upperRight.lon, upperRight.lat));
-	this.zoomToExtent(newExtent);
+	this.zoomToExtent(newExtent, true);
 
+};
+
+org.OpenGeoPortal.MapController.prototype.zoomToLayerExtent = function(extent){
+	var layerExtent = extent instanceof OpenLayers.Bounds ? extent : OpenLayers.Bounds.fromString(extent);
+	var newExtent = this.getMercaturExtent(layerExtent);
+	var nn = this.boundsArrayToOLObject([newExtent.left, newExtent.bottom, newExtent.right, newExtent.top]);
+	this.zoomToExtent(nn, true);
+};
+
+org.OpenGeoPortal.MapController.prototype.getCombinedExtent = function(layers) {
+	var bounds=[];
+	for (var i=0; i<layers.length; i++) {
+		bounds.push(this.boundsArrayToOLObject(layers[i].bounds));
+	}
+	var ba = this.getCombinedBounds(bounds);
+	return ba;
 };
 
 org.OpenGeoPortal.MapController.prototype.getCombinedBounds = function(arrBounds){

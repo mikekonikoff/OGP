@@ -60,6 +60,12 @@ org.OpenGeoPortal.Utility.whichTab = function(){
 		tabInfo.tableName = 'searchResults';
 		break;
 	case 2:
+		tabInfo.name = 'browsed';
+		tabInfo.tableObject = function(){return org.OpenGeoPortal.browseTableObj;};
+		tabInfo.tableDiv = 'browsedLayersTable';
+		tabInfo.tableName = 'browsedLayers';
+		break;
+	case 3:
 		tabInfo.name = 'saved';
 		tabInfo.tableObject = function(){return org.OpenGeoPortal.cartTableObj;};
 		tabInfo.tableDiv = 'savedLayersTable';
@@ -74,8 +80,8 @@ org.OpenGeoPortal.Utility.whichTab = function(){
 
 org.OpenGeoPortal.Utility.whichSearch = function(){
 	var activeSearchDiv = null;
-	jQuery(".searchBox > div").each(function(){
-		if (jQuery(this).css("display") == 'block'){
+	jQuery(".searchBox > div, #browseLayersDiv").each(function(){
+		if (jQuery(this).is(":visible")){
 			activeSearchDiv = jQuery(this).attr("id");
 		}
 	});
@@ -87,6 +93,9 @@ org.OpenGeoPortal.Utility.whichSearch = function(){
 		break;
 	case "advancedSearchBox":
 		searchInfo.type = 'advancedSearch';
+		break;
+	case "browseLayersDiv":
+		searchInfo.type = 'browseSearch';
 		break;
 	default:
 		//throw new Error('No tab is selected.');

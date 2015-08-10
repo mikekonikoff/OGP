@@ -26,7 +26,11 @@
 <script type="text/javascript" src="resources/javascript/solr.js"></script>
 <script type="text/javascript" src="resources/javascript/download.js"></script>
 <script type="text/javascript" src="resources/javascript/geoCommonsExport.js"></script>
-
+<script type="text/javascript" src="resources/javascript/ko/knockout-3.3.0.js"></script>
+<script type="text/javascript" src="resources/javascript/browseLayers.js"></script>
+<script type="text/javascript" src="/est/dwr/interface/Issue.js"></script>
+<script type="text/javascript" src="/est/dwr/interface/Dataset.js"></script>
+<script type="text/javascript" src="/est/dwr/engine.js"></script>
 <!-- <script type="text/javascript" src="javascript/testOverviewMap.js"></script>-->
 <!-- We should move to using a cdn where possible with a locally hosted fallback -->
 <!--

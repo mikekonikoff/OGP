@@ -1185,7 +1185,9 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 			  context = 'org.OpenGeoPortal.resultsTableObj';
 		  } else if (tableID == 'savedLayers'){
 			  context = 'org.OpenGeoPortal.cartTableObj';
-		  } else {
+		  } else if (tableID == 'browsedLayers'){
+			  context = 'org.OpenGeoPortal.browseTableObj';
+		  }  else {
 			  throw new Error("Could not set context.");
 		  }
 		  return context;
@@ -1488,6 +1490,8 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
     	var tableID = this.getTableID();
     	if (tableID == "savedLayers"){
     		return "No data layers have been added to the cart.";
+    	} else if (tableID == "browsedLayers"){
+    		return "Select from the options to browse layers.";
     	} else  {
     		return "";
     	}
@@ -1632,6 +1636,9 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		that.populate(that.processData(data));
 	    that.tableEffect("searchEnd");
 	    that.setResultNumber(data.response.numFound);
+	    if (that.getTableID() == 'browsedLayers') {
+    		that.getTableObj().fnSettings().oLanguage.sEmptyTable = data.response.numFound===0 ? "No data layers found to browse." : that.getEmptyTableMessage();
+	    }
 	};
 	//*******Search Results only
 	this.searchRequestJsonpError = function()
@@ -1706,6 +1713,10 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		{
 			this.searchRequestAdvancedJsonp(solr);
 		}
+		else if (searchType == 'browseSearch')
+		{
+			this.searchRequestBrowseJsonp(solr, layerBrowser.selectedIssue());
+		}
 		//tempSolr = solr;  // for debugging
 		this.setLastSolrSearch(solr);
 		solr.executeSearchQuery(this.searchRequestJsonpSuccess, this.searchRequestJsonpError);
@@ -1773,6 +1784,16 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		}
 	};
 
+	//*******Search Results only
+	/**
+	 * add elements specific to browse by issue
+	 */
+	this.searchRequestBrowseJsonp = function(solr, issue)
+	{
+    	ko.utils.arrayForEach (issue.datasets(), function (dataset) {
+			solr.addFilename(dataset.name);
+    	});
+	};
 
 	//*******Search Results only
 	/**
@@ -1885,7 +1906,14 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	};
 
 	this.deferredSearchSetTimeOut = function(startIndex){
-		var t = setTimeout('org.OpenGeoPortal.resultsTableObj.deferredSearchStart("' + startIndex + '")', 100);
+		var t, searchType = org.OpenGeoPortal.Utility.whichSearch().type;
+		if (searchType == 'browseSearch')
+		{
+			t = setTimeout('org.OpenGeoPortal.browseTableObj.deferredSearchStart("' + startIndex + '")', 100);
+		}
+		else {
+			t = setTimeout('org.OpenGeoPortal.resultsTableObj.deferredSearchStart("' + startIndex + '")', 100);
+		}
 		//console.log(t);
 	};
 

@@ -1,19 +1,23 @@
-<div id="left_tabs"> 
+<div id="left_tabs">
 	<div id="tabs" class="ui-tabs">
 		<ul>
 			<li><a href="#gettingStartedTab"><span class="tabText">
 				Getting Started
-				</span></a> 
+				</span></a>
 			</li>
 			<li><a href="#searchTab"><span class="tabText">
 				Search
-				</span></a> 
-			</li>				
+				</span></a>
+			</li>
+			<li><a href="#browseTab"><span class="tabText">
+				Browse
+				</span></a>
+			</li>
 			<li><a href="#savedLayersTab">
 				<span class="tabText">
 				<img src="resources/media/shoppingcart.png" alt="Cart" />
 				Cart <span id="savedLayersNumberTab" class="savedLayersNumber">(0)</span>
-				</span></a> 
+				</span></a>
 			</li>
 		</ul>
    		<div id="gettingStartedTab" class="ui-tabs-hide">
@@ -22,10 +26,13 @@
     	<div id="searchTab" class="ui-tabs-hide">
 			<%@include file="searchForm.jspf"%>
     	</div>
+    	<div id="browseTab" class="ui-tabs-hide">
+			<%@include file="browseLayers.jspf"%>
+    	</div>
     	<div id="savedLayersTab" class="ui-tabs-hide">
 			<%@include file="savedLayersTab.jspf"%>
     	</div>
 	</div>
-</div>  
+</div>
 
-  
+

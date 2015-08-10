@@ -3,7 +3,7 @@
  * author: Chris Barnett
  *
  */
-
+var layerBrowser;
 if (typeof org == 'undefined'){
 	org = {};
 } else if (typeof org != "object"){
@@ -42,11 +42,12 @@ jQuery(document).ready(function (){
 	org.OpenGeoPortal.map = new org.OpenGeoPortal.MapController();
 	org.OpenGeoPortal.resultsTableObj = new org.OpenGeoPortal.LayerTable();
 	org.OpenGeoPortal.cartTableObj = new org.OpenGeoPortal.LayerTable("savedLayersTable", "savedLayers");
+	org.OpenGeoPortal.browseTableObj = new org.OpenGeoPortal.LayerTable("browsedLayersTable", "browsedLayers");
 	org.OpenGeoPortal.ui = new org.OpenGeoPortal.UserInterface();
 
 	org.OpenGeoPortal.cartTableObj.hideCol("Save");
 	org.OpenGeoPortal.cartTableObj.showCol("checkBox");
-	org.OpenGeoPortal.ui.addSharedLayersToCart();
+//	org.OpenGeoPortal.ui.addSharedLayersToCart(); // moved to tilesloaded event handler in mapDiv.js, org.OpenGeoPortal.MapController.prototype.changeBackgroundMap
 
 	org.OpenGeoPortal.downloadQueue = new org.OpenGeoPortal.Downloader();
 

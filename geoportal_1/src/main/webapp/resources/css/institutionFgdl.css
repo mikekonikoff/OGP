@@ -299,3 +299,7 @@ td.colPreview, td.colMetadata, td.colSave, td.colSource {
 .searchFormLabel {
 	width: 120px;
 }
+.ui-helper-hidden-accessible {
+	background-color: transparent;
+	color: transparent;
+}
