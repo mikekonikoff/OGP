@@ -1,0 +1,53 @@
+<div id="browseLayersDiv">
+	<div class="sub_header">
+			<span class="sub_headerTitle">
+				BROWSE
+				<!--<img src="resources/media/header_browser.png" alt="Browser" />-->
+			</span>
+ 		<div class="arrow_buttons">
+    		<img src="resources/media/button_arrow_up.png" class="button" alt="collapse" />
+    		<img src="resources/media/button_arrow_left.png" class="button" alt="collapse left" />
+    		<img src="resources/media/button_arrow_right.png" class="button" alt="expand right" />
+ 		</div>
+	</div>
+	<form id="browseLayersForm" onsubmit="return false;"  class="welcomeText">
+		<h1><abbr title="Efficient Transportation Decision Making">ETDM</abbr> Issues</h1>
+		<select data-bind="options: issues, optionsText: 'name', value: selectedIssue, optionsCaption: 'Select...'"></select>
+		<span data-bind="visible: isLoading" style="vertical-align: bottom"><img src="resources/media/ui-anim_basic_16x16.gif" alt="Loading indicator" style="vertical-align: inherit"></img> Loading layers...</span>
+<!--
+		<div data-bind="foreach: {data: issues, as: 'issue'}">
+			<a data-bind="text: issue.name, click: function() {issue.init(), layerBrowser.selectedIssue(issue)}, attr: {href: 'javascript: void(0)'}"></a>
+				<br/>
+			<div>
+				<a data-bind="text: issue.name, click: function() {issue.showDatasets(!issue.showDatasets()); issue.init()}, attr: {href: 'javascript: void(0)'}"></a>
+				<div data-bind="foreach: {data: issue.datasets(), as: 'dataset'}, visible: issue.showDatasets()" style="overflow: scroll; margin-left: 20px; height: 100px">
+					<div><a data-bind="text: dataset.name, attr: {href: dataset.link}"></a></div>
+				</div>
+			</div>
+		</div>
+			<input type="text" id="currentExtentDisplay" title="Current map extent" data-bind="value: currentMapExtent" size="80"/>
+			<input type="button" value="refresh" class="sytedButtonSmall" data-bind="click: refreshExtent(!refreshExtent());"/>
+			<input type="text" id="newExtentDisplay" title="New map extent" data-bind="value: newExtent" size="80"/>
+			<input type="button" value="set" class="sytedButtonSmall" data-bind="click: setMapExtent"/>
+ -->
+	</form>
+	<div class="sub_header">
+		<span class="sub_headerTitle">
+		LAYERS
+		</span>
+
+		<span class="sub_headerButtons">
+
+			<!--<span class="organizeButton styledButtonSmall" onclick="org.OpenGeoPortal.ui.openOrganize(this);" title="Show options for sorting and organizing search results">
+			<span id="removeFromCartButton" class="deleteButton styledButtonSmall" title="Remove selected layers from the cart">
+    		Remove
+			</span>
+    		sort options
+			</span>
+    		<span id="cartClearMap" class="mapClearButton styledButtonSmall" title="Clear all layers from the map" >
+    		clear map
+			</span>-->
+		</span>
+	</div>
+	<div id="browsedLayersTable"></div>
+</div>
