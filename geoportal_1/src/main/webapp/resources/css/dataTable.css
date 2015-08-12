@@ -109,12 +109,12 @@ table.display {
 	border-collapse: collapse;
 	table-layout: fixed;
 	cursor: default;
-	
+
 /*	width: 100%;
 	clear: both;
 	*/
 	/* Note Firefox 3.5 and before have a bug with border-collapse
-	 * ( https://bugzilla.mozilla.org/show%5Fbug.cgi?id=155955 ) 
+	 * ( https://bugzilla.mozilla.org/show%5Fbug.cgi?id=155955 )
 	 * border-spacing: 0; is one possible option. Conditional-css.com is
 	 * useful for this kind of thing
 	 *
@@ -122,7 +122,7 @@ table.display {
 	 * It subtracts one px relative to the other browsers from the first column, and
 	 * adds one to the end...
 	 *
-	 * If you want that effect I'd suggest setting a border-top/left on th/td's and 
+	 * If you want that effect I'd suggest setting a border-top/left on th/td's and
 	 * then filling in the gaps with other borders.
 	 */
 }
@@ -169,7 +169,7 @@ table.display > tbody > tr > td {
 	color: #333333;
 	height: 17px;
 	border: 0px;
-	white-space: nowrap;	
+	white-space: nowrap;
 }
 
 table.display td.center {
@@ -304,7 +304,7 @@ div.box {
 	background-color: #E5E5FF;*/
 }
 
-/* expanded preview controls for search results table 
+/* expanded preview controls for search results table
 */
 
 .previewControls {
@@ -347,7 +347,7 @@ div.box {
 	font-size: 10px;
 	padding: 0px 1px;
 	}
-	
+
 .opacityText {
 	width: 26px;
 	}
@@ -355,10 +355,10 @@ div.box {
 .controlExpand {
 	padding-left: 1px;
 	}
-	
+
 .sizeText {
 	}
-	
+
 .colorPalette {
 	width:15px;
 	height:15px;
@@ -371,11 +371,11 @@ td.colTitle {
 	cursor: pointer;
 }
 
-.ui-resizable-helper { 
+.ui-resizable-helper {
 	/*border-right: 1px solid black;*/
 	margin-right: -5px;
 }
-	
+
 .tableCheckBox {
 	/*margin-bottom: 0px;*/
 	max-height: 13px;
@@ -392,7 +392,7 @@ td.colTitle {
 }
 
 .opacityControlCell {
-	left: 85px;
+	left: 90px;
 }
 
 .sizeControlCell {
@@ -412,7 +412,7 @@ td.colTitle {
 }
 
 .typeIcon {
-	vertical-align: middle;	
+	vertical-align: middle;
 }
 
 .expandIcon {
@@ -451,4 +451,3 @@ tr.previewedLayer .previewLock {
 	border-bottom: 1px solid #666666;
 }
 
- 
