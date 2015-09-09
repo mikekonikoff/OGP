@@ -10,13 +10,13 @@
     		<img src="resources/media/button_arrow_right.png" class="button" alt="expand right" />
  		</div>
 	</div>
-    
+
     <div class="searchBox">
-    	<%@include file="basicSearch.jspf"%> 
-        <%@include file="advancedSearch.jspf"%> 
+    	<%@include file="basicSearch.jspf"%>
+        <%@include file="advancedSearch.jspf"%>
    </div>
-   
- 	<div id="resultsSubHeader" class="sub_header"> 
+
+ 	<div id="resultsSubHeader" class="sub_header resultsSubHeader">
  	 	<span class="sub_headerTitle">
  	   		<span id="resultsNumber" class="resultsNumber">
     			0
@@ -26,24 +26,24 @@
     		<!--<img src="resources/media/header_searchresults.png" alt="Search Results" /> -->
     	</span>
 
-    	<span id="sortDropdownLabel">by</span>
-    	<div id="sortDropdown">
+    	<span id="sortDropdownLabel" class="sortDropdownLabel">by</span>
+    	<div id="sortDropdown" class="sortDropdown">
       	</div>
-    	<!--<span class="sub_headerButtons">-->	
-    		<div id="columnDropdown">
+    	<!--<span class="sub_headerButtons">-->
+    		<div id="columnDropdown" class="columnDropdown">
     		columns
 			</div>
-			<!--  
+			<!--
     		<span class="mapClearButton styledButtonSmall" title="Clear all layers from the map" >
     		clear map
 			</span>
-			
+
 		</span>-->
  	</div>
-	<%@include file="welcomeText.jspf"%> 
- 	<div id="resultsTable"></div>
+	<%@include file="welcomeText.jspf"%>
+ 	<div id="resultsTable" class="resultsTable"></div>
  	<div id="searchResultsMessage"></div>
- 	<div id="searchResultsNavigation"></div>
+ 	<div id="searchResultsNavigation" class="searchResultsNavigation"></div>
 
 </div>
 

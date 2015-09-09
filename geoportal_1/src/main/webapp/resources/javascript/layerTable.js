@@ -21,7 +21,7 @@ if (typeof org.OpenGeoPortal == 'undefined'){
 
 /**
  * LayerTable constructor
- * this object defines the behavior of the search results table, as well as the saved layers table
+ * this object defines the behavior of the search results table, as well as the saved layers table and browse layers table
  *
  *  @param userDiv  the id of the div element to place the table in
  *  @param tableName the id of the actual table element
@@ -1510,7 +1510,8 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		var divID = this.getTableDiv();
 		var totalHeight = jQuery('#container').height();
 		var searchHeight = 0;
-		jQuery('#basicSearchDiv > div').each(function(){
+		var searchDivID = (divID=="resultsTableBrowsed" ? "browseLayersDiv" : "basicSearchDiv");
+		jQuery('#' + searchDivID + ' > div').each(function(){
 			var currentDiv = jQuery(this);
 			if (currentDiv.attr('id') != divID){
 				if (currentDiv.hasClass('searchBox')){
@@ -1521,7 +1522,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 					}
 					totalHeight -= searchHeight;
 				} else {
-					if ((currentDiv.css('display') != 'none')&&(currentDiv.attr('id') != 'searchResultsMessage')){
+					if ((currentDiv.css('display') != 'none')&&(!currentDiv.hasClass('searchResultsMessage'))){
 						totalHeight -= currentDiv.height();
 					}
 				}
@@ -1530,7 +1531,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		var headerRowHeight = jQuery('#' + divID + ' table.display > thead > tr').height();
 		totalHeight -= headerRowHeight;
 
-		totalHeight -= jQuery("#searchResultsNavigation").height() || 0;
+		totalHeight -= jQuery("#" + divID + " .searchResultsNavigation").height() || 0;
 
 		var heightObj = {};
 		var searchRowHeight = jQuery('#' + divID + ' table.display > tbody > tr').height() || 23;
@@ -1547,7 +1548,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 			heightObj.buffer = 0;
 		}
 		this.displayedLayers.numberOfLayers = heightObj.rows;
-		//console.log(heightObj);
+//		console.log(heightObj);
 		return heightObj;
 	};
 
@@ -1636,7 +1637,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	this.searchRequestJsonpSuccess = function(data)
 	{
 		//console.log(data);
-		org.OpenGeoPortal.ui.showSearchResults();
+		org.OpenGeoPortal.ui.showSearchResults(that.getTableID());
 		that.populate(that.processData(data));
 	    that.tableEffect("searchEnd");
 	    that.setResultNumber(data.response.numFound);
@@ -1674,8 +1675,10 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		var sortColumn = sortObj.organizeBy;
 		if ((sortColumn == null) || (sortColumn == "score"))
 			sortColumn = "score";
-	    else if ((sortColumn == "ContentDate") || (sortColumn == "Access") || (sortColumn == "Name"))
-	           sortColumn == sortColumn;  // nothing to do, sortColumn doesn't need adjustment
+		else if ((sortColumn == "ContentDate") || (sortColumn == "Access"))
+			sortColumn == sortColumn;  // nothing to do, sortColumn doesn't need adjustment
+		else if (sortColumn == "Name")
+			sortColumn = "LayerId";
 		else
 			sortColumn = sortColumn + "Sort";  // use solr sort column that haven't been tokenized
 		solr.setSort(sortColumn, sortObj.organizeDirection);
@@ -1709,6 +1712,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	{
 		var solr = this.getBaseSearchRequestJsonp(startIndex);
 		var searchType = org.OpenGeoPortal.Utility.whichSearch().type;
+		var successCallback = this.searchRequestJsonpSuccess;
 		if (searchType == 'basicSearch')
 		{
 			this.searchRequestBasicJsonp(solr);
@@ -1719,11 +1723,15 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		}
 		else if (searchType == 'browseSearch')
 		{
-			this.searchRequestBrowseJsonp(solr, layerBrowser.selectedIssue());
+			this.searchRequestBrowseJsonp(solr, layerBrowser.selectedIssue(), layerBrowser.selectedOriginator());
+			successCallback = function(data) {
+				org.OpenGeoPortal.browseTableObj.searchRequestJsonpSuccess(data);
+				layerBrowser.isLoading(false);
+			};
 		}
 		//tempSolr = solr;  // for debugging
 		this.setLastSolrSearch(solr);
-		solr.executeSearchQuery(this.searchRequestJsonpSuccess, this.searchRequestJsonpError);
+		solr.executeSearchQuery(successCallback, this.searchRequestJsonpError);
 	};
 
 	// keeping track of the last solr search is useful in multiple cases
@@ -1788,15 +1796,19 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		}
 	};
 
-	//*******Search Results only
 	/**
-	 * add elements specific to browse by issue
+	 * add elements specific to browse by issue, originator
 	 */
-	this.searchRequestBrowseJsonp = function(solr, issue)
+	this.searchRequestBrowseJsonp = function(solr, issue, originator)
 	{
-    	ko.utils.arrayForEach (issue.datasets(), function (dataset) {
-			solr.addFilename(dataset.name);
-    	});
+		if (issue != null) {
+	    	ko.utils.arrayForEach (issue.datasets(), function (dataset) {
+				solr.addFilename(dataset.name);
+	    	});
+		}
+    	if (originator != null) {
+    		solr.setOriginator(originator.value);
+    	}
 	};
 
 	//*******Search Results only
@@ -1983,8 +1995,15 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 					that.markPreviewedLayers();
 					that.loginHandler();
 					if (that.getTableID() == "searchResults"){
+						var pagingDiv = "searchResultsNavigation";
+						var prefix = 'org.OpenGeoPortal.resultsTableObj';
 						that.createSortGraphics();
-						that.addPagingUi();  	//*******Search Results only
+						that.addPagingUi(pagingDiv, prefix);  	//*******Search Results only
+					} else if (that.getTableID() == "browsedLayers"){
+						var pagingDiv = "searchResultsNavigationBrowsed";
+						var prefix = 'org.OpenGeoPortal.browseTableObj';
+						that.createSortGraphics();
+						that.addPagingUi(pagingDiv, prefix);  	//*******Browsing Results only
 					}
 				},//apply widths in callback?
 			"bAutoWidth": false,
@@ -2236,14 +2255,14 @@ org.OpenGeoPortal.LayerTable.prototype.addColumnResize = function(){
 };
 
 //*******Search Results only
-org.OpenGeoPortal.LayerTable.prototype.addPagingUi = function()
+org.OpenGeoPortal.LayerTable.prototype.addPagingUi = function(pagingDiv, prefix)
 {
 	//unfortunately, startIndex is not static...we must calculate this value each
 	//time & we must know how many rows are expanded;  not a big deal for 'next', but how do
 	//we handle 'previous'? note..next should be working...still need a fix for previous in the case
 	//that a row is expanded
-	var pagingDiv = "searchResultsNavigation";
-	var prefix = 'org.OpenGeoPortal.resultsTableObj';
+//	var pagingDiv = "searchResultsNavigation";
+//	var prefix = 'org.OpenGeoPortal.resultsTableObj';
 	//how can we calculate this?
     var navigationString = '';
 	var displayedLayers = this.displayedLayers;

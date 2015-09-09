@@ -17,6 +17,8 @@ if (typeof org.fgdl == 'undefined'){
 org.fgdl.LayerBrowser = function(){
 	var self = this;
 	self.issues = ko.observableArray();
+	self.originators = ko.observableArray();
+	self.selectedOriginator = ko.observable(null);
 
 	self.isInited = ko.observable(false);
 
@@ -28,11 +30,43 @@ org.fgdl.LayerBrowser = function(){
 		//jQuery.blockUI({message: "<br /><img src='/est/images/load.gif' />Loading...<br /><br />"});
 		Issue.listEtatIssues(function(reply) {
 			//jQuery.unblockUI();
-
+			var etatIssues = [];
 			for (var i = 0; i < reply.length; i++) {
-				self.issues.push(new org.fgdl.EtdmIssue(reply[i]));
+				etatIssues.push(new org.fgdl.EtdmIssue(reply[i]));
 			}
+			self.issues(etatIssues);
 		});
+
+
+		var solr = new org.OpenGeoPortal.Solr();
+		solr.setSort("Originator", solr.SortAcending);
+		var query = solr.getTermsQuery(["OriginatorSort"], "");
+		var facetSuccess = function(data){
+			var labelArr = [];
+			jQuery.each(["OriginatorSort"], function(idx, val) {
+				var dataArr = data.terms[val];
+				for (var i in dataArr){
+					if (i%2 != 0){
+						continue;
+					}
+					var temp = {"label": dataArr[i].toUpperCase(), "value":  dataArr[i].toUpperCase()};
+					labelArr.push(temp);
+					i++;
+					i++;
+				}
+			});
+			labelArr.sort(function(a,b) {
+				// because setSort isn't working..
+				if (a.value > b.value) return 1;
+				if (a.value < b.value) return -1;
+				return 0;
+			});
+			self.originators(labelArr);
+		};
+		var facetError = function(){
+			console.log("error loading originators");
+		};
+		solr.termQuery(query, facetSuccess, facetError, this);
 	};
 
 	self.isLoading = ko.observable(false);
@@ -46,6 +80,15 @@ org.fgdl.LayerBrowser = function(){
 			self.selectedIssue().init(self);
 		}
 	});
+
+	self.selectedOriginator.subscribe(function() {
+		if (self.selectedOriginator() != null && self.selectedOriginator().value != null) {
+			self.isLoading(true);
+			org.OpenGeoPortal.browseTableObj.getTableObj().fnClearTable();
+			org.OpenGeoPortal.browseTableObj.searchRequest(0);
+		}
+	});
+
 //	self.refreshExtent = ko.observable(false);
 //	self.currentMapExtent = ko.computed(function() {
 //		console.log("refreshing map extent");
@@ -77,13 +120,14 @@ org.fgdl.EtdmIssue = function(js) {
 		//Dataset._path = "http://gp/est/dwr";
 
 		Dataset.byIssue(function(reply) {
+			var issueDatasets = [];
 			ko.utils.arrayForEach(reply, function (dataset) {
 				//console.log(dataset.layerAccess);
 				if (dataset.layerAccess == "public")
-					self.datasets.push(new org.fgdl.Dataset(dataset));
+					issueDatasets.push(new org.fgdl.Dataset(dataset));
 			});
+			self.datasets(issueDatasets);
 			org.OpenGeoPortal.browseTableObj.searchRequest(0);
-			layerBrowser.isLoading(false);
 		}, js);
 	};
 

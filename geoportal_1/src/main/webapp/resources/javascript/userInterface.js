@@ -202,8 +202,10 @@ org.OpenGeoPortal.UserInterface = function(){
 		this.createDataTypesMenu();
 		this.createInstitutionsMenu();
 		this.createTopicsMenu();
-		this.createSortMenu();
-		this.createColumnsMenu();
+		this.createSortMenu(this.utility.whichTab(1).tableObject());
+		this.createColumnsMenu(this.utility.whichTab(1).tableObject());
+		this.createSortMenu(this.utility.whichTab(2).tableObject());
+		this.createColumnsMenu(this.utility.whichTab(2).tableObject());
 
 		this.downloadEmailDialogHandler();
 		jQuery("#basicSearchTextField").val(this.searchText).focus();
@@ -387,7 +389,7 @@ org.OpenGeoPortal.UserInterface = function(){
 		// browse layers - initialize view model
 		layerBrowser = new org.fgdl.LayerBrowser();
 		// apply model bindings to template
-		ko.applyBindings(layerBrowser, jQuery("#browseLayersForm")[0]);
+		ko.applyBindings(layerBrowser, jQuery("#layerBrowserDiv")[0]);
 		layerBrowser.init();
 
 		jQuery("#main").fadeTo('fast', 1);
@@ -469,7 +471,16 @@ org.OpenGeoPortal.UserInterface.prototype.styledSelect = function(divId, paramOb
     selectElement.html(selectHtml);
 
 	jQuery("#" + divId + "Select").button();
-	jQuery("#" + divId + "Select .styledSelectText").width(jQuery("#" + divId).width() - jQuery("#" + divId + "Select .styledSelectArrow").width() - 39);
+
+	var width = jQuery("#" + divId).width() - jQuery("#" + divId + "Select .styledSelectArrow").width() - 30;
+	if (width <= 0) {
+		// jQuery returns 0 width when elements are on an inactive tab
+		jQuery("#tabs").tabs("option", "active", 2); // browse tab
+		width = jQuery("#" + divId).width() - jQuery("#" + divId + "Select .styledSelectArrow").width() - 30;
+		jQuery("#tabs").tabs("option", "active", 1); // search tab (default active)
+		// this could be parameterized if more tabs are added with LayerTables having sort/column menus
+	}
+	jQuery("#" + divId + "Select .styledSelectText").width(width);
 	jQuery("#" + divId + "Menu").buttonset().addClass("raised").hide();
 	//jQuery("#sourceCheckMenu").hide();
 
@@ -489,41 +500,42 @@ org.OpenGeoPortal.UserInterface.prototype.styledSelect = function(divId, paramOb
 /**
  * uses styledSelect to create the menu that allows a user to sort the results table by column name; dynamically created from the table object
  */
-org.OpenGeoPortal.UserInterface.prototype.createSortMenu = function() {
-	var tableObj = this.utility.whichTab().tableObject();
+org.OpenGeoPortal.UserInterface.prototype.createSortMenu = function(tableObj) {
+//	var tableObj = this.utility.whichTab().tableObject();
 	var fields = tableObj.tableHeadingsObj.getTableHeadings();
 	var defaultField = "Relevancy";
 	var menuHtml = "";
+	var menuSuffix = (tableObj.getTableID() == "browsedLayers" ? "Browsed" : "");
 	for (var sortIndex in fields){
 		if (fields[sortIndex].organize){
 			var currentField = fields[sortIndex];
-			menuHtml += '<label for="sortDropdownRadio' + currentField.columnConfig.sName + '">';
+			menuHtml += '<label for="sortDropdownRadio' + menuSuffix + currentField.columnConfig.sName + '">';
 			menuHtml += currentField.displayName;
 			menuHtml += '</label>';
 			var checked = "";
 			if (currentField.displayName.toLowerCase().trim() == defaultField.toLowerCase()){
 				checked += " checked=true";
 			}
-			menuHtml += '<input type="radio" class="sortDropdownRadio" name="sortDropdownRadio" id="sortDropdownRadio' + currentField.columnConfig.sName + '" value="' + currentField.columnConfig.sName + '"' + checked + ' />';
+			menuHtml += '<input type="radio" class="sortDropdownRadio' + menuSuffix + '" name="sortDropdownRadio' + menuSuffix + '" id="sortDropdownRadio' + menuSuffix + currentField.columnConfig.sName + '" value="' + currentField.columnConfig.sName + '"' + checked + ' />';
 		}
 	}
 	var params = {
 			"menuHtml": menuHtml,
 			"text": defaultField
 	};
-	this.styledSelect("sortDropdown", params);
-	jQuery('.sortDropdownRadio').hide();
+	this.styledSelect("sortDropdown"+menuSuffix, params);
+	jQuery('.sortDropdownRadio'+menuSuffix).hide();
 
 	var buttonHtml = defaultField;
-	jQuery(".sortDropdownSelect > span > span").html(buttonHtml);
+	jQuery("#sortDropdown" + menuSuffix + "Select > span > span").html(buttonHtml);
 	var that = this;
-	jQuery("#sortDropdownMenu span.ui-button-text").bind("click", function(){
+	jQuery("#sortDropdown" + menuSuffix + "Menu span.ui-button-text").bind("click", function(){
 		var selectedField = jQuery(this).closest("label").next().val();
 		var buttonHtml = fields[selectedField].displayName;
-		jQuery("#sortDropdownSelect > span > span").html(buttonHtml);
+		jQuery("#sortDropdown" + menuSuffix + "Select > span > span").html(buttonHtml);
 		that.chooseSort(selectedField);
 	});
-	jQuery("#sortDropdownSelect").addClass("subHeaderDropdownSelect");
+	jQuery("#sortDropdown"+menuSuffix+"Select").addClass("subHeaderDropdownSelect");
 };
 
 /**
@@ -636,23 +648,24 @@ org.OpenGeoPortal.UserInterface.prototype.createTopicsMenu = function() {
  * uses styledSelect to create the menu above the results table that allows the user to select which columns to display; dynamically created
  * from the table object
  */
-org.OpenGeoPortal.UserInterface.prototype.createColumnsMenu = function() {
+org.OpenGeoPortal.UserInterface.prototype.createColumnsMenu = function(tableObj) {
 	var menuHtml = "";
-	var tableObj = this.utility.whichTab().tableObject();
+//	var tableObj = this.utility.whichTab().tableObject();
 	var fields = tableObj.tableHeadingsObj.getTableHeadings();
+	var menuSuffix = (tableObj.getTableID() == "browsedLayers" ? "Browsed" : "");
 	for (var i in fields){
 		if (fields[i].organize){
 			if(i == "score"){
 				continue;
 			}
 			menuHtml += '<div>';
-			menuHtml += '<label for="columnCheck' + i + '">';
+			menuHtml += '<label for="columnCheck' + menuSuffix + i + '">';
 			menuHtml += fields[i].displayName + '</label>';
 			var checked = "";
 			if (fields[i].columnConfig.bVisible){
 				checked = ' checked="checked"';
 			}
-			menuHtml += '<input type="checkbox" class="columnCheck columnVisibility" id="columnCheck' + i + '" value="' + i + '"' + checked + ' />';
+			menuHtml += '<input type="checkbox" class="columnCheck columnVisibility" id="columnCheck' + menuSuffix + i + '" value="' + i + '"' + checked + ' />';
 			menuHtml += '</div>';
 		}
 	}
@@ -660,9 +673,10 @@ org.OpenGeoPortal.UserInterface.prototype.createColumnsMenu = function() {
 			"menuHtml": menuHtml,
 			"text": "Columns"
 	};
-	this.styledSelect("columnDropdown", params);
+	this.styledSelect("columnDropdown"+menuSuffix, params);
 	var that = this;
-	jQuery("#columnDropdownMenu input.columnCheck").bind("change", function(){
+	jQuery("#columnDropdown" + menuSuffix + "Menu").addClass("columnDropdownMenu");
+	jQuery("#columnDropdown" + menuSuffix + "Menu input.columnCheck").bind("change", function(){
 		//alert("changed");
 		that.toggleColumn(this);
 	});
@@ -690,19 +704,24 @@ org.OpenGeoPortal.UserInterface.prototype.createColumnsMenu = function() {
 		//}
 	});*/
 	//this.updateOrganize();
-	jQuery("#columnDropdownSelect").addClass("subHeaderDropdownSelect");
+	jQuery("#columnDropdown"+menuSuffix+"Select").addClass("subHeaderDropdownSelect");
 };
 
 /**
  * function that removes the welcome message from the search tab and shows the search results table
  */
-org.OpenGeoPortal.UserInterface.prototype.showSearchResults = function(){
-	jQuery("div#welcomeTextSearchTab").remove();
-	jQuery("#resultsSubHeader > span").css("display", "inline");
-	jQuery("#resultsSubHeader > div").css("display", "inline-block");
+org.OpenGeoPortal.UserInterface.prototype.showSearchResults = function(tableId){
+	var selectorSuffix = "";
+	if (tableId == "browsedLayers") {
+		selectorSuffix = "Browsed";
+	} else {
+		jQuery("div#welcomeTextSearchTab").remove();
+	}
+	jQuery("#resultsSubHeader" + selectorSuffix + " > span").css("display", "inline");
+	jQuery("#resultsSubHeader" + selectorSuffix + " > div").css("display", "inline-block").css("visibility", "visible");
 
-	jQuery("#resultsTable").css("display", "block");
-	jQuery("#searchResultsNavigation").css("display", "block");
+	jQuery("#resultsTable" + selectorSuffix).css("display", "block");
+	jQuery("#searchResultsNavigation" + selectorSuffix).css("display", "block");
 };
 
 /**
@@ -844,6 +863,8 @@ org.OpenGeoPortal.UserInterface.prototype.adjustTableLength = function(tableID){
 	var tableID = 'searchResults';
     if (tableID == 'searchResults'){
     	this.resultsTableObject.setTableLength();
+    } else if (tableID == 'browsedLayers'){
+    	this.browseTableObject.setTableLength();
     } else {
   	  throw new Error("The specified table is not applicable.");
     }
@@ -1008,8 +1029,9 @@ org.OpenGeoPortal.UserInterface.prototype.updateSortMenu = function(){
 
 	var fields = tableObj.tableHeadingsObj.getTableHeadings();
 	var buttonHtml = fields[organize.organizeBy].displayName;
-	jQuery("#sortDropdownSelect > span > span").html(buttonHtml);
-	jQuery("#sortDropdownMenu").find("input:radio").each(function(){
+	var menuSuffix = (tableObj.getTableID() == "browsedLayers" ? "Browsed" : "");
+	jQuery("#sortDropdown" + menuSuffix + "Select > span > span").html(buttonHtml);
+	jQuery("#sortDropdown" + menuSuffix + "Menu").find("input:radio").each(function(){
 		if (jQuery(this).val() == organize.organizeBy){
 			jQuery(this).attr("checked", true);
 		}
@@ -1199,7 +1221,7 @@ org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
     	vectorControl += "<select id=\"vectorDownloadType\" class=\"downloadSelect\"> \n";
     	vectorControl += "<option value=\"shp\">shapefile</option> \n";
     	vectorControl += "<option value=\"lyr\">Map Service for ArcGIS</option> \n";
-    	vectorControl += "<option value=\"kmz\">KMZ</option> \n";
+//    	vectorControl += "<option value=\"kmz\">KMZ</option> \n";
     	vectorControl += "</select><br/> \n";
     	var rasterControl = "<label for=\"rasterDownloadType\" class=\"downloadSelect\">Raster files</label>";
     	rasterControl += "<select id=\"rasterDownloadType\" class=\"downloadSelect\"> \n";

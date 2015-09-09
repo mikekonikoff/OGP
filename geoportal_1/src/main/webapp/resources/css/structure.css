@@ -342,11 +342,11 @@ span.infoLinks:hover {
 	background-color:#EDF4FA;
 }
 
-#sortDropdown {
+.sortDropdown {
 	display: inline-block;
 }
 
-#sortDropdownMenu {
+.sortDropdownMenu {
 	width: 125px;
 	overflow: hidden;
 	margin-top: -3px;
@@ -360,19 +360,19 @@ span.infoLinks:hover {
     top: 0px;
 }
 
-#columnDropdown {
+.columnDropdown {
     float: right;
     margin-top: 1px;
     padding-right: 5px;
 }
 
-#columnDropdownMenu {
+.columnDropdownMenu {
 	width: 125px;
 	overflow: hidden;
 	margin-top: -3px;
 }
 
-#columnDropdownMenu input {
+.columnDropdownMenu input {
 	left: 100px;
 }
 
@@ -493,12 +493,12 @@ span.infoLinks:hover {
 	padding-right: 5px;
 }
 
-#sortDropdownLabel {
+.sortDropdownLabel {
 	display: none;
 }
 
-#resultsSubHeader > div {
-	display: none;
+.resultsSubHeader > div {
+	visibility: hidden;
 }
 
 .sub_headerTitle {
@@ -641,7 +641,7 @@ textarea:focus {
 	color: #003366;
 }
 
-#searchResultsNavigation {
+.searchResultsNavigation {
 	position: absolute;
 	bottom: 0px;
 	text-align: center;
@@ -650,15 +650,15 @@ textarea:focus {
 	font-size: 10px;
 }
 
-#searchResultsNavigation a {
+.searchResultsNavigation a {
 	text-decoration: none;
 }
 
-#searchResultsNavigation a:hover {
+.searchResultsNavigation a:hover {
    	color:#417dc1;
 }
 
-#resultsTable {
+.resultsTable {
 	display: none;
 }
 

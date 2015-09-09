@@ -315,3 +315,21 @@ td.colPreview, td.colMetadata, td.colSave, td.colSource {
 	width: 20px;
 	height: 20px;
 }
+#mapItButton {
+	display: none;
+}
+#layerBrowserDiv {
+	display: flex;
+	flex-flow: row wrap;
+}
+#browseLayersDiv .searchBox {
+	padding-top: 5px;
+	width: auto;
+}
+.browseOption {
+	display: flex;
+	flex-flow: column;
+}
+.browseOption > select {
+	margin-top: auto;
+}

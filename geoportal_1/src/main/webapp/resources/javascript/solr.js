@@ -143,12 +143,13 @@ org.OpenGeoPortal.Solr.prototype.getTermQuery = function getFacetQuery(termField
 org.OpenGeoPortal.Solr.prototype.getTermsQuery = function getFacetsQuery(termFields, requestTerm)
 {
 	var jsonClause = this.getReturnTypeClause();
+	var sortClause = this.getSortClause();
 	var termsFl = "";
 	requestTerm = ".*" + requestTerm + ".*";
 	jQuery.each(termFields, function(idx, val) {
 		termsFl += "terms.fl=" + val + "&";
 	});
-	var solrQuery = termsFl + "terms.regex=" + requestTerm + "&terms.regex.flag=case_insensitive&terms.limit=-1&" +jsonClause;
+	var solrQuery = termsFl + "terms.regex=" + requestTerm + "&terms.regex.flag=case_insensitive&terms.limit=-1&" + sortClause + "&" +jsonClause;
 	return solrQuery;
 };
 

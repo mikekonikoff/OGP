@@ -42,7 +42,7 @@ jQuery(document).ready(function (){
 	org.OpenGeoPortal.map = new org.OpenGeoPortal.MapController();
 	org.OpenGeoPortal.resultsTableObj = new org.OpenGeoPortal.LayerTable();
 	org.OpenGeoPortal.cartTableObj = new org.OpenGeoPortal.LayerTable("savedLayersTable", "savedLayers");
-	org.OpenGeoPortal.browseTableObj = new org.OpenGeoPortal.LayerTable("browsedLayersTable", "browsedLayers");
+	org.OpenGeoPortal.browseTableObj = new org.OpenGeoPortal.LayerTable("resultsTableBrowsed", "browsedLayers");
 	org.OpenGeoPortal.ui = new org.OpenGeoPortal.UserInterface();
 
 	org.OpenGeoPortal.cartTableObj.hideCol("Save");

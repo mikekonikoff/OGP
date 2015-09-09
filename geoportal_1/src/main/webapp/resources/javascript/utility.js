@@ -62,7 +62,7 @@ org.OpenGeoPortal.Utility.whichTab = function(){
 	case 2:
 		tabInfo.name = 'browsed';
 		tabInfo.tableObject = function(){return org.OpenGeoPortal.browseTableObj;};
-		tabInfo.tableDiv = 'browsedLayersTable';
+		tabInfo.tableDiv = 'resultsTableBrowsed';
 		tabInfo.tableName = 'browsedLayers';
 		break;
 	case 3:
@@ -80,7 +80,7 @@ org.OpenGeoPortal.Utility.whichTab = function(){
 
 org.OpenGeoPortal.Utility.whichSearch = function(){
 	var activeSearchDiv = null;
-	jQuery(".searchBox > div, #browseLayersDiv").each(function(){
+	jQuery(".searchBox > div").each(function(){
 		if (jQuery(this).is(":visible")){
 			activeSearchDiv = jQuery(this).attr("id");
 		}
@@ -94,7 +94,7 @@ org.OpenGeoPortal.Utility.whichSearch = function(){
 	case "advancedSearchBox":
 		searchInfo.type = 'advancedSearch';
 		break;
-	case "browseLayersDiv":
+	case "layerBrowserDiv":
 		searchInfo.type = 'browseSearch';
 		break;
 	default:
