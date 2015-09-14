@@ -1162,22 +1162,21 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		  return '<input type="checkbox" class="cartCheckBox" checked />';
 	  };
 
-	  //*******Search Results only
+	  //*******Search Results and Browse only
 	  this.getSaveControl = function (rowObj){
 		  var context = this.getContextAsString();
 		  var layerID = this.getLayerIdFromRow(rowObj);
+		  var escLayerID = org.OpenGeoPortal.Utility.idEscape(layerID);
 		  var stateVal = org.OpenGeoPortal.layerState.getState(layerID, "inCart");
 		  if (typeof stateVal == 'undefined'){
 			  stateVal = false;
 		  }
 		  var rowNum = rowObj.iDataRow;
-		  var img = '<img onclick="jQuery(\'#cart' + rowNum + '\').attr(\'checked\', true).show();jQuery(this).hide();' + context + '.saveLayer(document.getElementById(\'cart' + rowNum + '\'), ' + rowNum + ')" alt="Save" class="tableCheckBox saveControl" title="Add this layer to your cart for download." id="plus' + rowNum + '" src="resources/media/icon_crosshair_off.png" style="display:none;"/>';
-		  var cb = '<input onclick="jQuery(\'#plus' + rowNum + '\').show();jQuery(this).hide();' + context + '.saveLayer(this, ' + rowNum + ')" type="checkbox" class="tableCheckBox saveControl" title="Remove this layer from your cart." id="cart' + rowNum + '" style="display:none; margin-left:2px; margin-top: 0px;" checked=true/>';
+		  var img = '<img onclick="jQuery(\'.cart'  + escLayerID + '\').each(function(){jQuery(this).attr(\'checked\', true).show();});jQuery(\'.plus'  + escLayerID + '\').each(function(){jQuery(this).hide();});' + context + '.saveLayer(jQuery(\'.cart'  + escLayerID + '\')[0], ' + rowNum + ')" alt="Save" title="Add this layer to your cart for download." class="tableCheckBox saveControl plus'  + escLayerID + '" src="resources/media/icon_crosshair_off.png" style="display:none;"/>';
+		  var cb = '<input onclick="jQuery(\'.plus'  + escLayerID + '\').each(function(){jQuery(this).show();});jQuery(\'.cart'  + escLayerID + '\').each(function(){jQuery(this).hide();});' + context + '.saveLayer(this, ' + rowNum + ')" type="checkbox" title="Remove this layer from your cart." class="tableCheckBox saveControl cart'  + escLayerID + '" style="display:none; margin-left:2px; margin-top: 0px;" checked=true/>';
 		  if (stateVal == true){
-			  //return '<input type="checkbox" onclick="' + context + '.saveLayer(this, ' + rowNum + ')" alt="Save" class="tableCheckBox saveControl" title="Remove this layer from your cart." checked=true />';
 			  return img + cb.replace("display:none;", "");
 		  } else {
-			  //return '<input type="checkbox" onclick="' + context + '.saveLayer(this, ' + rowNum + ')" alt="Save" class="tableCheckBox saveControl" title="Add this layer to your cart for download." />';
 			  return img.replace("display:none;", "") + cb.replace("checked=true", "");
 		  }
 	  };
