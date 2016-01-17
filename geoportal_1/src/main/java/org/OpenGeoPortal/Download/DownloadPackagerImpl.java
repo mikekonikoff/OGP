@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.OpenGeoPortal.Download.Types.BoundingBox;
 import org.OpenGeoPortal.Download.Types.LayerRequest;
 import org.OpenGeoPortal.Download.Types.LayerRequest.Status;
 import org.OpenGeoPortal.Layer.GeometryType;
@@ -61,9 +62,21 @@ public class DownloadPackagerImpl implements DownloadPackager {
 			e.printStackTrace();
 		}
 		logger.debug(directory.getAbsolutePath());
-		File zipArchive = new File(directory, "FGDLDownload" + timestamped.format(new Date()) + ".zip");
+		File zipArchive = new File(directory, "FGDLDownload" + timestamped.format(new Date()) + (hasClippedLayer(layerList) ? "_clip" : "") + ".zip");
 		ZipFilePackager.addFilesToArchive(filesToPackage, zipArchive);
 		downloadRequest.setDownloadPackage(zipArchive);
+	}
+
+	private boolean hasClippedLayer(List<LayerRequest> layers) throws Exception{
+		boolean hasClippedLayer = false;
+	    logger.debug(Integer.toString(layers.size()) + " layer(s) found");
+	    for (LayerRequest layer : layers) {
+	    	if (!layer.getRequestedBounds().isEquivalent(BoundingBox.WORLD)) {
+	    		hasClippedLayer = true;
+	    		break;
+	    	}
+	    }
+		return hasClippedLayer;
 	}
 
 	private Set<File> getFilesToPackage(List<LayerRequest> layers) throws Exception{
