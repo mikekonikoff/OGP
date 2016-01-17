@@ -298,9 +298,16 @@ normal;border:none;padding:0in'><a id="_top"></a><b><span style='font-size:
 											<span style='color: black'>Keyword(s)</span>
 										</p>
 									</li>
+<!--
 									<li>
 										<p class=MsoListParagraphCxSpMiddle>
 											<span style='color: black'>Originator</span>
+										</p>
+									</li>
+-->
+									<li>
+										<p class=MsoListParagraphCxSpMiddle>
+											<span style='color: black'>Publisher</span>
 										</p>
 									</li>
 									<li>
@@ -412,9 +419,16 @@ normal;border:none;padding:0in'><a id="_top"></a><b><span style='font-size:
 						<span style='color: black'>Name</span>
 					</p>
 				</li>
+<!--
 				<li>
 					<p class=MsoListParagraphCxSpMiddle>
 						<span style='color: black'>Originator</span>
+					</p>
+				</li>
+ -->
+				<li>
+					<p class=MsoListParagraphCxSpMiddle>
+						<span style='color: black'>Publisher</span>
 					</p>
 				</li>
 				<li>
@@ -761,7 +775,7 @@ normal;border:none;padding:0in'><a id="_top"></a><b><span style='font-size:
 								style='color: black'> </span><img border=0 width=26 height=21
 								id="Picture44" src="resources/media/userGuide/image006.jpg"><span
 								style='color: black'> tool while clicking and dragging
-								draws a box that zooms to the extent of the area of interest. By default the OpenGeoportal returns 
+								draws a box that zooms to the extent of the area of interest. By default the OpenGeoportal returns
 								relevant results each time the displayed map extent changes.</span>
 						</p>
 
@@ -1062,6 +1076,7 @@ normal;border:none;padding:0in'><a id="_top"></a><b><span style='font-size:
 												src="resources/media/userGuide/image018.gif">
 										</p>
 									</li>
+<!--
 									<li>
 										<p class=MsoListParagraphCxSpMiddle>
 											<span style='color: black'>Originator</span> - The originator
@@ -1072,6 +1087,19 @@ normal;border:none;padding:0in'><a id="_top"></a><b><span style='font-size:
 										<p class=MsoListParagraphCxSpMiddle>
 											<img border=0 width=336 height=26 id="Picture23"
 												src="resources/media/userGuide/image019.gif">
+										</p>
+									</li>
+ -->
+									<li>
+										<p class=MsoListParagraphCxSpMiddle>
+											<span style='color: black'>Publisher</span> - The publisher
+											is the office or agency publishing the source data for the
+											search result.
+										</p>
+
+										<p class=MsoListParagraphCxSpMiddle>
+											<img border=0 width=336 height=26 id="Picture23"
+												src="resources/media/userGuide/image063.gif">
 										</p>
 									</li>
 									<li>
@@ -1174,7 +1202,7 @@ normal;border:none;padding:0in'><a id="_top"></a><b><span style='font-size:
 											<li>
 												<p class=MsoListParagraphCxSpLast>
 													If you uncheck <b>Limit the Visible Map Area</b>,
-													the spatial component of the search will be removed. 
+													the spatial component of the search will be removed.
 													The search results will include layers from different
 													parts of the world. Only the text search will be in effect.
 												</p>
@@ -1472,7 +1500,7 @@ normal;border:none;padding:0in'><a id="_top"></a><b><span style='font-size:
 				</li>
 				<li>
 					<p class=MsoListParagraphCxSpMiddle>
-						<span style='color: black'>Name</span> 
+						<span style='color: black'>Name</span>
 						<span style='color: black'> - The document or data set name</span>
 					</p>
 
@@ -1483,7 +1511,7 @@ normal;border:none;padding:0in'><a id="_top"></a><b><span style='font-size:
 				</li>
 				<li>
 					<p class=MsoListParagraphCxSpMiddle>
-						<span style='color: black'>Originator</span> 
+						<span style='color: black'>Originator</span>
 						<span style='color: black'> - The office or agency providing the
 							source data for the search result</span>
 					</p>
@@ -1660,10 +1688,18 @@ normal;border:none;padding:0in'><a id="_top"></a><b><span style='font-size:
 								data set
 							</p>
 						</li>
+<!--
 						<li>
 							<p class=MsoListParagraphCxSpMiddle>
 								<b>Originator</b> - alphabetically, by the name of the office or
 								agency providing the source data
+							</p>
+						</li>
+ -->
+ 						<li>
+							<p class=MsoListParagraphCxSpMiddle>
+								<b>Publisher</b> - alphabetically, by the name of the office or
+								agency publishing the source data
 							</p>
 						</li>
 						<li>
@@ -1713,7 +1749,7 @@ normal;border:none;padding:0in'><a id="_top"></a><b><span style='font-size:
 				<a id="Cart"><b><span style='text-decoration: none'>Cart</span></b></a>
 			<p class=MsoNormal style='line-height: normal'>The Cart tab
 				provides temporary storage for data sets and map images you have selected. From the cart, several actions are possible;
-				downloading layers, creating web services, sharing the contents of your cart, and opening layers in GeoCommons (coming soon). 
+				downloading layers, creating web services, sharing the contents of your cart, and opening layers in GeoCommons (coming soon).
 				Hovering on each button will highlight which layers are available for that particular action. Additionally, you can
 				preview the data in the cart the same way you preview data on the
 				Search tab.</p>
@@ -1748,7 +1784,7 @@ normal;border:none;padding:0in'><a id="_top"></a><b><span style='font-size:
 						<span style='color: black; text-decoration: none'>Download</span>
 						- Used to save selected data and maps to the location of your
 						choice. When you choose to download items in your cart, you are
-						given options on the format and map extent to include.  
+						given options on the format and map extent to include.
 					</p>
 
 					<p class=MsoListParagraphCxSpFirst>
@@ -1828,7 +1864,7 @@ normal;border:none;padding:0in'><a id="_top"></a><b><span style='font-size:
 				<li>
 					<p class=MsoListParagraphCxSpMiddle>
 						<span style='color: black; text-decoration: none'>Reset</span> <span
-							style='color: black'> - restores the OpenGeoportal to its default state, 
+							style='color: black'> - restores the OpenGeoportal to its default state,
 							erasing any previously entered search criteria and
 							emptying your Cart</span>
 					</p>

@@ -374,6 +374,11 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		    if (/^FGDL./.test(layerID)) {
 			  	var wmsLayerID = layerID.replace(/^FGDL./,"fgdl_data:");
 			  	sOut += '<div class="symbologyCell">legend: <div title="Legend symbol for ' + displayName + '" style="background: center no-repeat url(\'http://geoportal04.est.geoplan.ufl.edu:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' + wmsLayerID + '\')"></div></div>';
+			  	var maxScaleValue = rowData[this.tableHeadingsObj.getColumnIndex("maxScale")];
+			  	if (maxScaleValue != null && maxScaleValue != "" && 1 * maxScaleValue < org.OpenGeoPortal.map.getScale() && jQuery(rowNode).hasClass("previewedLayer")) {
+			  		//sOut += '<div class="scaleCell">Layer not viewable at current scale (<span id="currentScale"></span>). Zoom in past 1:' + maxScaleValue + ' to view this layer.</div>';
+			  		sOut += '<div class="scaleCell"><span></span> Layer not viewable at current scale. Zoom in past 1:' + maxScaleValue + ' to view this layer.</div>';
+			  	}
 		    }
 	    	sOut += '<div class="zoomToLayerControlCell"><img src="' + this.getImage("zoomextent.gif") + '" class="button zoomToLayerControl" alt="Zoom to geographic extent of layer" title="Zoom to geographic extent of layer" onclick="org.OpenGeoPortal.map.zoomToLayerExtent(\'' + extent.join() + '\')" /></div>';
 	    	sOut += '<div class="attributeInfoControlCell">';
@@ -521,8 +526,18 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		} catch(err){alert(err + " expandableRow");};
 	  };
 
+	  this.closeToolTips = function() {
+		  var table = jQuery(this)[0].getTableObj();
+			jQuery(table).find(".symbologyCell > div").each(function(index, imgDiv) {
+				jQuery(imgDiv).tooltip().tooltip("close");
+			});
+	  };
+
 	  this.closeToolBar = function(rowNode){
 		  try{
+			jQuery(rowNode).next("tr").find(".symbologyCell > div").each(function(index, imgDiv) {
+				jQuery(imgDiv).tooltip().tooltip("close");
+			});
 	      var detailsClosed = this.getImage("arrow_right.png");
 	      jQuery(rowNode).find(".colExpand img").attr('src', detailsClosed);
 		  var tableObj = this.getTableObj();
@@ -642,8 +657,68 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 
 		jQuery(".previewedLayer").removeClass('previewSeparator');
 		jQuery(".previewedLayer").last().addClass('previewSeparator');
-        tableObj.fnDraw(false);
-
+		tableObj.fnDraw(false);
+		/**
+		 * Add tooltip to legend image, and replace legend image with cursor pointer image.
+		 * Make cursor pointer image clickable to toggle full legend image overlay.
+		 */
+	  	jQuery(".symbologyCell > div").each(function(index, imgDiv) {
+	  		// get the full legend image dimensions from the swatch background image
+	  		// TODO use an actual (clipped) image element as the legend instead of a background image on a div
+	  		var style = imgDiv.currentStyle || window.getComputedStyle(imgDiv, false);
+	  		var bi = style.backgroundImage.slice(4, -1);
+	  		var imgObj = new Image();
+	  		var newSrc = bi; console.log(newSrc);
+	        newSrc = newSrc.replace(/^"/, "");
+	        newSrc = newSrc.replace(/"$/, "");
+	  		//newSrc = newSrc.replace(/http:\/\/.*\/geoserver/, '/geoserver');
+	  		//newSrc = newSrc.replace(/http:\/\//,'https://');
+	  		newSrc = newSrc + "&vs=" + (new Date()).getTime();
+	  		imgObj.alt = imgDiv.title;
+	  		imgObj.onload = function() {
+	  			var theWidth = this.width, theHeight = this.height;
+	  			if (theWidth > 20 || theHeight > 20 && !/Cursor	/.test(imgObj.src)) {
+	  				// put full legend image in tooltip on cursor image that replaces legend swatch image
+	  				jQuery(imgDiv).tooltip({
+	  					tooltipClass : "oversizeSymbol",
+	  					content : function () {
+	  						//return jQuery("<div>" + imgObj.alt + "<br/></div>").append(imgObj);
+	  						//return imgObj;
+	  						return jQuery("<div></div>").append(jQuery(imgObj).clone());
+	  					},
+	  					position: {
+	  						my: "left top",
+	  						at: "left bottom",
+	  						of: imgDiv,
+	  						using: function( position, feedback ) {
+	  							jQuery(this).css( position );
+	  						}
+	  					},
+	  					collision: "none"
+	  				})
+	  				.on( "click", function() {
+	  					var self = this;
+	  					if (jQuery(this).hasClass("openTooltip")) {
+	  						// toggle the tooltip off
+	  						jQuery(this).removeClass("openTooltip");
+	  						jQuery(this).tooltip("close");
+							jQuery(this).bind("mouseleave.tooltip", function(event) {
+								jQuery(self).tooltip("close");
+							});
+	  					} else {
+	  						// toggle the tooltip on
+	  						jQuery(this).addClass("openTooltip");
+	  						jQuery(this).tooltip("open");
+	  						jQuery(this).unbind("mouseleave");
+	  					}
+	  					return false;
+	  				})
+	  				.css("background", "url('./resources/media/Cursor_Hand.png') no-repeat top center")
+	  				.css("background-size", "20px 20px");
+	  			}
+	  		};
+	  		jQuery(imgObj).attr("src", newSrc);
+	  	});
 		} catch(err){alert(err + " openRow");};
 	  };
 
@@ -1451,7 +1526,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 
 	  this.markPreviewedLayers = function(){
 		  var tableID = this.getTableID();
-		  if (tableID = "searchResults"){
+		  if (tableID == "searchResults"){
 			  var checked = jQuery('#' + tableID + ' .colPreview input:checked');
 			  //console.log(checked);
 			  checked.closest('tr').addClass('previewedLayer');
@@ -1464,7 +1539,9 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		  //for each column header;  will have to add a similar click handler for showCol
 		  //the datatables object holds state info for which columns are visible
 		  var that = this;
-		  jQuery('#searchResults th').each(function(){
+		  var tableID = this.getTableID();
+		  if (tableID == "savedLayers") return;
+		  jQuery('#' + tableID + ' th').each(function(){
 			  jQuery(this).unbind("mouseenter.header");
 			  jQuery(this).bind("mouseenter.header", function(){
 				  jQuery(this).find('img.sortGraphic').css("display", "inline");
@@ -1636,13 +1713,13 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	this.searchRequestJsonpSuccess = function(data)
 	{
 		//console.log(data);
+	    if (that.getTableID() == 'browsedLayers') {
+    		that.getTableObj().fnSettings().oLanguage.sEmptyTable = data.response.numFound===0 ? "No data layers found to browse." : that.getEmptyTableMessage();
+	    }
 		org.OpenGeoPortal.ui.showSearchResults(that.getTableID());
 		that.populate(that.processData(data));
 	    that.tableEffect("searchEnd");
 	    that.setResultNumber(data.response.numFound);
-	    if (that.getTableID() == 'browsedLayers') {
-    		that.getTableObj().fnSettings().oLanguage.sEmptyTable = data.response.numFound===0 ? "No data layers found to browse." : that.getEmptyTableMessage();
-	    }
 	};
 	//*******Search Results only
 	this.searchRequestJsonpError = function()
@@ -1722,7 +1799,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		}
 		else if (searchType == 'browseSearch')
 		{
-			this.searchRequestBrowseJsonp(solr, layerBrowser.selectedIssue(), layerBrowser.selectedOriginator());
+			this.searchRequestBrowseJsonp(solr, layerBrowser.selectedIssue(), layerBrowser.selectedPublisher());
 			successCallback = function(data) {
 				org.OpenGeoPortal.browseTableObj.searchRequestJsonpSuccess(data);
 				layerBrowser.isLoading(false);
@@ -1796,17 +1873,19 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	};
 
 	/**
-	 * add elements specific to browse by issue, originator
+	 * add elements specific to browse by issue, publisher
 	 */
-	this.searchRequestBrowseJsonp = function(solr, issue, originator)
+	this.searchRequestBrowseJsonp = function(solr, issue, publisher)
 	{
 		if (issue != null) {
-	    	ko.utils.arrayForEach (issue.datasets(), function (dataset) {
-				solr.addFilename(dataset.name);
-	    	});
+//	    	ko.utils.arrayForEach (issue.datasets(), function (dataset) {
+//				solr.addFilename(dataset.name);
+//	    	});
+		    solr.setIssue(""+issue.id);
+		    console.log("selected issue is " + issue.id + ", " + issue.name);
 		}
-    	if (originator != null) {
-    		solr.setOriginator(originator.value);
+    	if (publisher != null) {
+    		solr.setPublisher(publisher.value);
     	}
 	};
 
@@ -1859,12 +1938,13 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	    else
 	    	solr.setLocalRestricted(org.OpenGeoPortal.InstitutionInfo.getHomeInstitution());
 
-		var publisher = jQuery('#advancedOriginatorText').val().trim();
+		var publisher = jQuery('#advancedPublisherText').val().trim();
 	   // solr.setPublisher(publisher);
-	    solr.setOriginator(publisher);
+	    solr.setPublisher(publisher);
 
 		var filename = jQuery('#filenameText').val().trim();
 	    solr.setFilename(filename);
+	    solr.setLayerId(filename);
 
 	    var topicsElement = jQuery("input[type=radio][name=topicRadio]");
 	    var selectedTopic = topicsElement.filter(":checked").val();
@@ -2376,9 +2456,9 @@ org.OpenGeoPortal.LayerTable.TableHeadings = function(thisObj){
 		     "LayerDisplayName": {"ajax": true, "resizable": true, "minWidth": 28, "currentWidth": 215, "organize": "alpha", "displayName": "Name", "columnConfig":
 		            	{"sName": "LayerDisplayName", "sTitle": "Title", "bVisible": true, "aTargets": [ 7 ], "sClass": "colTitle", "bSortable": false}},
 		     "Originator": {"ajax": true, "resizable": true, "minWidth": 47, "currentWidth": 81, "organize": "group", "displayName": "Originator", "columnConfig":
-		            	{"sName": "Originator", "sTitle": "Originator", "bVisible": true, "aTargets": [ 8 ], "sClass": "colOriginator", "bSortable": false}},
+		            	{"sName": "Originator", "sTitle": "Originator", "bVisible": false, "aTargets": [ 8 ], "sClass": "colOriginator", "bSortable": false}},
 		     "Publisher": {"ajax": true, "resizable": true, "minWidth": 47, "currentWidth": 80, "organize": "group", "displayName": "Publisher", "columnConfig":
-		            	{"sName": "Publisher", "sTitle": "Publisher", "bVisible": false, "aTargets": [ 9 ], "sClass": "colPublisher", "bSortable": false}},
+		            	{"sName": "Publisher", "sTitle": "Publisher", "bVisible": true, "aTargets": [ 9 ], "sClass": "colPublisher", "bSortable": false}},
 		     "ContentDate": {"ajax": true, "resizable": false, "organize": "numeric", "displayName": "Publication Date", "columnConfig":
 		            	{"sName": "ContentDate", "sTitle": "Date", "bVisible": true, "aTargets": [ 10 ], "sClass": "colDate", "sWidth": "25px", "bSortable": false, "bUseRendered": true,
 		            		"fnRender": function(oObj){return oObj.aData[oObj.iDataColumn].substr(0, 4);}}},
@@ -2409,6 +2489,8 @@ org.OpenGeoPortal.LayerTable.TableHeadings = function(thisObj){
 		            	{"sName": "GeoReferenced", "sTitle": "Georeferenced", "bVisible": false, "aTargets": [ 21 ], "bSortable": false}},
 		   	 "Availability": {"ajax": true, "resizable": false, "organize": false, "columnConfig":
 		            	{"sName": "Availability", "sTitle": "Availability", "bVisible": false, "aTargets": [ 22 ], "bSortable": false}},
+  		     "maxScale": {"ajax": true, "resizable": false, "organize": false, "columnConfig":
+  		     			{"sName": "maxScale", "sTitle": "maxScale", "bVisible": false, "aTargets": [ 23 ], "bSortable": false}}
 // 		     "ThemeKeywords": {"ajax": true, "resizable": true, "minWidth": 30, "currentWidth": 32, "organize": "alpha", "displayName": "Keywords", "columnConfig":
 //				{"sName": "ThemeKeywords", "sTitle": "Keywords", "bVisible": true, "aTargets": [ 23 ], "sClass": "colKeywords", "bSortable": false}},
 			};

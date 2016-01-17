@@ -204,6 +204,9 @@ org.OpenGeoPortal.Solr.prototype.PublisherTerm = {term: "Publisher", hasBoost: t
 org.OpenGeoPortal.Solr.prototype.OriginatorTerm = {term: "Originator", hasBoost: true, boost: "1.0", hasCap: false};
 org.OpenGeoPortal.Solr.prototype.IsoTopicTerm = {term: "ThemeKeywordsSynonymsIso", hasBoost: true, boost: "4.0", hasCap: false};
 org.OpenGeoPortal.Solr.prototype.NameTerm = {term: "Name", hasBoost: true, boost: "4.0", hasCap: false, wildcards: {leading: true, trailing: true}};
+org.OpenGeoPortal.Solr.prototype.IssueTerm = {term: "etdmIssues", hasBoost: false, hasCap: false};
+org.OpenGeoPortal.Solr.prototype.LayerIdTerm = {term: "LayerId", hasBoost: true, boost: "8.0", hasCap: false, wildcards: {leading: true, trailing: true}};
+org.OpenGeoPortal.Solr.prototype.MaxScaleTerm = {term: "maxScale", hasBoost: false, hasCap: false};
 org.OpenGeoPortal.Solr.prototype.AbstractTerm = {term: "Abstract", hasBoost: true, boost: "1.0", hasCap: false};
 
 
@@ -215,8 +218,10 @@ org.OpenGeoPortal.Solr.prototype.BasicKeywordTerms = [org.OpenGeoPortal.Solr.pro
                                                       org.OpenGeoPortal.Solr.prototype.PlaceKeywordsTerm,
                                                       org.OpenGeoPortal.Solr.prototype.PublisherTerm,
                                                       org.OpenGeoPortal.Solr.prototype.OriginatorTerm,
-                                                      org.OpenGeoPortal.Solr.prototype.NameTerm,
+                                                      org.OpenGeoPortal.Solr.prototype.LayerIdTerm,
                                                       org.OpenGeoPortal.Solr.prototype.AbstractTerm];
+
+//                                                      org.OpenGeoPortal.Solr.prototype.NameTerm,
 
 org.OpenGeoPortal.Solr.prototype.AdvancedKeywordTerms = [org.OpenGeoPortal.Solr.prototype.LayerDisplayNameTerm,
                                                       org.OpenGeoPortal.Solr.prototype.ThemeKeywordsTerm,
@@ -237,6 +242,7 @@ org.OpenGeoPortal.Solr.prototype.ToDate = null;
 org.OpenGeoPortal.Solr.prototype.DataTypes = [];
 org.OpenGeoPortal.Solr.prototype.Institutions = [];
 org.OpenGeoPortal.Solr.prototype.Filenames = [];
+org.OpenGeoPortal.Solr.prototype.Issue = null;
 org.OpenGeoPortal.Solr.prototype.AccessDisplay = null;
 
 org.OpenGeoPortal.Solr.prototype.Publisher = null;
@@ -276,7 +282,7 @@ org.OpenGeoPortal.Solr.prototype.tokenize = function tokenize(searchTerms)
 			}
 		}
 	}*/
-	searchTerms = searchTerms.replace(/^\s+|\s+$/g,'').replace(/\s+/g,' ');
+	searchTerms = searchTerms.replace(/^\s+|\s+$/g,'').replace(/\s+/g,' ').replace(/\s+(AND|OR|NOT)\s+/gi, ' ');
 
 	return searchTerms.split(" ");
 
@@ -973,7 +979,14 @@ org.OpenGeoPortal.Solr.prototype.getFilenamesFilter = function getFilenamesFilte
 {
 return this.getFilter("Name", this.Filenames);
 };
-
+org.OpenGeoPortal.Solr.prototype.setLayerId = function setLayerId(layerId)
+{
+	this.LayerId = layerId;
+};
+org.OpenGeoPortal.Solr.prototype.getLayerIdFilter = function getLayerIdFilter()
+{
+return this.getFilter("LayerId", this.LayerId);
+};
 org.OpenGeoPortal.Solr.prototype.setAccessDisplay = function setAccessDisplay(accessValue)
 {
 	this.AccessDisplay = accessValue;
@@ -1121,6 +1134,11 @@ org.OpenGeoPortal.Solr.prototype.setFilename = function setFilename(filename)
 	this.Filename = filename;
 };
 
+org.OpenGeoPortal.Solr.prototype.setIssue = function setIssue(issue)
+{
+	this.Issue = issue;
+};
+
 org.OpenGeoPortal.Solr.prototype.getAndFilter = function(term, values){
 	if ((values == null) || (values == "")){
 		return "";
@@ -1141,7 +1159,7 @@ org.OpenGeoPortal.Solr.prototype.getAndFilter = function(term, values){
 			filter += term + ":" + currentSource;
 		}
 	}
-	filter += "&pf=" + term + ":" + arrValues.join(" ");
+	filter += "&pf=" + term + ":" + this.escapeSolrValue(arrValues.join(" "));
 	return filter;
 };
 
@@ -1163,6 +1181,11 @@ org.OpenGeoPortal.Solr.prototype.getFilenameFilter = function getFilenameFilter(
 
 };
 
+org.OpenGeoPortal.Solr.prototype.getIssueFilter = function getIssueFilter()
+{
+	return this.getAndFilter("etdmIssues", this.Issue);
+
+};
 
 /*
  * should search results include restricted data from remote institutions
@@ -1287,7 +1310,7 @@ org.OpenGeoPortal.Solr.prototype.getReturnedColumnsClause = function getReturned
 		returnedColumns = "fl=";
 	else if (requestType == org.OpenGeoPortal.Solr.prototype.SearchRequest)
 		returnedColumns = "fl=Name,Institution,Access,DataType,LayerDisplayName,Publisher,GeoReferenced" +
-						  ",Originator,Location,MinX,MaxX,MinY,MaxY,ContentDate,LayerId,score,WorkspaceName";
+						  ",Originator,Location,MinX,MaxX,MinY,MaxY,ContentDate,LayerId,score,WorkspaceName,maxScale";
 	else
 		returnedColumns = "error in org.OpenGeoPortal.Solr.prototype.getReturnedColumnsClause" +
 						  " did not understand passed requestType " + requestType;
@@ -1415,11 +1438,13 @@ org.OpenGeoPortal.Solr.prototype.getSearchQuery = function getSearchQuery()
 	var originator = this.getOriginatorFilter();
 	var filename = this.getFilenameFilter();
 	var filenames = this.getFilenamesFilter();
+//	var layerId = this.getLayerIdFilter();
+	var issue = this.getIssueFilter();
 	var restrictedFilter = this.getRestrictedFilter();
 	var shardClause = this.getShardServerNames();  // "shards=geoportal-dev.atech.tufts.edu/solr,gis.lib.berkeley.edu:8080/solr/";
 	var extras = this.combineFiltersAndClauses([spatialFilter, returnType, returnedColumns, rowCount, startRow, shardClause,
 	                                            sortClause, keywordFilter, dateFilter, dataTypeFilter, institutionFilter,
-						    accessFilter, publisher, originator, filename, filenames, restrictedFilter, topicFilter]);
+						    accessFilter, publisher, originator, filename, filenames, issue, restrictedFilter, topicFilter]);
 
 	var query = "q=" + queryClause + "&debugQuery=false&" + extras; //spatialFilter + "&" + returnType + "&" + returnedColumns;
 	//foo = query;

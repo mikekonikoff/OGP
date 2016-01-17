@@ -338,6 +338,7 @@ org.OpenGeoPortal.UserInterface = function(){
 			jQuery('#left_tabs').height(containerHeight);
 			//map height and search results table height don't get properly changed here
 			//org.OpenGeoPortal.Utility.whichTab().tableObject().getTableObj().fnDraw();
+			org.OpenGeoPortal.Utility.whichTab().tableObject().closeToolTips();
 			var containerWidth = jQuery(window).width();//Math.max((Math.floor(jQuery(window).width() * .9)), 1002);
 			jQuery('#main').width(containerWidth);
 			if (jQuery("#left_col").css("display") == "none"){
@@ -2628,16 +2629,16 @@ org.OpenGeoPortal.UserInterface.prototype.downloadEmailDialogHandler = function(
 
 org.OpenGeoPortal.UserInterface.prototype.autocomplete = function(){
 
-	jQuery( "#advancedOriginatorText" ).autocomplete(
-			this.getAutocompleteOptions("#advancedOriginatorText", ["OriginatorSort"])
+	jQuery( "#advancedPublisherText" ).autocomplete(
+			this.getAutocompleteOptions("#advancedPublisherText", ["PublisherSort"])
 	);
 
 	jQuery( "#filenameText" ).autocomplete(
-			this.getAutocompleteOptions("#filenameText", ["Name"])
+			this.getAutocompleteOptions("#filenameText", ["LayerId"])
 	);
 
 	jQuery( "#basicSearchTextField" ).autocomplete(
-		jQuery.extend({}, this.getAutocompleteOptions("#basicSearchTextField", ["Name", "OriginatorSort"]), // , "Abstract"
+		jQuery.extend({}, this.getAutocompleteOptions("#basicSearchTextField", ["LayerId", "PublisherSort", "ThemeKeywordsExact"]), // , "Abstract"
 		{
 			create: function () {
 				jQuery( this ).next("span.ui-helper-hidden-accessible").position({
@@ -2659,15 +2660,20 @@ org.OpenGeoPortal.UserInterface.prototype.getAutocompleteOptions = function (inp
 	        	var solr = new org.OpenGeoPortal.Solr();
 	        	var query = solr.getTermsQuery(fieldNames, request.term);
 	        		var facetSuccess = function(data){
-	                    var labelArr = [];
+	                    var labelArr = [], labelSet = [];
 	                    jQuery.each(fieldNames, function(idx, val) {
 	                    	var dataArr = data.terms[val];
 	                    	for (var i in dataArr){
 	                    		if (i%2 != 0){
 	                    			continue;
 	                    		}
-	                    		var temp = {"label": dataArr[i].toUpperCase(), "value":  dataArr[i].toUpperCase()};
-	                    		labelArr.push(temp);
+	        					var label = dataArr[i].toUpperCase().trim().replace(/^FGDL\./, "");
+	        					if (labelSet.indexOf(label) > -1){
+	        						continue;
+	        					}
+	        					var temp = {"label": label, "value":  label};
+	        					labelArr.push(temp);
+	        					labelSet.push(label);
 	                    		i++;
 	                    		i++;
 	                    	}

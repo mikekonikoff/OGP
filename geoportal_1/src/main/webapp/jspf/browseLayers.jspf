@@ -17,8 +17,8 @@
 				<select data-bind="options: issues, optionsText: 'name', value: selectedIssue, optionsCaption: 'Select...'"></select>
 			</div>
 			<div class="browseOption">
-				<h1>Originator</h1>
-				<select data-bind="options: originators, optionsText: 'label', value: selectedOriginator, optionsCaption: 'Select...'" style="width: 33em"></select>
+				<h1>Publisher</h1>
+				<select data-bind="options: publishers, optionsText: 'label', value: selectedPublisher, optionsCaption: 'Select...'" style="width: 33em"></select>
 			</div>
 			<div data-bind="visible: isLoading" style="vertical-align: bottom"><img src="resources/media/ui-anim_basic_16x16.gif" alt="Loading indicator" style="vertical-align: inherit"></img> Loading ...</div>
 		</div>
@@ -39,7 +39,7 @@
    		columns
 		</div>
  	</div>
-	<div id="resultsTableBrowsed" class="resultsTable"></div>
+	<div id="resultsTableBrowsed"></div>
  	<div id="browsedLayersMessage" class="searchResultsMessage"></div>
  	<div id="searchResultsNavigationBrowsed" class="searchResultsNavigation"></div>
 </div>

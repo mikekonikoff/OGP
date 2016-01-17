@@ -1,9 +1,15 @@
  <!-- topic keywords come from http://gcmd.nasa.gov/User/difguide/iso_topics.html  -->
  <div id="advancedSearchBox">
     <form id="advancedSearchForm" onsubmit="return false;">
+<!--
     	<div class="searchFormRow">
    			<label for="advancedOriginatorText" class="searchFormLabel">Originator:</label>
    			<input name="advancedOriginatorText" type="text" class="searchFormInput" id="advancedOriginatorText"/>
+		</div>
+-->
+    	<div class="searchFormRow">
+   			<label for="advancedPublisherText" class="searchFormLabel">Publisher:</label>
+   			<input name="advancedPublisherText" type="text" class="searchFormInput" id="advancedPublisherText"/>
 		</div>
 		<div class="searchFormRow">
     		<label for="advancedKeywordText" class="searchFormLabel">Keyword(s) / Abstract:</label>
