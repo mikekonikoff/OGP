@@ -38,7 +38,7 @@ org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
 	//set default OpenLayers map options
 	var nav = new OpenLayers.Control.NavigationHistory({nextOptions: {title: "Zoom to next geographic extent"}, previousOptions:{title: "Zoom to previous geographic extent"}});
     var zoomBox = new OpenLayers.Control.ZoomBox(
-            {title:"Click or draw rectangle on map to zoom in"});
+            {title:"Click or draw rectangle on map to zoom in", autoActivate: true});
     var zoomBoxListener = function(){jQuery(document).trigger("zoomBoxActivated")};
     zoomBox.events.register("activate", this, zoomBoxListener);
     var panListener = function(){jQuery(document).trigger("panActivated")};
@@ -64,6 +64,8 @@ org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
         title: "FL", active: true
     });
 
+    var currentScale = new OpenLayers.Control.Scale();
+
     panel.addControls([
                        globalExtent,
                        floridaExtent,
@@ -71,7 +73,8 @@ org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
                        nav.next,
                        zoomBox,
                        panHand,
-                       clearMap
+                       clearMap,
+                       currentScale
         ]);
     //display mouse coords in lon-lat
     var displayCoords = new OpenLayers.Control.MousePosition({displayProjection: new OpenLayers.Projection("EPSG:4326")});
@@ -287,8 +290,14 @@ org.OpenGeoPortal.MapController.prototype.changeBackgroundMap = function(bgType)
 				backgroundMaps.params);
 
 			this.addLayer(bgMap);
+			that.render(that.userDiv);
+			jQuery(".mapClearButtonItemInactive").text("clear previews");
+			that.userMapAction = true;
+			jQuery(document).trigger("mapReady");
+			jQuery("#geoportalMap").fadeTo("slow", 1);
+
 			google.maps.event.addListenerOnce(bgMap.mapObject, "tilesloaded", function() {
-				  //console.log("Tiles loaded");
+				  console.log("Tiles loaded");
 				  that.render(that.userDiv);
 					jQuery(".mapClearButtonItemInactive").text("clear previews");
 					that.userMapAction = true;
@@ -298,8 +307,8 @@ org.OpenGeoPortal.MapController.prototype.changeBackgroundMap = function(bgType)
 					jQuery("#geoportalMap").fadeTo("slow", 1);
 					org.OpenGeoPortal.ui.addSharedLayersToCart();
 				});
-
 		}
+
 		if (this.getLayersByName('OpenStreetMap').length > 0){
 			this.getLayersByName('OpenStreetMap')[0].setVisibility(false);
 		}

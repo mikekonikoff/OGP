@@ -315,6 +315,18 @@ td.colPreview, td.colMetadata, td.colSave, td.colSource {
 	width: 20px;
 	height: 20px;
 }
+.scaleCell {
+	left: 225px;
+	width: 100px;
+	color: black;
+}
+.scaleCell > span {
+	width: 15px !important;
+	height: 15px !important;
+	background: url('../media/ui-icons_cd0a0a_256x240.png') 0 95px;
+	display: inline-flex;
+	vertical-align: middle;
+}
 #mapItButton {
 	display: none;
 }
@@ -332,4 +344,22 @@ td.colPreview, td.colMetadata, td.colSave, td.colSource {
 }
 .browseOption > select {
 	margin-top: auto;
+}
+.oversizeSymbol {
+	float: left;
+	border: solid 1px gray;
+}
+.olControlScale{
+    bottom: 0px !important;
+    left: 300px !important;
+    width: 9em;
+    height: 1em;
+    color: black;
+    font-size: small;
+    background-color: white;
+    opacity: 0.66;
+    padding: 2px 0px 2px 20px;
+
+/*text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+ */
 }
