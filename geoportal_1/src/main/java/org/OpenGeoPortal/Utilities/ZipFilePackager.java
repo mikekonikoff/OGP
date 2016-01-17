@@ -25,8 +25,8 @@ public class ZipFilePackager{
 	 * Adds a set of files to a zip archive.
 	 * @param Set<File> filesToPackage
 	 * @param File zipArchive
-	 * 
-	 * @throws FileNotFoundException 
+	 *
+	 * @throws FileNotFoundException
 	 */
 	final static Logger logger = LoggerFactory.getLogger(ZipFilePackager.class.getName());
 
@@ -51,7 +51,7 @@ public class ZipFilePackager{
 		fileToZip.delete();
 		return zipFile;
 	}
-	
+
 	public static void addFilesToArchive(Set<File> filesToPackage, File zipArchive) throws IOException {
 	    if (filesToPackage.isEmpty()){
 	    	//if there are no files, don't do anything.
@@ -67,7 +67,7 @@ public class ZipFilePackager{
 	    	}
 	    }
 		byte[] buffer = new byte[1024 * 1024];
-	    
+
 		ZipArchiveOutputStream newZipStream = new ZipArchiveOutputStream(zipArchive);
 	    int zipFileCounter = 0;
 	    for (File currentFile : filesToPackage){
@@ -94,24 +94,28 @@ public class ZipFilePackager{
 	    			ArchiveEntry currentEntry;
 	    			while ((currentEntry = currentZipStream.getNextEntry()) != null) {
 	    				String entryName = currentEntry.getName();
-		    			logger.debug("Zipping: " + entryName);
-	    				ZipArchiveEntry zipEntry = new ZipArchiveEntry(entryName);
-	    				try {
-	    					newZipStream.putArchiveEntry(zipEntry);
-	    				} catch (Exception e){
-	    					//duplicate names should never happen.
-	    					entryName = Math.round(Math.random() * 10000) + "_" + entryName;
-	    					ZipArchiveEntry zipEntry2 = new ZipArchiveEntry(entryName);
-	    					newZipStream.putArchiveEntry(zipEntry2);
+	    				if ("wfsrequest.txt".equals(entryName)) {
+	    					logger.debug("Skipping: " + entryName);
+	    				} else {
+	    					logger.debug("Zipping: " + entryName);
+	    					ZipArchiveEntry zipEntry = new ZipArchiveEntry(entryName);
+	    					try {
+	    						newZipStream.putArchiveEntry(zipEntry);
+	    					} catch (Exception e){
+	    						//duplicate names should never happen.
+	    						entryName = Math.round(Math.random() * 10000) + "_" + entryName;
+	    						ZipArchiveEntry zipEntry2 = new ZipArchiveEntry(entryName);
+	    						newZipStream.putArchiveEntry(zipEntry2);
+	    					}
+	    					int bytesRead;
+	    					while ((bytesRead = currentZipStream.read(buffer))!= -1) {
+	    						newZipStream.write(buffer, 0, bytesRead);
+	    					}
+	    					newZipStream.closeArchiveEntry();
 	    				}
-	    				int bytesRead;
-	    				while ((bytesRead = currentZipStream.read(buffer))!= -1) {
-	    					newZipStream.write(buffer, 0, bytesRead);
-	           	 		}
-	    				newZipStream.closeArchiveEntry();
 	    			}
 	    			currentZipStream.close();
-	    		}	
+	    		}
 	    	} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -125,7 +129,7 @@ public class ZipFilePackager{
 
 	    	}
     	}
-	    
+
 	    if (zipFileCounter > 0){
 	     	try {
 				newZipStream.close();
@@ -134,11 +138,11 @@ public class ZipFilePackager{
 				e.printStackTrace();
 			}
 	    }
-	    
+
 		//long endTime = System.currentTimeMillis();
 		//logger2.info(zipFileCounter + " file(s) zipped in " + (endTime - startTime) + " milliseconds.");
 	}
-	
+
 	/*public static Set<File> unarchiveFiles(File zippedFile) throws Exception {
 		ZipFile zipFile = new ZipFile(zippedFile);
 		zipFile.
@@ -148,7 +152,7 @@ public class ZipFilePackager{
 		    READ UNTIL content IS EXHAUSTED
 		} finally {
 		    content.close();
-		}		
+		}
 	}*/
 	public static Set<File> unarchiveFiles(File zipArchive) throws Exception {
 		Set<File> unarchivedFiles = new HashSet<File>();
@@ -169,12 +173,12 @@ public class ZipFilePackager{
     		}
     		ZipFile zipFile = new ZipFile(zipArchive);
 			Enumeration<ZipArchiveEntry> entries = zipFile.getEntriesInPhysicalOrder();
-			
+
 			while (entries.hasMoreElements()) {
 				ZipArchiveEntry currentEntry = entries.nextElement();
 				String entryName = currentEntry.getName();
 				logger.debug("Current entry: " + entryName);
-				try { 
+				try {
 					logger.debug(zipArchive.getParent() + "/" + currentEntry.getName());
 					File destFile = new File(containerDir, currentEntry.getName());
 					if (currentEntry.isDirectory()){
@@ -199,9 +203,9 @@ public class ZipFilePackager{
 					break;
 				}
 			}
-			
+
 			zipFile.close();
-			
+
 	} catch (FileNotFoundException e) {
 		logger.error("file not found exception");
 		//e.printStackTrace();
@@ -212,8 +216,8 @@ public class ZipFilePackager{
 		return unarchivedFiles;
 	}
 
-	
-	
+
+
 	public static final void copyInputStream(InputStream in, OutputStream out)
 			throws IOException
 			{
