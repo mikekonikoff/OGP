@@ -2638,7 +2638,7 @@ org.OpenGeoPortal.UserInterface.prototype.autocomplete = function(){
 	);
 
 	jQuery( "#basicSearchTextField" ).autocomplete(
-		jQuery.extend({}, this.getAutocompleteOptions("#basicSearchTextField", ["LayerId", "PublisherSort", "ThemeKeywordsExact"]), // , "Abstract"
+		jQuery.extend({}, this.getAutocompleteOptions("#basicSearchTextField", ["LayerId", "LayerDisplayNameSort", "PublisherSort", "ThemeKeywordsExact"]), // , "Abstract"
 		{
 			create: function () {
 				jQuery( this ).next("span.ui-helper-hidden-accessible").position({
