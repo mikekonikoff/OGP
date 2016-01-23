@@ -198,12 +198,12 @@ org.OpenGeoPortal.Solr.prototype.LayerAreaIntersection = {term: "LayerAreaInters
 org.OpenGeoPortal.Solr.prototype.BasicKeywordString = null;
 
 org.OpenGeoPortal.Solr.prototype.LayerDisplayNameTerm = {term: "LayerDisplayNameSynonyms", baseTerm:"LayerDisplayName", hasBoost: true, boost: "10.0", hasCap: true, cap: "0.5"};
-org.OpenGeoPortal.Solr.prototype.ThemeKeywordsTerm = {term: "ThemeKeywordsSynonymsLcsh", baseTerm: "ThemeKeywords", hasBoost: true, boost: "1.0", hasCap: true, cap: "0.5"};
+org.OpenGeoPortal.Solr.prototype.ThemeKeywordsTerm = {term: "ThemeKeywordsSynonymsLcsh", baseTerm: "ThemeKeywords", hasBoost: true, boost: "8.0", hasCap: true, cap: "0.5"};
 org.OpenGeoPortal.Solr.prototype.PlaceKeywordsTerm = {term: "PlaceKeywordsSynonyms", baseTerm: "PlaceKeywords", hasBoost: true, boost: "2.0", hasCap: false};
 org.OpenGeoPortal.Solr.prototype.PublisherTerm = {term: "Publisher", hasBoost: true, boost: "1.0", hasCap: false};
 org.OpenGeoPortal.Solr.prototype.OriginatorTerm = {term: "Originator", hasBoost: true, boost: "1.0", hasCap: false};
 org.OpenGeoPortal.Solr.prototype.IsoTopicTerm = {term: "ThemeKeywordsSynonymsIso", hasBoost: true, boost: "4.0", hasCap: false};
-org.OpenGeoPortal.Solr.prototype.NameTerm = {term: "Name", hasBoost: true, boost: "4.0", hasCap: false, wildcards: {leading: true, trailing: true}};
+org.OpenGeoPortal.Solr.prototype.NameTerm = {term: "Name", hasBoost: true, boost: "8.0", hasCap: false, wildcards: {leading: true, trailing: true}};
 org.OpenGeoPortal.Solr.prototype.IssueTerm = {term: "etdmIssues", hasBoost: false, hasCap: false};
 org.OpenGeoPortal.Solr.prototype.LayerIdTerm = {term: "LayerId", hasBoost: true, boost: "8.0", hasCap: false, wildcards: {leading: true, trailing: true}};
 org.OpenGeoPortal.Solr.prototype.MaxScaleTerm = {term: "maxScale", hasBoost: false, hasCap: false};
