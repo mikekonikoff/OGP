@@ -1799,7 +1799,7 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		}
 		else if (searchType == 'browseSearch')
 		{
-			this.searchRequestBrowseJsonp(solr, layerBrowser.selectedIssue(), layerBrowser.selectedPublisher());
+			this.searchRequestBrowseJsonp(solr, layerBrowser);
 			successCallback = function(data) {
 				org.OpenGeoPortal.browseTableObj.searchRequestJsonpSuccess(data);
 				layerBrowser.isLoading(false);
@@ -1877,16 +1877,24 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	 */
 	this.searchRequestBrowseJsonp = function(solr, issue, publisher)
 	{
-		if (issue != null) {
+		if (layerBrowser != null) {
+			var issue = layerBrowser.selectedIssue();
+			var publisher = layerBrowser.selectedPublisher();
+			var isoKeyword = layerBrowser.selectedIsoKeyword();
+			if (issue != null) {
 //	    	ko.utils.arrayForEach (issue.datasets(), function (dataset) {
 //				solr.addFilename(dataset.name);
 //	    	});
-		    solr.setIssue(""+issue.id);
-		    console.log("selected issue is " + issue.id + ", " + issue.name);
+				solr.setIssue(""+issue.id);
+				console.log("selected issue is " + issue.id + ", " + issue.name);
+			}
+			if (publisher != null) {
+				solr.setPublisher(publisher.value);
+			}
+			if (isoKeyword != null) {
+				solr.setThemeKeyword(isoKeyword.value);
+			}
 		}
-    	if (publisher != null) {
-    		solr.setPublisher(publisher.value);
-    	}
 	};
 
 	//*******Search Results only

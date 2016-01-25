@@ -16,9 +16,13 @@ if (typeof org.fgdl == 'undefined'){
 
 org.fgdl.LayerBrowser = function(){
 	var self = this;
+	self.categories = ["ETDM Issue","Publisher","ISO Keyword"];
+	self.selectedCategory = ko.observable(null);
 	self.issues = ko.observableArray();
 	self.publishers = ko.observableArray();
 	self.selectedPublisher = ko.observable(null);
+	self.isoKeywords = ko.observableArray();
+	self.selectedIsoKeyword = ko.observable(null);
 
 	self.isInited = ko.observable(false);
 
@@ -38,40 +42,8 @@ org.fgdl.LayerBrowser = function(){
 		});
 
 
-		var solr = new org.OpenGeoPortal.Solr();
-		solr.setSort("PublisherSort", solr.SortAcending);
-		var query = solr.getTermsQuery(["PublisherSort"], "");
-		var facetSuccess = function(data){
-			var labelArr = [], labelSet = [];
-			jQuery.each(["PublisherSort"], function(idx, val) {
-				var dataArr = data.terms[val];
-				for (var i in dataArr){
-					if (i%2 != 0){
-						continue;
-					}
-					var label = dataArr[i].toUpperCase().trim();
-					if (labelSet.indexOf(label) > -1){
-						continue;
-					}
-					var temp = {"label": label, "value":  label};
-					labelArr.push(temp);
-					labelSet.push(label);
-					i++;
-					i++;
-				}
-			});
-			labelArr.sort(function(a,b) {
-				// because setSort isn't working..
-				if (a.value > b.value) return 1;
-				if (a.value < b.value) return -1;
-				return 0;
-			});
-			self.publishers(labelArr);
-		};
-		var facetError = function(){
-			console.log("error loading publishers");
-		};
-		solr.termQuery(query, facetSuccess, facetError, this);
+		self.initSelectListItems(self.publishers, "PublisherSort");
+		self.initSelectListItems(self.isoKeywords, "ThemeKeywordsExact");
 
 		org.OpenGeoPortal.browseTableObj.getTableObj().fnClearTable();
 	};
@@ -79,9 +51,17 @@ org.fgdl.LayerBrowser = function(){
 	self.isLoading = ko.observable(false);
 
 	self.selectedIssue = ko.observable(null);
-
+	self.hasSelectedIssue = ko.computed(function () {
+		return (self.selectedIssue() != null && self.selectedIssue().name != null);
+	});
+	self.hasSelectedPublisher = ko.computed(function() {
+		return (self.selectedPublisher() != null && self.selectedPublisher().value != null);
+	});
+	self.hasSelectedIsoKeyword = ko.computed(function () {
+		return (self.selectedIsoKeyword() != null && self.selectedIsoKeyword().value != null);
+	});
 	self.updateBrowseResults = function() {
-		if ((self.selectedIssue() != null && self.selectedIssue().name != null) || (self.selectedPublisher() != null && self.selectedPublisher().value != null)){
+		if (self.hasSelectedIssue() || self.hasSelectedPublisher() || self.hasSelectedIsoKeyword()) {
 			self.isLoading(true);
 			org.OpenGeoPortal.browseTableObj.getTableObj().fnClearTable();
 			org.OpenGeoPortal.browseTableObj.searchRequest(0);
@@ -89,8 +69,8 @@ org.fgdl.LayerBrowser = function(){
 	};
 
 	self.selectedIssue.subscribe(self.updateBrowseResults);
-
 	self.selectedPublisher.subscribe(self.updateBrowseResults);
+	self.selectedIsoKeyword.subscribe(self.updateBrowseResults);
 
 //	self.refreshExtent = ko.observable(false);
 //	self.currentMapExtent = ko.computed(function() {
@@ -106,6 +86,43 @@ org.fgdl.LayerBrowser = function(){
 //		console.log("setting map extent to " + ne);
 //		org.OpenGeoPortal.map.zoomToExtent(ne, true);
 //	};
+	self.initSelectListItems = function (observableArray, fieldName) {
+		var solr = new org.OpenGeoPortal.Solr();
+		solr.setSort(fieldName, solr.SortAcending);
+		var query = solr.getTermsQuery([fieldName], "");
+		var facetSuccess = function(data){
+			var labelArr = [], labelSet = [];
+			jQuery.each([fieldName], function(idx, val) {
+				var dataArr = data.terms[val];
+				for (var i in dataArr){
+					if (i%2 != 0){
+						continue;
+					}
+					var label = dataArr[i].toUpperCase().trim().replace(/[\),\/]$|^\(/, "");
+					if (label.length == 0 || labelSet.indexOf(label) > -1){
+						continue;
+					}
+					var temp = {"label": label, "value":  label};
+					labelArr.push(temp);
+					labelSet.push(label);
+					i++;
+					i++;
+				}
+			});
+			labelArr.sort(function(a,b) {
+				// because setSort isn't working..
+				if (a.value > b.value) return 1;
+				if (a.value < b.value) return -1;
+				return 0;
+			});
+			observableArray(labelArr);
+		};
+		var facetError = function(error){
+			console.log("error loading " + fieldName + " error was " + error);
+			//debugger;
+		};
+		solr.termQuery(query, facetSuccess, facetError, this);
+	};
 };
 
 org.fgdl.EtdmIssue = function(js) {

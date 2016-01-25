@@ -245,6 +245,7 @@ org.OpenGeoPortal.Solr.prototype.Filenames = [];
 org.OpenGeoPortal.Solr.prototype.Issue = null;
 org.OpenGeoPortal.Solr.prototype.AccessDisplay = null;
 
+org.OpenGeoPortal.Solr.prototype.ThemeKeyword = null;
 org.OpenGeoPortal.Solr.prototype.Publisher = null;
 org.OpenGeoPortal.Solr.prototype.Originator = null;
 org.OpenGeoPortal.Solr.prototype.Filename = null;
@@ -1119,6 +1120,11 @@ org.OpenGeoPortal.Solr.prototype.setDates = function (fromDate, toDate)
 	this.ToDate = toDate;
 };
 
+org.OpenGeoPortal.Solr.prototype.setThemeKeyword = function setThemeKeyword(themeKeyword)
+{
+	this.ThemeKeyword = themeKeyword;
+};
+
 org.OpenGeoPortal.Solr.prototype.setPublisher = function setPublisher(publisher)
 {
 	this.Publisher = publisher;
@@ -1161,6 +1167,12 @@ org.OpenGeoPortal.Solr.prototype.getAndFilter = function(term, values){
 	}
 	filter += "&pf=" + term + ":" + this.escapeSolrValue(arrValues.join(" "));
 	return filter;
+};
+
+org.OpenGeoPortal.Solr.prototype.getThemeKeywordFilter = function getThemeKeywordFilter()
+{
+	return this.getAndFilter("ThemeKeywords", this.ThemeKeyword);
+
 };
 
 org.OpenGeoPortal.Solr.prototype.getPublisherFilter = function getPublisherFilter()
@@ -1434,6 +1446,7 @@ org.OpenGeoPortal.Solr.prototype.getSearchQuery = function getSearchQuery()
 	var dataTypeFilter = this.getDataTypeFilter();
 	var institutionFilter = this.getInstitutionFilter();
 	var accessFilter = this.getAccessFilter();
+	var theme = this.getThemeKeywordFilter();
 	var publisher = this.getPublisherFilter();
 	var originator = this.getOriginatorFilter();
 	var filename = this.getFilenameFilter();
@@ -1444,7 +1457,7 @@ org.OpenGeoPortal.Solr.prototype.getSearchQuery = function getSearchQuery()
 	var shardClause = this.getShardServerNames();  // "shards=geoportal-dev.atech.tufts.edu/solr,gis.lib.berkeley.edu:8080/solr/";
 	var extras = this.combineFiltersAndClauses([spatialFilter, returnType, returnedColumns, rowCount, startRow, shardClause,
 	                                            sortClause, keywordFilter, dateFilter, dataTypeFilter, institutionFilter,
-						    accessFilter, publisher, originator, filename, filenames, issue, restrictedFilter, topicFilter]);
+						    accessFilter, theme, publisher, originator, filename, filenames, issue, restrictedFilter, topicFilter]);
 
 	var query = "q=" + queryClause + "&debugQuery=false&" + extras; //spatialFilter + "&" + returnType + "&" + returnedColumns;
 	//foo = query;
