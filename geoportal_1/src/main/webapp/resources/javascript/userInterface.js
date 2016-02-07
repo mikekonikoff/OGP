@@ -590,39 +590,45 @@ org.OpenGeoPortal.UserInterface.prototype.createDataTypesMenu = function() {
 
 };
 
+org.OpenGeoPortal.UserInterface.prototype.TopicCategories = [{"value":"", "label":"None"},
+                       {"value":"farming", "label":"Agriculture and Farming"},
+                       {"value":"biota", "label":"Biology and Ecology"},
+                       {"value":"boundaries", "label":"Administrative and Political Boundaries"},
+                       {"value":"climatologyMeteorologyAtmosphere", "label":"Atmospheric and Climatic"},
+                       {"value":"economy", "label":"Business and Economic"},
+                       {"value":"elevation", "label":"Elevation and Derived Products"},
+                       {"value":"environment", "label":"Environment and Conservation"},
+                       {"value":"geoscientificinformation", "label":"Geological and Geophysical"},
+                       {"value":"health", "label":"Human Health and Disease"},
+                       {"value":"imageryBaseMapsEarthCover", "label":"Imagery and Base Maps"},
+                       {"value":"intelligenceMilitary", "label":"Military"},
+                       {"value":"inlandWaters", "label":"Inland Water Resources"},
+                       {"value":"location", "label":"Locations and Geodetic Networks"},
+                       {"value":"oceans", "label":"Oceans and Estuaries"},
+                       {"value":"planningCadastre", "label":"Cadastral"},
+                       {"value":"society", "label":"Cultural, Society, and Demographics"},
+                       {"value":"structure", "label":"Facilities and Structure"},
+                       {"value":"transportation", "label":"Transportation Networks"},
+                       {"value":"utilitiesCommunication", "label":"Utilities and Communication"}
+                       ];
+
+org.OpenGeoPortal.UserInterface.prototype.getTopicCategories = function getTopicCategories() {
+	return this.TopicCategories;
+};
+
 /**
  * uses styledSelect to create the menu in advanced search that allows a user to select an ISO topic to search
  */
 org.OpenGeoPortal.UserInterface.prototype.createTopicsMenu = function() {
-	var topicCategories = [{"topic":"", "label":"None"},
-	                       {"topic":"farming", "label":"Agriculture and Farming"},
-	                       {"topic":"biota", "label":"Biology and Ecology"},
-	                       {"topic":"boundaries", "label":"Administrative and Political Boundaries"},
-	                       {"topic":"climatologyMeteorologyAtmosphere", "label":"Atmospheric and Climatic"},
-	                       {"topic":"economy", "label":"Business and Economic"},
-	                       {"topic":"elevation", "label":"Elevation and Derived Products"},
-	                       {"topic":"environment", "label":"Environment and Conservation"},
-	                       {"topic":"geoscientificinformation", "label":"Geological and Geophysical"},
-	                       {"topic":"health", "label":"Human Health and Disease"},
-	                       {"topic":"imageryBaseMapsEarthCover", "label":"Imagery and Base Maps"},
-	                       {"topic":"intelligenceMilitary", "label":"Military"},
-	                       {"topic":"inlandWaters", "label":"Inland Water Resources"},
-	                       {"topic":"location", "label":"Locations and Geodetic Networks"},
-	                       {"topic":"oceans", "label":"Oceans and Estuaries"},
-	                       {"topic":"planningCadastre", "label":"Cadastral"},
-	                       {"topic":"society", "label":"Cultural, Society, and Demographics"},
-	                       {"topic":"structure", "label":"Facilities and Structure"},
-	                       {"topic":"transportation", "label":"Transportation Networks"},
-	                       {"topic":"utilitiesCommunication", "label":"Utilities and Communication"}
-	                       ];
+	var topicCategories = this.getTopicCategories();
 	var menuHtml = "";
 	for (var topicIndex in topicCategories){
 		var currentTopic = topicCategories[topicIndex];
 		menuHtml += '<div>';
-		menuHtml += '<label for="topicRadio' + currentTopic.topic + '">';
+		menuHtml += '<label for="topicRadio' + currentTopic.value + '">';
 		menuHtml += currentTopic.label;
 		menuHtml += '</label>';
-		menuHtml += '<input type="radio" class="topicRadio" name="topicRadio" id="topicRadio' + currentTopic.topic + '" value="' + currentTopic.topic + '"/>';
+		menuHtml += '<input type="radio" class="topicRadio" name="topicRadio" id="topicRadio' + currentTopic.value + '" value="' + currentTopic.value + '"/>';
 		menuHtml += '</div>';
 	}
 	var params = {
@@ -1043,7 +1049,7 @@ org.OpenGeoPortal.UserInterface.prototype.updateSortMenu = function(){
 //should add to cartTable code
 org.OpenGeoPortal.UserInterface.prototype.initSortable = function(){
 	var that = this;
-	jQuery( "#savedLayers > tbody" ).sortable({helper: "original", opacity: .5, containment: "parent",
+	jQuery( "#savedLayers > tbody" ).sortable({helper: "original", opacity: .5, containment: "parent", cancel: "tr",
 		items: "tr", tolerance: "pointer", cursor: "move",
 		start: function(event, ui){
 				//this code is ugly...optimize
@@ -1085,7 +1091,7 @@ org.OpenGeoPortal.UserInterface.prototype.initSortable = function(){
 
 			}
 	});
-	jQuery( "#browsedLayers > tbody" ).sortable({helper: "original", opacity: .5, containment: "parent",
+	jQuery( "#browsedLayers > tbody" ).sortable({helper: "original", opacity: .5, containment: "parent", cancel: "tr",
 		items: "tr", tolerance: "pointer", cursor: "move",
 		start: function(event, ui){
 				//this code is ugly...optimize
@@ -2671,7 +2677,7 @@ org.OpenGeoPortal.UserInterface.prototype.getAutocompleteOptions = function (inp
 	        					if (labelSet.indexOf(label) > -1){
 	        						continue;
 	        					}
-	        					var temp = {"label": label, "value":  label};
+	        					var temp = {"label": label, "value": label};
 	        					labelArr.push(temp);
 	        					labelSet.push(label);
 	                    		i++;

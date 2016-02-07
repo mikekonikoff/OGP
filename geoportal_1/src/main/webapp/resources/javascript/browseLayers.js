@@ -16,12 +16,12 @@ if (typeof org.fgdl == 'undefined'){
 
 org.fgdl.LayerBrowser = function(){
 	var self = this;
-	self.categories = ["ETDM Issue","Publisher","ISO Keyword"];
+	self.categories = ["ETDM Issue","Publisher","ISO Theme Keyword"];
 	self.selectedCategory = ko.observable(null);
 	self.issues = ko.observableArray();
 	self.publishers = ko.observableArray();
 	self.selectedPublisher = ko.observable(null);
-	self.isoKeywords = ko.observableArray();
+	self.isoKeywords = ko.observableArray(org.OpenGeoPortal.UserInterface.prototype.getTopicCategories().slice(1));
 	self.selectedIsoKeyword = ko.observable(null);
 
 	self.isInited = ko.observable(false);
@@ -43,7 +43,7 @@ org.fgdl.LayerBrowser = function(){
 
 
 		self.initSelectListItems(self.publishers, "PublisherSort");
-		self.initSelectListItems(self.isoKeywords, "ThemeKeywordsExact");
+		//self.initSelectListItems(self.isoKeywords, "ThemeKeywordsSynonymsIso");
 
 		org.OpenGeoPortal.browseTableObj.getTableObj().fnClearTable();
 	};
@@ -52,13 +52,13 @@ org.fgdl.LayerBrowser = function(){
 
 	self.selectedIssue = ko.observable(null);
 	self.hasSelectedIssue = ko.computed(function () {
-		return (self.selectedIssue() != null && self.selectedIssue().name != null);
+		return (self.selectedIssue() != null && self.selectedIssue().value != undefined);
 	});
 	self.hasSelectedPublisher = ko.computed(function() {
-		return (self.selectedPublisher() != null && self.selectedPublisher().value != null);
+		return (self.selectedPublisher() != null && self.selectedPublisher().value != undefined);
 	});
 	self.hasSelectedIsoKeyword = ko.computed(function () {
-		return (self.selectedIsoKeyword() != null && self.selectedIsoKeyword().value != null);
+		return (self.selectedIsoKeyword() != null && self.selectedIsoKeyword().value != undefined);
 	});
 	self.updateBrowseResults = function() {
 		if (self.hasSelectedIssue() || self.hasSelectedPublisher() || self.hasSelectedIsoKeyword()) {
@@ -72,6 +72,17 @@ org.fgdl.LayerBrowser = function(){
 	self.selectedPublisher.subscribe(self.updateBrowseResults);
 	self.selectedIsoKeyword.subscribe(self.updateBrowseResults);
 
+	self.selectedCategory.subscribe(function() {
+		if (self.selectedCategory() != "ETDM Issue") {
+			self.selectedIssue(null);
+		}
+		if (self.selectedCategory() != "Publisher") {
+			self.selectedPublisher(null);
+		}
+		if (self.selectedCategory() != "ISO Theme Keyword") {
+			self.selectedIsoKeyword(null);
+		}
+	});
 //	self.refreshExtent = ko.observable(false);
 //	self.currentMapExtent = ko.computed(function() {
 //		console.log("refreshing map extent");
@@ -133,6 +144,14 @@ org.fgdl.EtdmIssue = function(js) {
 	self.datasets = ko.observableArray();
 
 	self.isInited = ko.observable(false);
+
+	self.label = ko.computed(function() {
+		return self.name;
+	});
+
+	self.value = ko.computed(function() {
+		return self.id;
+	});
 
 	self.init = function (layerBrowser) {
 		if (self.isInited()) return;

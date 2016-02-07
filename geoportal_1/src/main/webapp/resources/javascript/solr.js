@@ -210,7 +210,7 @@ org.OpenGeoPortal.Solr.prototype.MaxScaleTerm = {term: "maxScale", hasBoost: fal
 org.OpenGeoPortal.Solr.prototype.AbstractTerm = {term: "Abstract", hasBoost: true, boost: "1.0", hasCap: false};
 
 
-org.OpenGeoPortal.Solr.prototype.GenericPhraseBoost = "9.0";
+org.OpenGeoPortal.Solr.prototype.GenericPhraseBoost = "12.0";
 
 
 org.OpenGeoPortal.Solr.prototype.BasicKeywordTerms = [org.OpenGeoPortal.Solr.prototype.LayerDisplayNameTerm,
