@@ -1,34 +1,51 @@
-<div id="home_text" class="welcomeText">
-	<h1><%@include file="institutionWelcome.jspf"%></h1>
-	<p>
-	Search, discover, preview, and retrieve geospatial data from multiple repositories.
-	<%@include file="ftpSite.jspf" %>
-	</p>
+<div id="gettingStarted">
+	<div class="sub_header">
+			<span class="sub_headerTitle">
+				GETTING STARTED
+				<!--<img src="resources/media/header_search.png" alt="Search" />-->
+			</span>
+			<div class="arrow_buttons">
+	   		<img src="resources/media/button_arrow_left.png" class="button" alt="collapse left" />
+	   		<img src="resources/media/button_arrow_right.png" class="button" alt="expand right" />
+			</div>
+	</div>
+	<div id="home_text" class="welcomeText">
+		<h1><%@include file="institutionWelcome.jspf"%></h1>
+		<p>
+		Enter a keyword in the box above to discover geospatial data.
+		</p>
+		<%@include file="ftpSite.jspf" %>
 
-    <h2>Search</h2>
-    <p>There are two ways to search for data. The two methods can be used individually or combined for more effective search</p>
-   	<ul>
-   		<li>Use <span style="font-weight:bold">basic</span> or <span style="font-weight:bold">advanced</span> search</li>
-    	<li>Interact with the map to search for data by relevant geographic extent</li>
-    </ul>
-    <h2>Interacting with the map  </h2>
-    <ul>
-      	<li>Interacting with the map will perform a search for relevant data</li>
-       	<li>Enter a place in the <span style="font-weight:bold">Find Place</span> field to zoom to a location</li>
-       	<li>Click the <span style="font-weight:bold">Zoom</span> or <span style="font-weight:bold">Pan</span> tool and drag the map with the mouse</li>
-       	<li>Double-click to zoom in on an area</li>
-       	<li>Hold down shift and click-drag a box to zoom to an area</li>
-       	<li>Click on <span style="font-weight:bold">Basemap</span> to set the background layer to OpenStreetMap, Google Maps, etc.</li>
-    </ul>
-    <h2>Preview</h2>
-    <ul>
-    	<li>Click the <span style="font-weight:bold">Preview</span> checkbox to preview the layer on the map from your search results or from your Cart</li>
-    	<li>Expand the layer dropdown to access the preview controls</li>
-    	<li>Click the attribute preview tool <span><img src="resources/media/preview.gif"/></span> and click on a feature on the map to view its attributes</li>
-    </ul>
-    <h2>Download</h2>
-	<ul>
-		<li>Click the <span style="font-weight:bold">Cart</span> checkbox to add the selected layer to your Cart for download, additional preview, or to create web mapping services</li>
-	</ul>
+	    <h2>Search</h2>
+	    <p>There are two ways to search for data. </p>
+	   	<ul>
+	   		<li><span style="font-weight:bold">Basic Search</span>: Start typing a keyword, data source, or filename. Words that match metadata records will be displayed. These can be used or not. Searches can be limited to the current map extent by checking the box "Limit results to visible map area".</li>
+	    	<li><span style="font-weight:bold">Advanced</span> (advanced Options): This is a more robust search that allows you to search for specific data sources (publisher), keywords, filename, data source year, ISO keyword/ topic, spatial data type, and repository. Currently, only data from FGDL is searchable, but the other repositories will be enabled in the future. Searches can be limited to the current map extent by checking the box "Limit results to visible map area".</li>
+	    </ul>
+	    <h2>Browse</h2>
+	    <p>There are three ways to browse for data. </p>
+	    <ul>
+	      <li><span style="font-weight:bold">ETDM Issue</span>: Browse data by Florida Department of Transportation Efficient Transportation Decision Making (ETDM) Issue or data category.</li>
+	      <li><span style="font-weight:bold">Publisher</span>: Browse data by Publisher (data source).</li>
+	      <li><span style="font-weight:bold">ISO Theme Keyword</span>: Browse data by one of the 19 ISO Theme Keywords.</li>
+	    </ul>
+	    <h2>Interacting with the map  </h2>
+	    <ul>
+	       	<li>Enter a place in the <span style="font-weight:bold">Find Place</span> field to zoom to a location</li>
+	       	<li>Click the <span style="font-weight:bold">Zoom</span> or <span style="font-weight:bold">Pan</span> tool and drag the map with the mouse</li>
+	       	<li>Double-click to zoom in on an area</li>
+	       	<li>Hold down shift and click-drag a box to zoom to an area</li>
+	       	<li>Click on <span style="font-weight:bold">Basemap</span> to set the background layer to OpenStreetMap, Google Maps, etc.</li>
+	    </ul>
+	    <h2>Preview</h2>
+	    <ul>
+	    	<li>Click the <span style="font-weight:bold">Preview</span> checkbox to preview the layer on the map from your search results or from your Cart</li>
+	    	<li>Expand the layer dropdown to access the preview controls</li>
+	    	<li>Click the attribute preview tool <span><img src="resources/media/preview.gif"></span> and click on a feature on the map to view its attributes</li>
+	    </ul>
+	    <h2>Download</h2>
+		<ul>
+			<li>Click the <span style="font-weight:bold">Cart</span> checkbox to add the selected layer to your Cart for download shapefiles or ArcGIS Layer files (web map services).</li>
+		</ul>
+	</div>
 </div>
-

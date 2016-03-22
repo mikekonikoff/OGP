@@ -45,7 +45,7 @@
       			</div>
       		</div>
       	<!--</div>-->
-      	<div class="searchFormRow">
+      	<div class="searchFormRow" style="display:none;">
       	    <span class="searchFormLabel"><!-- spacer --></span>
     		<span class="formCheckbox searchFormInput">
     			<input type="checkbox" name="restrictedCheck" id="restrictedCheck" />
@@ -57,7 +57,7 @@
    			<span id="advancedSearchSubmit" class="styledButtonSmall">Search</span>
     	</div>
     	<div class="searchFormRow">
-   			<input type="checkbox" name="mapFilterCheck2" id="mapFilterCheck2" class="mapFilterFlag" onclick="//org.OpenGeoPortal.ui.mapFilterStatus(this)" />
+   			<input type="checkbox" name="mapFilterCheck2" id="mapFilterCheck2" class="mapFilterFlag" onclick="org.OpenGeoPortal.ui.mapFilterStatus(this)" />
     		<label for="mapFilterCheck2">Limit results to visible map area</label>
     		<span id="lessSearchOptions" class="searchToggle button" onclick="org.OpenGeoPortal.ui.toggleSearch(this)">basic options</span>
     	</div>

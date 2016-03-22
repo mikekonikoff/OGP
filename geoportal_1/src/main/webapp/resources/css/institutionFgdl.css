@@ -363,3 +363,13 @@ td.colPreview, td.colMetadata, td.colSave, td.colSource {
 /*text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
  */
 }
+
+#gettingStarted {
+	height: 90%;
+	position: relative;
+}
+
+#home_text {
+	max-height: 100%;
+	overflow: auto;
+}

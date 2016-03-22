@@ -1774,6 +1774,8 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 				solr.setBoundingBox(minX, maxX, minY, maxY);
 			}
 		}
+		if (this.getAutocompleteQuery())
+			solr.setIncludeExtras(false);
 		return solr;
 	};
 	//*******Search Results only
@@ -1787,8 +1789,16 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	this.searchRequestJsonp = function(startIndex)
 	{
 		var solr = this.getBaseSearchRequestJsonp(startIndex);
-		var searchType = org.OpenGeoPortal.Utility.whichSearch().type;
+		var searchType = this.getAutocompleteQuery() ? "autocomplete" : org.OpenGeoPortal.Utility.whichSearch().type;
 		var successCallback = this.searchRequestJsonpSuccess;
+
+		if (searchType == 'autocomplete') {
+			solr.setUseAutocompleteQuery(true);
+			this.searchRequestAutocompleteJsonp(solr);
+			successCallback = function(data) {
+				org.OpenGeoPortal.resultsTableObj.searchRequestJsonpSuccess(data);
+			};
+		}
 		if (searchType == 'basicSearch')
 		{
 			this.searchRequestBasicJsonp(solr);
@@ -1799,7 +1809,9 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		}
 		else if (searchType == 'browseSearch')
 		{
-			this.searchRequestBrowseJsonp(solr, layerBrowser);
+			if (layerBrowser == null || layerBrowser.selectedCategory() == null)
+				return;
+			this.searchRequestBrowseJsonp(solr);
 			successCallback = function(data) {
 				org.OpenGeoPortal.browseTableObj.searchRequestJsonpSuccess(data);
 				layerBrowser.isLoading(false);
@@ -1824,6 +1836,19 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	this.getLastSolrSearch = function()
 	{
 		return this.lastSolrSearch;
+	};
+
+	// if this query is from basic search autocomplete option
+	this.autocompleteQuery = false;
+
+	this.setAutocompleteQuery = function(ac)
+	{
+		this.autocompleteQuery = ac;
+	};
+
+	this.getAutocompleteQuery = function()
+	{
+		return this.autocompleteQuery;
 	};
 
 	this.rerunLastSearch = function()
@@ -1875,26 +1900,50 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	/**
 	 * add elements specific to browse by issue, publisher
 	 */
-	this.searchRequestBrowseJsonp = function(solr, issue, publisher)
+	this.searchRequestBrowseJsonp = function(solr)
 	{
 		if (layerBrowser != null) {
-			var issue = layerBrowser.selectedIssue();
-			var publisher = layerBrowser.selectedPublisher();
-			var isoKeyword = layerBrowser.selectedIsoKeyword();
-			if (issue != null) {
-//	    	ko.utils.arrayForEach (issue.datasets(), function (dataset) {
-//				solr.addFilename(dataset.name);
-//	    	});
-				solr.setIssue(""+issue.id);
-				console.log("selected issue is " + issue.id + ", " + issue.name);
-			}
-			if (publisher != null) {
-				solr.setPublisher(publisher.value);
-			}
-			if (isoKeyword != null) {
-				solr.setThemeKeyword(isoKeyword.value);
+			switch (layerBrowser.selectedCategory()) {
+				case "ETDM Issue":
+					var issue = layerBrowser.selectedIssue();
+					if (issue != null) {
+						solr.setIssue(""+issue.id);
+						console.log("selected issue is " + issue.id + ", " + issue.name);
+					}
+					break;
+				case "Publisher":
+					var publisher = layerBrowser.selectedPublisher();
+					if (publisher != null) {
+						solr.setPublisher(publisher.value);
+					}
+					break;
+				case "ISO Theme Keyword":
+					var isoKeyword = layerBrowser.selectedIsoKeyword();
+					if (isoKeyword != null) {
+						solr.setThemeKeyword(isoKeyword.value);
+					}
+					break;
+				default:
+					break;
 			}
 		}
+	};
+
+	//*******Autocomplete Results only
+	/**
+	 * add elements specific to autocomplete search
+	 */
+	this.searchRequestAutocompleteJsonp = function(solr)
+	{
+		var keywords = jQuery('#basicSearchAutocomplete').val().trim();
+
+		if ((keywords != null) && (keywords != ""))
+			solr.setBasicKeywords(keywords);
+    	solr.setLocalRestricted(org.OpenGeoPortal.InstitutionInfo.getHomeInstitution());
+    	var institutionConfig = org.OpenGeoPortal.InstitutionInfo.getInstitutionInfo();
+    	for (var institution in institutionConfig){
+			solr.addInstitution(institution);
+    	}
 	};
 
 	//*******Search Results only
@@ -2385,7 +2434,7 @@ org.OpenGeoPortal.LayerTable.prototype.addPagingUi = function(pagingDiv, prefix)
 	}
 
 
-	resultsString += " Results " + (startIndex + 1) + "-" + (startIndex + layersDisplayed) + " ";
+	resultsString += " Results " + (startIndex + 1) + "-" + (startIndex + layersDisplayed) + " of " + resultsCount + " ";
 
 	if (pagingText){
 		navigationString = "<span>" + prevString + resultsString + nextString + "</span>";

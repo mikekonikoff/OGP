@@ -24,6 +24,7 @@
 <script type="text/javascript" src="resources/javascript/userInterface.js"></script>
 <script type="text/javascript" src="resources/javascript/main.js"></script>
 <script type="text/javascript" src="resources/javascript/solr.js"></script>
+<script type="text/javascript" src="resources/javascript/solr2.js"></script>
 <script type="text/javascript" src="resources/javascript/download.js"></script>
 <script type="text/javascript" src="resources/javascript/geoCommonsExport.js"></script>
 <script type="text/javascript" src="resources/javascript/ko/knockout-3.3.0.js"></script>

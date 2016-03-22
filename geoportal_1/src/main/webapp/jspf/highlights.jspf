@@ -1,9 +1,7 @@
 <div id="highlights" class="dialog infoDialog">
-	<p>
-		Welcome to the new FGDL! We are happy to announce that as of 11/4/2014 we are live with a limited amount of data layers. We will be adding data and making updates regularly.
-		The FGDL Metadata Explorer will remain up and running during this transition. Please zoom in and pan around with the map and/or enter search terms to begin discovering our geospatial data.
+	<p>Welcome to the new FGDL! As of March 2016, we have about 80% of the FGDL layers transitioned to this new site. We are continually adding and updating data. The FGDL Metadata Explorer will remain up and running during this transition.
 	</p>
 	<p>
-		If you wish to give us feedback, please fill out this quick survey: <a href="javascript: alert('Coming Soon!')">Survey Link</a>
+		Please explore the new site, and email us feedback at: <a href="mailto: fgdl-ogp@fgdl.org">fgdl-ogp@fgdl.org</a>
 	</p>
 </div>

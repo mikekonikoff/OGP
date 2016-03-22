@@ -1,6 +1,6 @@
 /* map panel */
 #map {
-	min-width: 415px;
+	min-width: 400px;
 	height: 512px;
 	display: inline-block;
 }

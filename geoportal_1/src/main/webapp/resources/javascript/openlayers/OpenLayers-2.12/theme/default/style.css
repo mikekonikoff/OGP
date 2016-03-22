@@ -287,15 +287,18 @@ div.olControlSaveFeaturesItemInactive {
 }
 .olDragDown {
     cursor: move;
+    cursor: grabbing;
 }
 .olDrawBox {
     cursor: crosshair;
 }
 .olControlDragFeatureOver {
     cursor: move;
+    cursor: grabbing;
 }
 .olControlDragFeatureActive.olControlDragFeatureOver.olDragDown {
     cursor: -moz-grabbing;
+    cursor: grabbing;
 }
 
 /**

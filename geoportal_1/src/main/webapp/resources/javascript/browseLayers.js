@@ -61,7 +61,7 @@ org.fgdl.LayerBrowser = function(){
 		return (self.selectedIsoKeyword() != null && self.selectedIsoKeyword().value != undefined);
 	});
 	self.updateBrowseResults = function() {
-		if (self.hasSelectedIssue() || self.hasSelectedPublisher() || self.hasSelectedIsoKeyword()) {
+		if (self.selectedCategory() != null && (self.hasSelectedIssue() || self.hasSelectedPublisher() || self.hasSelectedIsoKeyword())) {
 			self.isLoading(true);
 			org.OpenGeoPortal.browseTableObj.getTableObj().fnClearTable();
 			org.OpenGeoPortal.browseTableObj.searchRequest(0);

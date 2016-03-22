@@ -1,3 +1,14 @@
+<h2>Access FGDL map services by connecting to our server from your desktop GIS:</h2>
 <p>
-You can also browse and download shapefiles directly using the FTP site at <a href="ftp://ftp.fgdl.org/pub/state/" class="normalLink">ftp://ftp.fgdl.org/pub/state/</a>
+	<b>ArcCatalog</b>: GIS Servers &gt; Add WMS Server &gt;
+	Copy paste below into URL box: <br/>
+	http://geoportal04.geoplan.ufl.edu/geoserver/wms
+</p>
+<p>
+	<b>QGIS</b>: Create a new WMS Connection: <br/>
+	URL: http://geoportal04.geoplan.ufl.edu/geoserver/wms
+</p>
+<p>
+	You can also browse and download shapefiles directly using the FTP site
+	at <a class="normalLink" href="ftp://ftp.fgdl.org/pub/state/">ftp://ftp.fgdl.org/pub/state/</a>
 </p>
