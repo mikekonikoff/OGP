@@ -528,17 +528,20 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	  };
 
 	  this.closeToolTips = function() {
-		  var table = jQuery(this)[0].getTableObj();
-			jQuery(table).find(".symbologyCell > div").each(function(index, imgDiv) {
-				jQuery(imgDiv).tooltip().tooltip("close");
-			});
+		  return true;
+// using webpopoverui instead
+//		  var table = jQuery(this)[0].getTableObj();
+//			jQuery(table).find(".symbologyCell > div").each(function(index, imgDiv) {
+//				jQuery(imgDiv).tooltip().tooltip("close");
+//			});
 	  };
 
 	  this.closeToolBar = function(rowNode){
 		  try{
-			jQuery(rowNode).next("tr").find(".symbologyCell > div").each(function(index, imgDiv) {
-				jQuery(imgDiv).tooltip().tooltip("close");
-			});
+// using webpopoverui instead
+//			jQuery(rowNode).next("tr").find(".symbologyCell > div").each(function(index, imgDiv) {
+//				jQuery(imgDiv).tooltip().tooltip("close");
+//			});
 	      var detailsClosed = this.getImage("arrow_right.png");
 	      jQuery(rowNode).find(".colExpand img").attr('src', detailsClosed);
 		  var tableObj = this.getTableObj();

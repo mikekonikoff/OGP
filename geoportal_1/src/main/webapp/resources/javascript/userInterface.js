@@ -340,7 +340,7 @@ org.OpenGeoPortal.UserInterface = function(){
 			jQuery('#left_tabs').height(containerHeight);
 			//map height and search results table height don't get properly changed here
 			//org.OpenGeoPortal.Utility.whichTab().tableObject().getTableObj().fnDraw();
-			try {org.OpenGeoPortal.Utility.whichTab().tableObject().closeToolTips();} catch (Ex) {};
+			//try {org.OpenGeoPortal.Utility.whichTab().tableObject().closeToolTips();} catch (Ex) {};
 			var containerWidth = jQuery(window).width();//Math.max((Math.floor(jQuery(window).width() * .9)), 1002);
 			jQuery('#main').width(containerWidth);
 			if (jQuery("#left_col").css("display") == "none"){
