@@ -5,6 +5,7 @@
 	"search":{"serviceType": "solr", "serviceAddress": "https://geoportal05.geoplan.ufl.edu/solr/collectionFgdl/select"},
 	"institutions": {
   	"FGDL":{"login": {"loginType": "form", "authenticationPage": "login"},
+				"proxy": {"id": "proxy.Public.FGDL", "accessLevel": ["public"], "wms": "https://geoportal04.geoplan.ufl.edu/geoserver/wms"},
 				"graphics":{"sourceIcon":{"resourceLocation": "resources/media/src_fgdl.png", "altDisplay": "FGDL", "tooltipText": "Florida Geographic Data Library"}}},
 	"Tufts": {"login": {"loginType": "form", "authenticationPage": "login"},
 				"proxy": {"id": "proxy.Restricted.Tufts", "accessLevel": ["restricted"], "wms": "restricted/wms", "wfs": "restricted/wfs"},

@@ -10,5 +10,8 @@
  		<span id="headerLogin" class="infoLinks login">Login</span>
    		<div id="welcome">Welcome!</div>
    	</div>
+<%--
+	// TODO show this when it's not the production site
 	<div class="ribbon-wrapper-red"><div class="ribbon-red">BETA</div></div>
+--%>
 </div>

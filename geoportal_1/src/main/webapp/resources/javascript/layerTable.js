@@ -373,7 +373,8 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 //	    	sOut += '<div class="colorControlCell"><div class="colorPalette button" title="Change the layer color" id="colorPalette' + tableID + escapedLayerID + '" onclick="org.OpenGeoPortal.ui.colorDialog(\'' + layerID + '\', \'' + dataType + '\')"></div></div>';
 		    if (/^FGDL./.test(layerID)) {
 			  	var wmsLayerID = layerID.replace(/^FGDL./,"fgdl_data:");
-			  	sOut += '<div class="symbologyCell">legend: <div title="Legend symbol for ' + displayName + '" style="background: center no-repeat url(\'http://geoportal04.est.geoplan.ufl.edu:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' + wmsLayerID + '\')"></div></div>';
+			  	var wmsService = org.OpenGeoPortal.InstitutionInfo.getWMSProxy("FGDL", "public");
+			  	sOut += '<div class="symbologyCell">legend: <div title="Legend symbol for ' + displayName + '" style="background: center no-repeat url(\'' + wmsService + '?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' + wmsLayerID + '\')"></div></div>';
 			  	var maxScaleValue = rowData[this.tableHeadingsObj.getColumnIndex("maxScale")];
 			  	if (maxScaleValue != null && maxScaleValue != "" && 1 * maxScaleValue < org.OpenGeoPortal.map.getScale() && jQuery(rowNode).hasClass("previewedLayer")) {
 			  		//sOut += '<div class="scaleCell">Layer not viewable at current scale (<span id="currentScale"></span>). Zoom in past 1:' + maxScaleValue + ' to view this layer.</div>';
@@ -664,7 +665,6 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 		 */
 	  	jQuery(".symbologyCell > div").each(function(index, imgDiv) {
 	  		// get the full legend image dimensions from the swatch background image
-	  		// TODO use an actual (clipped) image element as the legend instead of a background image on a div
 	  		var style = imgDiv.currentStyle || window.getComputedStyle(imgDiv, false);
 	  		var bi = style.backgroundImage.slice(4, -1);
 	  		var imgObj = new Image();
@@ -674,44 +674,15 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 	  		//newSrc = newSrc.replace(/http:\/\/.*\/geoserver/, '/geoserver');
 	  		//newSrc = newSrc.replace(/http:\/\//,'https://');
 	  		newSrc = newSrc + "&vs=" + (new Date()).getTime();
-	  		imgObj.alt = imgDiv.title;
 	  		imgObj.onload = function() {
 	  			var theWidth = this.width, theHeight = this.height;
 	  			if (theWidth > 20 || theHeight > 20 && !/Cursor	/.test(imgObj.src)) {
 	  				// put full legend image in tooltip on cursor image that replaces legend swatch image
-	  				jQuery(imgDiv).tooltip({
-	  					tooltipClass : "oversizeSymbol",
+	  				jQuery(imgDiv).webuiPopover({
+	  					style : "float: left; border: solid 1px gray;",
 	  					content : function () {
-	  						//return jQuery("<div>" + imgObj.alt + "<br/></div>").append(imgObj);
-	  						//return imgObj;
 	  						return jQuery("<div></div>").append(jQuery(imgObj).clone());
-	  					},
-	  					position: {
-	  						my: "left top",
-	  						at: "left bottom",
-	  						of: imgDiv,
-	  						using: function( position, feedback ) {
-	  							jQuery(this).css( position );
-	  						}
-	  					},
-	  					collision: "none"
-	  				})
-	  				.on( "click", function() {
-	  					var self = this;
-	  					if (jQuery(this).hasClass("openTooltip")) {
-	  						// toggle the tooltip off
-	  						jQuery(this).removeClass("openTooltip");
-	  						jQuery(this).tooltip("close");
-							jQuery(this).bind("mouseleave.tooltip", function(event) {
-								jQuery(self).tooltip("close");
-							});
-	  					} else {
-	  						// toggle the tooltip on
-	  						jQuery(this).addClass("openTooltip");
-	  						jQuery(this).tooltip("open");
-	  						jQuery(this).unbind("mouseleave");
 	  					}
-	  					return false;
 	  				})
 	  				.css("background", "url('./resources/media/Cursor_Hand.png') no-repeat top center")
 	  				.css("background-size", "20px 20px");
@@ -1006,7 +977,6 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
           var rowData = tableObj.fnGetData(tableRow[0]);
 		this.previewedLayers.addLayer(rowData);
 		function callback() {
-			if (that.getTableID() == "searchResults"){
 			tableObj.fnDeleteRow(tableRow[0], false);
 			var tableData = tableObj.fnGetData();
 			tableObj.fnClearTable();
@@ -1024,10 +994,6 @@ org.OpenGeoPortal.LayerTable = function(userDiv, tableName){
 			jQuery(".previewedLayer").removeClass('previewSeparator');
 			jQuery(".previewedLayer").last().addClass('previewSeparator');
 			tableObj.fnDraw();
-			} else if (that.getTableID() == "savedLayers"){
-				//this is a little kludgey
-				org.OpenGeoPortal.ui.previousExtent = "";
-			}
 		};
 		var rowOne = tableObj.fnGetNodes(0);
 		var	options = { to: rowOne,

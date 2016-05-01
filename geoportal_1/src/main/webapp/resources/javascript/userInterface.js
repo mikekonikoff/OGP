@@ -334,7 +334,7 @@ org.OpenGeoPortal.UserInterface = function(){
 			that.mapObject.events.triggerEvent('zoomend');
 		});
 
-		jQuery(window).resize(function(){
+		jQuery(window).resize(function(e){
 			var containerHeight = Math.max((jQuery(window).height() - jQuery("#header").height() - jQuery("#footer").height() - 4), 680);
 			jQuery('#container').height(containerHeight);
 			jQuery('#left_tabs').height(containerHeight);
@@ -347,11 +347,11 @@ org.OpenGeoPortal.UserInterface = function(){
 				jQuery('#map').width(jQuery("#container").width() - 18);
 			} else if (jQuery("#map").css("display") != "none"){
 				var mapWidth = jQuery("#container").width() - jQuery("#left_col").width() - 1;
-				if (mapWidth >= 415){
+				if (mapWidth >= 500){
 					jQuery('#map').width(mapWidth);
 				} else {
-					 jQuery("#left_col").width(jQuery("#container").width() - 415 - 1);
-					jQuery('#map').width(415);
+					 jQuery("#left_col").width(jQuery("#container").width() - 500 - 1);
+					jQuery('#map').width(500);
 					that.setSearchPanelWidth(jQuery("#left_col").width());
 				}
 
@@ -359,7 +359,10 @@ org.OpenGeoPortal.UserInterface = function(){
 				jQuery("#left_col").width(jQuery("#container").width() - 1);
 				that.setSearchPanelWidth(jQuery("#left_col").width());
 			}
-
+			that.resizePanels();
+		    that.resultsTableObject.setTableLength();
+		    that.browseTableObject.setTableLength();
+		    that.cartTableObject.setTableLength();
 		});
 
 		jQuery(window).trigger("resize");
@@ -425,6 +428,9 @@ org.OpenGeoPortal.UserInterface = function(){
 				that.minimizeDialog(id);
 			}
 		});*/
+
+		if (!jQuery(".mapFilterFlag").is(":checked"))
+			this.searchSubmit();
 	};
 	this.init();
 	jQuery("#main").fadeTo('fast', 1);
@@ -1267,7 +1273,7 @@ org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
     		width: 300,
     		title: "DOWNLOAD SETTINGS",
     		resizable: false,
-    		modal: true
+    		modal: false
 		};
     if (typeof jQuery('#downloadDialog')[0] == 'undefined'){
     	var downloadDiv = '<div id="downloadDialog" class="dialog downloadSettingsDialog"> \n';
