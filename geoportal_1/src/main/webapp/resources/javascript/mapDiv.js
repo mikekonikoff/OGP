@@ -170,6 +170,9 @@ org.OpenGeoPortal.MapController = function(userDiv, userOptions) {
 			that.setCenter(that.WGS84ToMercator(that.getCenter().lon, 0));
 		}
 		//console.log('zoomend');
+		
+		org.OpenGeoPortal.ui.downloadDialogUpdateUnclippable();
+		
 			jQuery(document).trigger('eventZoomEnd');
 		});
 

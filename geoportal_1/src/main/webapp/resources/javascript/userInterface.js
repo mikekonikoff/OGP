@@ -1221,6 +1221,44 @@ org.OpenGeoPortal.UserInterface.prototype.isVector = function(dataType){
 	}
 };
 
+org.OpenGeoPortal.UserInterface.prototype.downloadDialogUpdateUnclippable = function() {
+	var that = this;
+	var unclippable = [];
+	var downloadType = jQuery("#vectorDownloadType").val();
+	if (downloadType=="lyr") {
+		jQuery("#checkClip").attr("checked", false);
+		jQuery("#checkClip").prop("disabled", true);
+		jQuery("#checkClipLabel").css("color", "#777");
+		jQuery("#downloadDialog").dialog( "option", "width", 300);
+		jQuery("#noClipScale").hide();
+		jQuery("#noClip").show();
+	} else {
+		// loop over layers
+		jQuery("#savedLayers tr").has(".cartCheckBox:checked").each(function() {
+			var data = jQuery("#savedLayers").dataTable().fnGetData(this);
+			var maxscale_idx = that.resultsTableObject.tableHeadingsObj.getColumnIndex("maxScale");
+			var layerName_idx = that.resultsTableObject.tableHeadingsObj.getColumnIndex("Name");
+			if (typeof data[maxscale_idx] != 'undefined' && data[maxscale_idx] != "" && data[maxscale_idx]*1 < org.OpenGeoPortal.map.getScale()) {
+				unclippable.push("<span class='scaleSpan'></span> Zoom in past 1:" + data[maxscale_idx] + " to enable clip option for " + data[layerName_idx] + "<br/>");
+			}
+		});
+		if (unclippable.length==0) {
+			jQuery("#checkClip").prop("disabled", false);
+			jQuery("#checkClipLabel").css("color", "#000");
+			jQuery("#downloadDialog").dialog( "option", "width", 300);
+			jQuery("#noClipScale").hide();
+			jQuery("#noClip").hide();
+		} else {
+			jQuery("#checkClip").attr("checked", false);
+			jQuery("#checkClip").prop("disabled", true);
+			jQuery("#checkClipLabel").css("color", "#777");
+			jQuery("#noClipScale").html(unclippable.join("\n")).show();
+			jQuery("#downloadDialog").dialog( "option", "width", 500);
+			jQuery("#noClip").hide();
+		}
+	}
+};
+
 org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
 	//first, check to see if anything is in savedLayers & checked
 	var layerList = this.getLayerList("download");
@@ -1266,7 +1304,8 @@ org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
     	rasterControl += '<option value="kmz">KMZ</option> \n';
     	rasterControl += "</select><br/> \n";
     	var clipControl = '<input id="checkClip" type="checkbox" /><label for="checkClip" id="checkClipLabel">Clip data to map extent</label><br/> \n';
-    	clipControl += '<span id="noClip" style="display: none; margin-left: 2em; font-size: 90%">Clipping not available for selected format.</span> \n';
+    	clipControl += '<div id="noClip" style="display: none; margin-left: 2em; font-size: 90%">Clipping not available for selected format.</div> \n';
+    	clipControl += '<div id="noClipScale" style="display: none; margin-left: 2em; font-size: 90%"></div> \n';
     	//var emailInput = '<label for="emailAddress">Enter your email address:</label><input id="emailAddress" type="text" /> </br>\n';
     	var formatLabel = "<span>Select format for:</span><br />\n";
     	if (showVectorControl || showRasterControl){
@@ -1306,16 +1345,7 @@ org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
 	}
 	jQuery("#downloadDialog").dialog(params);
 	jQuery("#vectorDownloadType").change(function () {
-		if (jQuery(this).val() == "lyr"){
-			jQuery("#checkClip").attr("checked", false);
-			jQuery("#checkClip").prop("disabled", true);
-			jQuery("#checkClipLabel").css("color", "#777");
-			jQuery("#noClip").show();
-		} else {
-			jQuery("#checkClip").prop("disabled", false);
-			jQuery("#checkClipLabel").css("color", "#000");
-			jQuery("#noClip").hide();
-		}
+		that.downloadDialogUpdateUnclippable();
 	});
 	var buttons;
 	if (counter == 0){
@@ -1340,6 +1370,7 @@ org.OpenGeoPortal.UserInterface.prototype.downloadDialog = function(){
 	}
 	jQuery("#downloadDialog").dialog("option", "buttons", buttons);
 	jQuery("#downloadDialog").dialog('open');
+	this.downloadDialogUpdateUnclippable();
 };
 
 org.OpenGeoPortal.UserInterface.prototype.downloadContinue = function(){
@@ -1732,6 +1763,10 @@ org.OpenGeoPortal.UserInterface.prototype.availableLayerLogic = function(action,
 		var institution = rowData[this.cartTableObject.tableHeadingsObj.getColumnIndex('Institution')].toLowerCase();
 		var access = rowData[this.cartTableObject.tableHeadingsObj.getColumnIndex('Access')].toLowerCase();
 		var dataType = rowData[this.cartTableObject.tableHeadingsObj.getColumnIndex('DataType')].toLowerCase();
+//	  	var maxScaleValue = rowData[this.cartTableObject.getColumnIndex("maxScale")];
+//	  	if (maxScaleValue != null && maxScaleValue != "" && 1 * maxScaleValue < org.OpenGeoPortal.map.getScale()) {
+//	  		return false;
+//		}
 		if (dataType == "libraryrecord"){
 			return false;
 		}
