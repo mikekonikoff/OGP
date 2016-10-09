@@ -305,15 +305,19 @@ org.OpenGeoPortal.UserInterface = function(){
 		jQuery(document).on("click", zoomMinusSelector, function(){
 			that.mapObject.zoomOut();
 		});
-
-		jQuery('#tabs a').bind("mousedown", function(){
-			//console.log(jQuery(this));
-				var tabImage = jQuery(this).find("img");
-				if (tabImage.length > 0){
-					tabImage.attr("src", that.utility.getImage("shoppingcart_on.png"));
-				} else {
-					jQuery('#tabs a img').attr("src", that.utility.getImage("shoppingcart.png"));
-				};
+// not needed for fgdl, no shopping cart images used
+//		jQuery('#tabs a').bind("mousedown", function(){
+//			//console.log(jQuery(this));
+//				var tabImage = jQuery(this).find("img");
+//				if (tabImage.length > 0){
+//					tabImage.attr("src", that.utility.getImage("shoppingcart_on.png"));
+//				} else {
+//					jQuery('#tabs a img').attr("src", that.utility.getImage("shoppingcart.png"));
+//				};
+//		});
+		// fix weird resize issues after switching tabs
+		jQuery('#tabs a.ui-tabs-anchor').bind("click", function(){
+			jQuery(window).trigger("resize");
 		});
 		this.autocomplete();
 //		var containerHeight = Math.max((jQuery(window).height() - jQuery("#header").height() - jQuery("#footer").height() - 2), 680);
