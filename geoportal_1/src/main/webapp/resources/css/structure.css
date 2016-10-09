@@ -555,10 +555,20 @@ textarea:focus {
     width: 264px;
 }
 
-#basicSearchSubmit {
-    float: right;
+#basicSearchSubmit, #clearResults, #clearBrowseResults {
     font-size: 11px;
     line-height: 19px;
+    margin-left: 5px;
+    height: 19px;
+}
+
+#clearBrowseResults {
+
+}
+
+#searchBoxContainer {
+	display: flex;
+	flex-flow: row;
 }
 
 #basicSearchMapFilterContainer {

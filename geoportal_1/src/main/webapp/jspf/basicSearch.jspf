@@ -1,9 +1,10 @@
 <div id="basicSearchBox">
 	<form id="basicSearchForm" onsubmit="return false;">
-		<div>
+		<div id="searchBoxContainer">
 			<input id="basicSearchTextField" name="basicSearchTextField" type="text" />
 			<input id="basicSearchAutocomplete" name="basicSearchAutocomplete" type="hidden" />
 			<span id="basicSearchSubmit" class="styledButtonSmall" onclick="org.OpenGeoPortal.ui.searchSubmit()">Search</span>
+			<span id="clearResults" class="styledButtonSmall" onclick="org.OpenGeoPortal.ui.clearTable()">Clear</span>
     	</div>
 		<%--<div id="wildcardHint">wildcard character = <span>*</span></div>--%>
     	<div id="basicSearchMapFilterContainer">

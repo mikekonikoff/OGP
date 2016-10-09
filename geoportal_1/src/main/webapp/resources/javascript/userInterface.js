@@ -847,6 +847,7 @@ org.OpenGeoPortal.UserInterface.prototype.clearAdvancedSearch = function(){
 	jQuery("#topicDropdownMenu input[type=radio]").first().attr("checked", true);
 	jQuery("#topicDropdownSelect > span > span").html("Select a topic");
 	jQuery("#advancedSearchBox span.ui-helper-hidden-accessible").text("");
+	this.clearTable();
 };
 
 org.OpenGeoPortal.UserInterface.prototype.clearDefault = function(inputFieldName)
@@ -891,6 +892,10 @@ org.OpenGeoPortal.UserInterface.prototype.adjustTableLength = function(tableID){
 org.OpenGeoPortal.UserInterface.prototype.toggleSearch = function(thisObj){
 	var thisID = jQuery(thisObj).attr('id');
 	if (thisID == 'moreSearchOptions'){
+		  if (jQuery('#basicSearchTextField').val()==this.searchText)
+			  jQuery('#advancedKeywordText').val("");
+		  else
+			  jQuery('#advancedKeywordText').val(jQuery('#basicSearchTextField').val());
 		  jQuery('#basicSearchBox').animate(
     			  {height: 'hide'},
     			  {queue: false, duration: 0}
@@ -900,6 +905,8 @@ org.OpenGeoPortal.UserInterface.prototype.toggleSearch = function(thisObj){
     			  {queue: false, duration: 0}
     		  );
 	} else if (thisID == 'lessSearchOptions'){
+		  if (jQuery('#advancedKeywordText').val().trim()!="")
+			  jQuery('#basicSearchTextField').val(jQuery('#advancedKeywordText').val());
 		  jQuery('#basicSearchBox').animate(
     			  {height: 'show'},
     			  {queue: false, duration: 0}
@@ -1055,6 +1062,14 @@ org.OpenGeoPortal.UserInterface.prototype.updateSortMenu = function(){
 		}
 	});
 
+};
+
+org.OpenGeoPortal.UserInterface.prototype.clearTable = function(){
+	this.mapObject.clearMap();
+	var tableObj = this.utility.whichTab().tableObject();
+	//tableObj.getTableObj().fnClearTable();
+	tableObj.searchRequestJsonpSuccess({response: {start: 0, numFound: -1, docs: []}});
+	jQuery("#basicSearchTextField").val(this.searchText);
 };
 
 //should add to cartTable code

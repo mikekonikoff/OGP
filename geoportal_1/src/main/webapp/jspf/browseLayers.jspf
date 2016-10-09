@@ -28,7 +28,14 @@
 				<h1>ISO Theme Keyword</h1>
 				<select data-bind="options: isoKeywords, optionsText: 'label', value: selectedIsoKeyword, optionsCaption: 'Select...'" style="width: 20em"></select>
 			</div>
-			<div data-bind="visible: isLoading" style="vertical-align: bottom"><img src="resources/media/ui-anim_basic_16x16.gif" alt="Loading indicator" style="vertical-align: inherit"></img> Loading ...</div>
+			<div class="browseOption" data-bind="visible: selectedCategory() != null">
+				<h1>&nbsp;</h1>
+				<span id="clearBrowseResults" class="styledButtonSmall" data-bind="click: function() {selectedCategory(null);org.OpenGeoPortal.ui.clearTable()}">Clear</span>
+			</div>
+			<div class="browseOption">
+				<h1>&nbsp;</h1>
+				<div data-bind="visible: isLoading" style="vertical-align: bottom"><img src="resources/media/ui-anim_basic_16x16.gif" alt="Loading indicator" style="vertical-align: inherit"></img> Loading ...</div>
+			</div>
 		</div>
 	</div>
  	<div id="resultsSubHeaderBrowsed" class="sub_header resultsSubHeader">
